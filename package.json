@@ -36,5 +36,5 @@
 		"@supabase/supabase-js": "^2.14.0"
 	},
 	"packageManager":"pnpm@8.2.0",
-	"prepare": "svelte-kit sync"
+	"prepack": "svelte-kit sync"
 }
