@@ -6,12 +6,21 @@
 
 <script>
 	import {getCurrentWeatherData} from "../api/weatherApi.svelte";
+	import {getAPOD} from "../api/apodApi.svelte";
 
+	// Weather API
 	let location = "Dresden";
 	let weatherData = getCurrentWeatherData(location);
 
 	function handleWeatherDataClick(){
 		weatherData = getCurrentWeatherData(location);
+	}
+	
+	// APOD - Astronomy Picture of the Day
+	let apodData = getAPOD();
+
+	function handleAPODClick(){
+		apodData = getAPOD();
 	}
 </script>
 
@@ -31,5 +40,17 @@
 		<p>Luftfeuchtigkeit: {data.humidity} %</p>
 	{:catch error}
 		<p style="color: red">{error.message}</p>
+	{/await}
+
+	<h2>APOD - Astronomy Picture of the Day</h2>
+	<button on:click={handleAPODClick}>Picture of the Day</button>
+
+	{#await apodData}
+		<p>hole Astronomy Picture of the Day</p>
+	{:then data} 
+		<p>{data.title} - {data.date}</p>
+		<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
+		<!-- svelte-ignore a11y-img-redundant-alt -->
+		<img src={data.url} alt="APOD - Asyttronomy Picture of the Day" width="50%">
 	{/await}
 </section>
