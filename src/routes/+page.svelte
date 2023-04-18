@@ -41,11 +41,11 @@
 	{#await weatherData}
 		<p>hole Wetterinformationen...</p>
 	{:then data}
-		<p>Wetterdaten für: {data.location}</p>
-		<p>Temperatur: {data.temp_C} °C</p>
-		<p>gefühlte Temperatur: {data.feelslike_c} °C</p>
-		<p>Wetterkondition: {data.condition}</p>
-		<p>Luftfeuchtigkeit: {data.humidity} %</p>
+		<p>Wetterdaten für: {data.location.name}</p>
+		<p>Temperatur: {data.current.temp_c} °C</p>
+		<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
+		<p>Wetterkondition: {data.current.condition.text}</p>
+		<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}

@@ -11,17 +11,6 @@
 	 */
 	export let longitude;
 
-	let weatherDataObject = {
-		location: typeof(String),
-		temp_C: typeof(String),
-		feelslike_c: typeof(String),
-		condition: typeof(String),
-		humidity: typeof(String),
-        latitude: typeof(String),
-        longitude: typeof(String)
-	}
-
-
 	/**
 	 * @param {string} location
 	 */
@@ -32,6 +21,9 @@
             url,
             {
                 method: 'GET',
+				headers: {
+                "Access-Control-Allow-Origin": "*"
+            	}
             }
         );
 	}
@@ -40,24 +32,13 @@
 	 * @param {string} location
 	 */
 	export async function getCurrentWeatherData(location){
-		//waitingForAPI = true;
 		const response = await API_REQUEST(location);
-		//waitingForAPI = false;
         const data = await response.json();		
 
-		weatherDataObject = {
-			location: data.location.name,
-			temp_C: data.current.temp_c,
-			feelslike_c: data.current.feelslike_c,
-			condition: data.current.condition.text,
-			humidity: data.current.humidity,
-            latitude: data.location.lat,
-            longitude: data.location.lon
-		}
-
 		if (response.ok){
-			return weatherDataObject;
+			return data;
 		} else {
+			// TODO: Handle error if the location doesn't exists (example: "dfsds")
 			throw new Error(data)
 		}
 	}
