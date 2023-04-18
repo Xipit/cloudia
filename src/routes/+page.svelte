@@ -5,8 +5,9 @@
 -->
 
 <script>
-	import {getCurrentWeatherData} from "../api/weatherApi.svelte";
+	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi.svelte";
 	import {getAPOD} from "../api/apodApi.svelte";
+	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI.svelte";
 
 	// Weather API
 	let location = "Dresden";
@@ -21,6 +22,13 @@
 
 	function handleAPODClick(){
 		apodData = getAPOD();
+	}
+
+	// Visible Planets API
+	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
+
+	function handleVisiblePlanetsClick(){
+		visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
 	}
 </script>
 
@@ -51,6 +59,16 @@
 		<p>{data.title} - {data.date}</p>
 		<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
 		<!-- svelte-ignore a11y-img-redundant-alt -->
-		<img src={data.url} alt="APOD - Asyttronomy Picture of the Day" width="50%">
+		<img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
+	{/await}
+
+	<h2>Visible Planets</h2>
+	<button on:click={handleVisiblePlanetsClick}>Scuhe Planeten am Himmel</button>
+	{#await visiblePlanetsData}
+		<p>Suche sichtbare Planeten...</p>
+	{:then visiblePlanetsData} 
+		{#each visiblePlanetsData as data}
+			<p>{data.name}</p>
+		{/each}
 	{/await}
 </section>
