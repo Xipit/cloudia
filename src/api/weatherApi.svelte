@@ -1,3 +1,6 @@
+<!-- This has to be used because the weather API returns "http://..." instead of "https://...". -->
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
 <script context="module">
 	const BASE_URL = "http://api.weatherapi.com/v1/";
 	const API_KEY = "d02fc8f55f1a44e481294946230304";
@@ -22,7 +25,7 @@
             {
                 method: 'GET',
 				headers: {
-                "Access-Control-Allow-Origin": "*"
+                	'Access-Control-Allow-Origin': '*',
             	}
             }
         );
