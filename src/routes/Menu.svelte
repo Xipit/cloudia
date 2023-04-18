@@ -37,7 +37,7 @@
         padding: 0.625em;
     }
     p:hover {
-        box-shadow: 0 0.5em 2em 0 rgba( 31, 38, 135, 0.37 );
+        text-shadow: 3px 3px 4px rgba( 31, 38, 135, 0.37 );
         backdrop-filter: blur( 0.65em );
         -webkit-backdrop-filter: blur( 0.65em );
         border-radius: 0.2em;
