@@ -63,7 +63,7 @@
 	{/await}
 
 	<h2>Visible Planets</h2>
-	<button on:click={handleVisiblePlanetsClick}>Scuhe Planeten am Himmel</button>
+	<button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
 	{#await visiblePlanetsData}
 		<p>Suche sichtbare Planeten...</p>
 	{:then visiblePlanetsData} 

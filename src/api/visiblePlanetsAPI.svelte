@@ -1,14 +1,5 @@
 <script context="module">
 	const BASE_URL = "https://api.visibleplanets.dev/v3"
-	
-	/**
-	 * @type {number | undefined}
-	 */
-	let latitude;
-	/**
-	 * @type {number | undefined}
-	 */
-	let longitude;
 
 	/**
 	 * @param {string | number | undefined} latitude
@@ -34,15 +25,12 @@
 		const response = await API_REQUEST(latitude, longitude);
         const data = await response.json();
 
-		console.log(data);
-
 		if (response.ok){
 			return data.data;
 		} else {
 			throw new Error(data)
 		}
 	}
-
 
 	/**
 	 * @param {number} deg
