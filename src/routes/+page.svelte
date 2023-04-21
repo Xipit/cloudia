@@ -6,7 +6,6 @@
     import Menu from './Menu.svelte';
 
     export let data:PageData;
-    let open:boolean;
 
 
     // -> progressive enhancement with js: https://www.youtube.com/watch?v=lSm0GNnh-0I
@@ -25,34 +24,13 @@
 </script>
 
 <main>
-    <!--
-    <div class="icon">
-        <Hamburger
-        bind:open
-        --color="black" />
     
-        <Menu bind:open />
-    </div>
--->
-	<h1>SvelteKit & Supabase Auth</h1>
     {#if data.session }
         <p>Welcome {data.session.user.email}</p>
         <form action="/logout" method="POST">
-            <button type="submit" class="btn btn-primary">LogOut</button>
+            <button type="submit" class="button">LogOut</button>
         </form>
     {:else}
-	<p>Let's learn how to register and login users!</p>
-	<div class="auth-buttons">
-		<a href="/login" class="btn btn-primary">Login</a>
-		<a href="/register" class="btn btn-secondary">Register</a>
-	</div>
+        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p>
     {/if}
 </main>
-
-
-<style>
-    .icon {
-        position: absolute;
-        left: 1.25em;
-    }
-</style>

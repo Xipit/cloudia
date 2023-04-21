@@ -7,6 +7,8 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
+	import Menu from './Menu.svelte';
+	import { Hamburger } from 'svelte-hamburgers';
 	// AUTHENTICATION 
 	export let data: LayoutData;
 	$: ({ supabase, session } = data);
@@ -21,10 +23,21 @@
 		});
 		return () => subscription.unsubscribe();
 	})
+
+	let open:boolean;
+	let isLoggedIn:boolean = data.session !== null;
+
 </script>
 
 <div class="app">
 	<Header />
+	<div class="icon">
+        <Hamburger
+        bind:open
+        --color="black" />
+    
+        <Menu bind:open isLoggedIn={isLoggedIn}/>
+    </div>
 
 	<main>
 		<slot />
@@ -48,4 +61,10 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
+
+    .icon {
+        position: absolute;
+        left: 1.25em;
+    }
+
 </style>
