@@ -5,9 +5,15 @@
 -->
 
 <script lang="ts">
+	import { Hamburger } from 'svelte-hamburgers';
+    import Menu from './Menu.svelte';
+
 	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
+
+	// hamburger menu
+	let open:boolean;
 
 	// Weather API
 	let location = "Dresden";
@@ -32,6 +38,13 @@
 	}
 </script>
 
+<div class="icon">
+	<Hamburger
+	bind:open
+	--color="black" />
+
+	<Menu bind:open />
+</div>
 <section>
 	<h1>API Prototype</h1>
 	<h2>Wetter API</h2>
@@ -80,6 +93,29 @@
 				<p>{data.name}</p>
 			{/each}
 		{/if}
-		
+
 	{/await}
+	
 </section>
+
+<style>
+    .icon {
+        position: absolute;
+        left: 1.25em;
+    }
+
+
+	/* The following lines are just temporary */
+	button {
+		background-color: azure;		
+		padding: 0.3em;
+	}
+
+	button:hover {
+		background-color: blanchedalmond;
+	}
+
+	section {
+		margin: 3em;
+	}
+</style>
