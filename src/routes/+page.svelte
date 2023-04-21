@@ -41,11 +41,15 @@
 	{#await weatherData}
 		<p>hole Wetterinformationen...</p>
 	{:then data}
-		<p>Wetterdaten für: {data.location.name}</p>
-		<p>Temperatur: {data.current.temp_c} °C</p>
-		<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
-		<p>Wetterkondition: {data.current.condition.text}</p>
-		<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
+		{#if data.error}
+			<p>{data.error.message}</p>
+		{:else}
+			<p>Wetterdaten für: {data.location.name}</p>
+			<p>Temperatur: {data.current.temp_c} °C</p>
+			<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
+			<p>Wetterkondition: {data.current.condition.text}</p>
+			<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
+		{/if}		
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
@@ -60,6 +64,8 @@
 		<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
 		<!-- svelte-ignore a11y-img-redundant-alt -->
 		<img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
+	{:catch error}
+		<p style="color: red">{error.message}</p>
 	{/await}
 
 	<h2>Visible Planets</h2>
@@ -67,8 +73,13 @@
 	{#await visiblePlanetsData}
 		<p>Suche sichtbare Planeten...</p>
 	{:then visiblePlanetsData} 
-		{#each visiblePlanetsData as data}
-			<p>{data.name}</p>
-		{/each}
+		{#if visiblePlanetsData.error}
+			<p>{visiblePlanetsData.error.message}</p>
+		{:else}
+			{#each visiblePlanetsData as data}
+				<p>{data.name}</p>
+			{/each}
+		{/if}
+		
 	{/await}
 </section>

@@ -24,13 +24,12 @@ export async function getAPOD(){
     const response = await API_REQUEST();
     const data = await response.json();
 
-    imgData = {
-        date: data.date,
-        title: data.title,
-        url: data.url
-    }
-
     if (response.ok){
+        imgData = {
+            date: data.date,
+            title: data.title,
+            url: data.url
+        }
 		return imgData;
 	} else {
 		throw new Error(data)

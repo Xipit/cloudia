@@ -2,12 +2,12 @@ import { PUBLIC_API_KEY_WEATHER } from "$env/static/public";
 
 const BASE_URL = "http://api.weatherapi.com/v1/";
 
-export let latitude: number;
-export let longitude: number;
+export let latitude: any = null;
+export let longitude: any = null;
 
 async function API_REQUEST(location: String){
 	let url = BASE_URL + "current.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location;
-    return await fetch(
+	return await fetch(
         url,
         {
             method: 'GET',
@@ -20,15 +20,16 @@ async function API_REQUEST(location: String){
 
 export async function getCurrentWeatherData(location: String){
 	const response = await API_REQUEST(location);
-    const data = await response.json();		
-	console.log(data);
-	latitude = data.location.lat;
-	longitude = data.location.lon;
+	const data = await response.json();		
 
-	if (response.ok){
+	if (response.ok){		
+		latitude = data.location.lat;
+		longitude = data.location.lon;
 		return data;
 	} else {
-		// TODO: Handle error if the location doesn't exists (example: "dfsds")
-		throw new Error(data)
+		latitude = null;
+		longitude = null;
+		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
+		return data;
 	}
 }

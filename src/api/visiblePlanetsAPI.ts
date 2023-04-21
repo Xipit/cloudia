@@ -1,5 +1,11 @@
 const BASE_URL = "https://api.visibleplanets.dev/v3"
 
+let errorData = {
+	error: {
+		message: "",
+	}
+};
+
 async function API_REQUEST(latitude: number, longitude: number){
 	// url https://api.visibleplanets.dev/v3?latitude=32&longitude=-98&showCoords=true
 	let url = BASE_URL + "?latitude=" + latitude + "&longitude=" + longitude + "&showCoords=true";
@@ -12,9 +18,17 @@ async function API_REQUEST(latitude: number, longitude: number){
     );
 }
 
-export async function getVisiblePlanetsData(latitude: number, longitude: number){
-
-	console.log(latitude + ", " + longitude);
+export async function getVisiblePlanetsData(latitude: any, longitude: any){
+	if ((typeof latitude !== "number") || (typeof longitude !== "number")) {
+		console.log("location could not be found");
+		errorData = {
+			error: {
+				message: "Location could not be found. Try search again.",
+			}
+		}
+		return errorData;
+	}
+	
 	const response = await API_REQUEST(latitude, longitude);
     const data = await response.json();
 
