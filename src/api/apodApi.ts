@@ -1,5 +1,6 @@
+import { PUBLIC_API_KEY_NASA } from "$env/static/public";
+
 const BASE_URL = "https://api.nasa.gov/planetary/apod/";
-const API_KEY = "WMC1WMgpAQshc3x9ye52j44seSmdfzUeoXGwlwHK";
 
 let imgData = {
     date: typeof(String),
@@ -9,7 +10,7 @@ let imgData = {
 
 // this function returns the response of the API
 async function API_REQUEST(){
-    let url = BASE_URL + "?api_key=" + API_KEY;
+    let url = BASE_URL + "?api_key=" + PUBLIC_API_KEY_NASA;
     return await fetch(
         url,
         {

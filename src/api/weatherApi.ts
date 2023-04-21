@@ -1,11 +1,12 @@
+import { PUBLIC_API_KEY_WEATHER } from "$env/static/public";
+
 const BASE_URL = "http://api.weatherapi.com/v1/";
-const PLUBLIC_API_KEY_WEATHER="d02fc8f55f1a44e481294946230304";
 
 export let latitude: number;
 export let longitude: number;
 
 async function API_REQUEST(location: String){
-	let url = BASE_URL + "current.json?key=" + PLUBLIC_API_KEY_WEATHER + "&q=" + location;
+	let url = BASE_URL + "current.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location;
     return await fetch(
         url,
         {
