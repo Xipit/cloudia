@@ -4,10 +4,10 @@
 
 -->
 
-<script>
-	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi.svelte";
-	import {getAPOD} from "../api/apodApi.svelte";
-	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI.svelte";
+<script lang="ts">
+	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
+	import {getAPOD} from "../api/apodApi";
+	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
 
 	// Weather API
 	let location = "Dresden";
