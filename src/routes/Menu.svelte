@@ -42,16 +42,15 @@
             word-break: break-word;
 
             &:hover, &:active, &:focus {
-                text-shadow: 3px 3px 4px rgba( 31, 38, 135, 0.37 );
+                text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
                 backdrop-filter: blur( 0.65em );
                 -webkit-backdrop-filter: blur( 0.65em );
                 border-radius: 0.2em;
                 padding: 0.625em;
             }
         }
-    }
 
-    .burger-menu-background {
+        .burger-menu-background {
         position: absolute;
         width: 100%;
 		top: 0;
@@ -62,5 +61,8 @@
 		border-left: 0.063em solid rgba(0, 0, 0, .1);
 		box-shadow: -0.125em 0px 0.375em -0.063em rgba(0, 0, 0, 0.1);
         z-index: -1;
+        }
     }
+
+    
   </style>

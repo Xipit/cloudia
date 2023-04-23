@@ -45,11 +45,18 @@
 		{#if data.error}
 			<p>{data.error.message}</p>
 		{:else}
-			<p>Wetterdaten für: {data.location.name}</p>
-			<p>Temperatur: {data.current.temp_c} °C</p>
-			<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
-			<p>Wetterkondition: {data.current.condition.text}</p>
-			<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
+			<div class="main-info">
+				<div class="temperature">{data.current.temp_c} °C</div>
+				<div class="location">{data.location.name}</div>
+			</div>
+
+			<div class="weather-indicator"></div>
+
+			<div class="side-info">
+				<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
+				<p>Wetterkondition: {data.current.condition.text}</p>
+				<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
+			</div>
 		{/if}		
 	{:catch error}
 		<p style="color: red">{error.message}</p>
@@ -83,8 +90,8 @@
 		{/if}
 
 	{/await}
-	
 </section>
+
 
 <style>
 	/* The following lines are just temporary */
@@ -99,5 +106,34 @@
 
 	section {
 		margin: 3em;
+	}
+	.main-info {
+		margin-top: 70px;
+		margin-left: 15px;
+		color: white;
+		text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
+	}
+	.temperature {
+		font-family: 'Chewy', cursive;
+		font-size: 55px;
+	}
+	.location {
+		font-size: 25px;
+		margin-top: -15px;
+	}
+	.weather-indicator{
+		background:rgba(255, 255, 255, 0.3);
+		margin-top:20px;
+		height:150px;
+		width:100%;;
+		border-radius:7px;
+	}
+	.side-info {
+		background:rgba(255, 255, 255, 0.3);
+		margin-top:20px;
+		padding: 10px;
+		height:300px;
+		width:100%;;
+		border-radius:7px;
 	}
 </style>
