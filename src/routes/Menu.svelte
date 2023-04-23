@@ -1,56 +1,64 @@
 <script lang="ts">
     import { fly, scale } from 'svelte/transition';
     import { quadOut } from 'svelte/easing';
+    import { Hamburger } from 'svelte-hamburgers';
   
     export let open:boolean;
   </script>
   
+  <Hamburger
+  bind:open
+  --color="black" />
+
   {#if open}
-    <div class="menu">
+    <div class="burger-menu">
         {#each ['Profil', 'Einstellungen', 'Ortsauswahl', 'Favoriten'] as link, i}
-            <p transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
+            <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
                 {link}
-            </p>
+            </a>
         {/each}
+        <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
     </div>
+    {/if}
   
-    <div class="bar" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
-  {/if}
-  
-  <style>
-    :global(html) {
-        background-image: linear-gradient(to top, #ffdd55, #80d9cf);
-        font-family: Arial, Helvetica, sans-serif;
-    }
-    .menu {
+  <style lang="scss">
+    
+    .burger-menu {
+        width: 300px;
         text-align: left;
         font-size: 1.5em;
         letter-spacing: 0.15em;
         padding: 1em;
         padding-top: 0;
         color: black;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        a {
+            width: 100%;
+            margin: 1rem auto;
+            padding: 0.625em;
+            word-break: break-word;
+
+            &:hover, &:active, &:focus {
+                box-shadow: 0 0.5em 2em 0 rgba( 31, 38, 135, 0.37 );
+                backdrop-filter: blur( 0.65em );
+                -webkit-backdrop-filter: blur( 0.65em );
+                border-radius: 0.2em;
+                padding: 0.625em;
+            }
+        }
     }
-    p {
-        cursor: pointer;
-        width: max-content;
-        margin: 1rem auto;
-        padding: 0.625em;
-    }
-    p:hover {
-        box-shadow: 0 0.5em 2em 0 rgba( 31, 38, 135, 0.37 );
-        backdrop-filter: blur( 0.65em );
-        -webkit-backdrop-filter: blur( 0.65em );
-        border-radius: 0.2em;
-        padding: 0.625em;
-    }
-    .bar {
-        position: fixed;
+
+    .burger-menu-background {
+        position: absolute;
+        width: 100%;
 		top: 0;
 		left: 0;
 		background: #ddd;
 		padding: 1em;
 		height: 100vh;
-		width: 18em;
 		border-left: 0.063em solid rgba(0, 0, 0, .1);
 		box-shadow: -0.125em 0px 0.375em -0.063em rgba(0, 0, 0, 0.1);
         z-index: -1;
