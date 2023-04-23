@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Header from './Header.svelte';
-	import './styles.css';
 	import '../app.css';
 
 
@@ -31,6 +30,10 @@
 </div>
 
 <style>
+	:global(html) {
+        background-image: linear-gradient(to top, #ffdd55, #80d9cf);
+        font-family: Arial, Helvetica, sans-serif;
+    }
 	.app {
 		display: flex;
 		flex-direction: column;
