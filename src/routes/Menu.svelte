@@ -1,28 +1,42 @@
+<head>
+    <!-- The following lines are just temporary  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
+</head>
+
 <script lang="ts">
     import { fly, scale } from 'svelte/transition';
     import { quadOut } from 'svelte/easing';
     import { Hamburger } from 'svelte-hamburgers';
   
     export let open:boolean;
-  </script>
+</script>
+  <div class="icon">
+    <Hamburger
+        bind:open
+        --color="black" />
+  </div>
   
-  <Hamburger
-  bind:open
-  --color="black" />
-
   {#if open}
     <div class="burger-menu">
+        <p transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </p>
         {#each ['Profil', 'Einstellungen', 'Ortsauswahl', 'Favoriten'] as link, i}
             <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
                 {link}
             </a>
         {/each}
+        
         <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
     </div>
     {/if}
   
   <style lang="scss">
-    
+    .icon {
+        padding-top: 10px;
+        padding-left: 10px;
+    }
+
     .burger-menu {
         width: 300px;
         text-align: left;
@@ -35,10 +49,17 @@
         flex-direction: column;
         overflow: hidden;
 
+        .cloudia {
+            position: absolute;
+            top: 0.9em;
+            left: 7.6em;
+            font-family: 'Chewy', cursive;
+        }
+
         a {
             width: 100%;
             margin: 1rem auto;
-            padding: 0.625em;
+            padding: 0.1em;
             word-break: break-word;
 
             &:hover, &:active, &:focus {
@@ -46,7 +67,7 @@
                 backdrop-filter: blur( 0.65em );
                 -webkit-backdrop-filter: blur( 0.65em );
                 border-radius: 0.2em;
-                padding: 0.625em;
+                padding: 0.1em;
             }
         }
 
