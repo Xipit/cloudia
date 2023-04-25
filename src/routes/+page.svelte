@@ -5,16 +5,18 @@
 -->
 
 <script lang="ts">
-	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
+	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
 
 	// Weather API
-	let location = "Dresden";
+	let location = "";
 	let weatherData = getCurrentWeatherData(location);
+	let nextHoursWeatherData = getNextHoursWeatherData(location);
 
 	function handleWeatherDataClick(){
 		weatherData = getCurrentWeatherData(location);
+		nextHoursWeatherData = getNextHoursWeatherData(location);
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -54,6 +56,24 @@
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
+	<br>
+	<h3>Wetterdaten für die nächsten 5 Stunden:</h3>
+	{#await nextHoursWeatherData}
+		<p>checke Wetter für die nächsten Stunden</p>
+	{:then data} 
+		{#if data.error}
+			<p>{data.error.message}</p>
+		{:else}
+			{#each data.hour as hour}
+				<p>{hour.time}: {hour.temp_c}°C</p>
+			{/each}
+		{/if}	
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
+
+	<br>
+	<br>
 
 	<h2>APOD - Astronomy Picture of the Day</h2>
 	<button on:click={handleAPODClick}>Picture of the Day</button>
@@ -68,6 +88,9 @@
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
+
+	<br>
+	<br>
 
 	<h2>Visible Planets</h2>
 	<button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
