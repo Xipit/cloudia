@@ -5,9 +5,15 @@
 -->
 
 <script lang="ts">
+	import { enhance, type SubmitFunction } from "$app/forms";
+	import { supabaseClient } from "$lib/js/supabase";
+	import type { PageData } from "./$types";
+
 	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
+
+    export let data:PageData;
 
 	// Weather API
 	let location = "Dresden";
@@ -24,73 +30,86 @@
 		apodData = getAPOD();
 	}
 
-	// Visible Planets API
+    	// Visible Planets API
 	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
 
-	function handleVisiblePlanetsClick(){
-		visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
-	}
+    function handleVisiblePlanetsClick(){
+        visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
+    }
+
 </script>
 
-
-<section>
-	
-
-	{#await weatherData}
-		<p>hole Wetterinformationen...</p>
-	{:then data}
-		{#if data.error}
-			<p>{data.error.message}</p>
-		{:else}
-			<div class="main-info">
-				<div class="temperature">{data.current.temp_c} °C</div>
+<main>
+    <section>
+        {#if data.session }
+        <p>Welcome {data.session.user.email}</p>
+        <form action="/logout" method="POST">
+            <button type="submit" class="button">LogOut</button>
+        </form>
+    {:else}
+        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p>
+    {/if}
+    </section>
+    <section>
+        <h1>API Prototype</h1>
+        <h2>Wetter API</h2>
+		
+        {#await weatherData}
+            <p>hole Wetterinformationen...</p>
+        {:then data}
+            {#if data.error}
+                <p>{data.error.message}</p>
+            {:else}
+                <div class="main-info">
+	                <div class="temperature">{data.current.temp_c} °C</div>
 				<div class="location">{data.location.name}</div>
 			</div>
 
 			<div class="weather-indicator"></div>
 
 			<div class="side-info">
-				<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
-				<p>Wetterkondition: {data.current.condition.text}</p>
-				<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
+	                <p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
+	                <p>Wetterkondition: {data.current.condition.text}</p>
+	                <p>Luftfeuchtigkeit: {data.current.humidity} %</p>
 			</div>
-		{/if}		
-	{:catch error}
-		<p style="color: red">{error.message}</p>
-	{/await}
+            {/if}		
+        {:catch error}
+            <p style="color: red">{error.message}</p>
+        {/await}
 
-	<!-- <h2>APOD - Astronomy Picture of the Day</h2>
-	<button on:click={handleAPODClick}>Picture of the Day</button>
+		<!-- <h2>APOD - Astronomy Picture of the Day</h2>
+		<button on:click={handleAPODClick}>Picture of the Day</button>
 
-	{#await apodData}
-		<p>hole Astronomy Picture of the Day</p>
-	{:then data} 
-		<p>{data.title} - {data.date}</p> -->
-		<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
-		<!-- svelte-ignore a11y-img-redundant-alt -->
-		<!-- <img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
-	{:catch error}
-		<p style="color: red">{error.message}</p>
-	{/await} -->
+		{#await apodData}
+			<p>hole Astronomy Picture of the Day</p>
+		{:then data} 
+			<p>{data.title} - {data.date}</p> -->
+			<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
+			<!-- svelte-ignore a11y-img-redundant-alt -->
+			<!-- <img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await} -->
 
-	<!-- <h2>Visible Planets</h2>
-	<button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
-	{#await visiblePlanetsData}
-		<p>Suche sichtbare Planeten...</p>
-	{:then visiblePlanetsData} 
-		{#if visiblePlanetsData.error}
-			<p>{visiblePlanetsData.error.message}</p>
-		{:else}
-			{#each visiblePlanetsData as data}
-				<p>{data.name}</p>
-			{/each}
-		{/if}
+		<!-- <h2>Visible Planets</h2>
+		<button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
+		{#await visiblePlanetsData}
+			<p>Suche sichtbare Planeten...</p>
+		{:then visiblePlanetsData} 
+			{#if visiblePlanetsData.error}
+				<p>{visiblePlanetsData.error.message}</p>
+			{:else}
+				{#each visiblePlanetsData as data}
+					<p>{data.name}</p>
+				{/each}
+			{/if}
 
-	{/await} -->
-	
-	<input placeholder="Ort eintragen" bind:value={location}>
-	<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
-</section>
+		{/await} -->
+		
+		<input placeholder="Ort eintragen" bind:value={location}>
+		<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
+	</section>
+</main>
 
 
 <style lang="scss">

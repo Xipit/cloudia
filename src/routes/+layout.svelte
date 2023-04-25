@@ -1,7 +1,7 @@
 <head>
 	 <!-- The following lines are just temporary  -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true">
 	<link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -15,6 +15,8 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
+	import Menu from './Menu.svelte';
+	import { Hamburger } from 'svelte-hamburgers';
 	// AUTHENTICATION 
 	export let data: LayoutData;
 	$: ({ supabase, session } = data);
@@ -22,16 +24,20 @@
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, _session) => {
-			if (_session?.expires_at !== session?.expires_at){
+			console.log('Auth state change detected');
+			//if (_session?.expires_at !== session?.expires_at){
 				invalidate('supabase:auth');
-			}
+			//}
 		});
 		return () => subscription.unsubscribe();
 	})
+
+	let isLoggedIn:boolean = data.session !== null;
+
 </script>
 
 <div class="app">
-	<Header />
+	<Header bind:isLoggedIn={isLoggedIn}/>
 
 	<main>
 		<slot />
@@ -59,4 +65,10 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
+
+    .icon {
+        position: absolute;
+        left: 1.25em;
+    }
+
 </style>

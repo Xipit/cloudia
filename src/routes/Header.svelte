@@ -4,10 +4,12 @@
 
     // hamburger menu
 	let open:boolean;
+
+    export let isLoggedIn:boolean;
 </script>
 
 <div class="header">
-	<Menu bind:open />
+	<Menu bind:open bind:isLoggedIn/>
 </div>
 
 

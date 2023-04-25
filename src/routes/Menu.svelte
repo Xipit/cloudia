@@ -1,9 +1,3 @@
-<head>
-    <!-- The following lines are just temporary  -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
-</head>
 
 <script lang="ts">
     import { fly, scale } from 'svelte/transition';
@@ -11,6 +5,20 @@
     import { Hamburger } from 'svelte-hamburgers';
   
     export let open:boolean;
+    export let isLoggedIn:boolean;
+
+    const menuItems = [
+        ...(isLoggedIn 
+            ? [{ name: 'Logout', href: '/' }] 
+            : [ 
+                { name: 'Login', href: '/login' },
+                { name: 'Registrieren', href: '/register' },
+            ]
+        ),
+        { name: 'Einstellungen' },
+        { name: 'Ortsauswahl' },
+        { name: 'Favoriten' }
+    ];
 </script>
   <div class="icon">
     <Hamburger
@@ -21,9 +29,9 @@
   {#if open}
     <div class="burger-menu">
         <p transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </p>
-        {#each ['Profil', 'Einstellungen', 'Ortsauswahl', 'Favoriten'] as link, i}
-            <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
-                {link}
+        {#each menuItems as link, i}
+            <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
+                {link.name}
             </a>
         {/each}
         
