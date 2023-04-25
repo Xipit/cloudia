@@ -23,20 +23,12 @@
 		return () => subscription.unsubscribe();
 	})
 
-	let open:boolean;
 	let isLoggedIn:boolean = data.session !== null;
 
 </script>
 
 <div class="app">
-	<Header />
-	<div class="icon">
-        <Hamburger
-        bind:open
-        --color="black" />
-    
-        <Menu bind:open isLoggedIn={isLoggedIn}/>
-    </div>
+	<Header bind:isLoggedIn={isLoggedIn}/>
 
 	<main>
 		<slot />

@@ -26,9 +26,9 @@
 
   {#if open}
     <div class="burger-menu">
-        {#each ['Profil', 'Einstellungen', 'Ortsauswahl', 'Favoriten'] as link, i}
-            <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
-                {link}
+        {#each menuItems as link, i}
+            <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
+                {link.name}
             </a>
         {/each}
         <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
