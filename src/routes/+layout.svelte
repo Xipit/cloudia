@@ -15,8 +15,7 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
-	import Menu from './Menu.svelte';
-	import { Hamburger } from 'svelte-hamburgers';
+
 	// AUTHENTICATION 
 	export let data: LayoutData;
 	$: ({ supabase, session } = data);
@@ -25,9 +24,8 @@
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, _session) => {
 			console.log('Auth state change detected');
-			//if (_session?.expires_at !== session?.expires_at){
-				invalidate('supabase:auth');
-			//}
+			invalidate('supabase:auth');
+
 		});
 		return () => subscription.unsubscribe();
 	})
