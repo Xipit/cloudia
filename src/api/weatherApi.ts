@@ -1,5 +1,7 @@
 import { PUBLIC_API_KEY_WEATHER } from "$env/static/public";
+import { Cache } from './cache';
 
+const cache = new Cache();
 const BASE_URL = "http://api.weatherapi.com/v1/";
 
 export let latitude: any = null;
@@ -25,15 +27,15 @@ const forecastDays = {
 
 async function API_REQUEST_CURRENT(location: String){
 	let url = BASE_URL + "current.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location;
-	return await fetch(
-        url,
-        {
-            method: 'GET',
-			headers: {
-            	'Access-Control-Allow-Origin': '*',
-        	}
-        }
-    );
+	let fetchOptions = {
+		method: 'GET',
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+		}
+	}
+
+	let localStorageKey = "weatherApiCurrent?q=" + location;
+	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
 }
 
 export async function getCurrentWeatherData(location: String){
@@ -46,10 +48,9 @@ export async function getCurrentWeatherData(location: String){
 		return data;
 	}
 
-	const response = await API_REQUEST_CURRENT(location);
-	const data = await response.json();		
+	const data = await API_REQUEST_CURRENT(location);
 
-	if (response.ok){		
+	if (!data.error) {
 		latitude = data.location.lat;
 		longitude = data.location.lon;
 		return data;
@@ -66,15 +67,17 @@ export async function getCurrentWeatherData(location: String){
 
 async function API_REQUEST_FORECAST(location: String){
 	let url = BASE_URL + "forecast.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location + "&days=3";
-	return await fetch(
-        url,
-        {
-            method: 'GET',
-			headers: {
-            	'Access-Control-Allow-Origin': '*',
-        	}
-        }
-    );
+	let fetchOptions = {
+		method: 'GET',
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+		}
+	}
+
+	let localStorageKey = "weatherApiForecast" + location;
+	//todo: check how long the data can/should be used until new data should be fetched? --> what value should "expiresAfterMinutes" have?
+	// new enum property in "expireEnum"?
+	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
 }
 
 async function getForecastWeatherData(location: String){
@@ -87,10 +90,9 @@ async function getForecastWeatherData(location: String){
 		return data;
 	}
 
-	const response = await API_REQUEST_FORECAST(location);
-	const data = await response.json();		
+	const data = await API_REQUEST_FORECAST(location);
 
-	if (response.ok){		
+	if (!data.error) {
 		return data;
 	} else {
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
