@@ -5,7 +5,7 @@
 -->
 
 <script lang="ts">
-	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData} from "../api/weatherApi"
+	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
 
@@ -13,10 +13,12 @@
 	let location = "";
 	let weatherData = getCurrentWeatherData(location);
 	let nextHoursWeatherData = getNextHoursWeatherData(location);
+	let nextDaysWeatherData = getNextDaysWeatherData(location);
 
 	function handleWeatherDataClick(){
 		weatherData = getCurrentWeatherData(location);
 		nextHoursWeatherData = getNextHoursWeatherData(location);
+		nextDaysWeatherData = getNextDaysWeatherData(location);
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -71,7 +73,23 @@
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
-
+	<br>
+	<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+	{#await nextDaysWeatherData}
+		<p>checke Wetter für die nächsten Tage</p>
+	{:then data} 
+		{#if data.error}
+			<p>{data.error.message}</p>
+		{:else}
+			{#each data.day as day}
+				<p>{day.date}</p>
+				<p>- max temp: {day.maxtemp_c}°C</p>
+				<p>- min temp: {day.mintemp_c}°C</p>
+			{/each}
+		{/if}	
+	{:catch error}
+		<p style="color: red">{error.message}</p>
+	{/await}
 	<br>
 	<br>
 

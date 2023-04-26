@@ -5,11 +5,19 @@ const BASE_URL = "http://api.weatherapi.com/v1/";
 export let latitude: any = null;
 export let longitude: any = null;
 
-const forecast = {
+const forecastHours = {
 	hour: [{
 		date: "",
 		time: "",
 		temp_c: "",
+	}]
+}
+
+const forecastDays = {
+	day: [{
+		date: "",
+		maxtemp_c: "",
+		mintemp_c: "",
 	}]
 }
 
@@ -97,17 +105,17 @@ export async function getNextHoursWeatherData(location: String){
 		return data;
 	} else {
 		// remove old items from list
-		forecast.hour.splice(0);
+		forecastHours.hour.splice(0);
 
 		let timestampNow = Date.now();
 		let dateNow = new Date(timestampNow);
 
-		// This is used to get to know which is the next hour for the forecast.hour array
+		// This is used to get to know which is the next hour for the forecastHours.hour array
 		let nextHourDate = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate(), dateNow.getHours())
 
 		let dayIndex = 0;
 
-		// Pushes the data for the next i-Hours into forecast.hour
+		// Pushes the data for the next i-Hours into forecastHour.hour
 		for (let i = 0; i < 5; i++) {
 			nextHourDate.setHours(nextHourDate.getHours() + 1);
 
@@ -121,13 +129,40 @@ export async function getNextHoursWeatherData(location: String){
 			let forecastday = data.forecast.forecastday[dayIndex];
 			let forecastHour = forecastday.hour[nextHourDate.getHours()];
 
-			forecast.hour.push({
+			forecastHours.hour.push({
 				date: forecastday.date.toString(),
 				time: forecastHour.time.toString(),
 				temp_c: forecastHour.temp_c.toString(),
 			})
 		}
-		return forecast;
+		return forecastHours;
+	}
+}
+
+export async function getNextDaysWeatherData(location: String) {
+	const data = await getForecastWeatherData(location);
+
+	if (data.error){		
+		return data;
+	} else {
+		// remove old items from list
+		forecastDays.day.splice(0);
+
+		// Pushes the data for the next i-Days into forecastDays.day
+		// What we get: Weatherdata for today, tomorrow, the day after tomorrow
+		for (let i = 0; i < 3; i++) {
+			let forecastday = data.forecast.forecastday[i];
+
+			if (forecastday != null) {
+				forecastDays.day.push({
+					date: forecastday.date.toString(),
+					maxtemp_c: forecastday.day.maxtemp_c.toString(),
+					mintemp_c: forecastday.day.mintemp_c.toString(),
+				})
+			}
+		}
+		
+		return forecastDays;
 	}
 }
 
