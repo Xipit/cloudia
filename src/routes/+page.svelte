@@ -68,34 +68,40 @@
 				<div class="location">{data.location.name}</div>
 			</div>
 
-			<div class="weather-indicator"></div>
+			
 
-			<div class="side-info">
+			<!-- div class="side-info">
 	                <p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
 	                <p>Wetterkondition: {data.current.condition.text}</p>
 	                <p>Luftfeuchtigkeit: {data.current.humidity} %</p>
-			</div>
+			</div -->
             {/if}		
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}
 
-		<!--<h3>Wetterdaten für die nächsten 5 Stunden:</h3>
 		{#await nextHoursWeatherData}
 			<p>checke Wetter für die nächsten Stunden</p>
 		{:then data} 
 			{#if data.error}
 				<p>{data.error.message}</p>
 			{:else}
-				{#each data.hour as hour}
-					<p>{hour.time}: {hour.temp_c}°C</p>
-				{/each}
+				<div class="weather-indicator">
+					{#each data.hour as hour}
+						<div class="time-element">
+							{hour.temp_c}°C
+							<img src="src\img\sun.png" alt="Sun">
+							{hour.time}
+						</div>
+					{/each}
+				</div>
 			{/if}	
 		{:catch error}
 			<p style="color: red">{error.message}</p>
 		{/await}
 		<br>
-		<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+
+		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
 		{#await nextDaysWeatherData}
 			<p>checke Wetter für die nächsten Tage</p>
 		{:then data} 
@@ -183,11 +189,17 @@
 		}
 
 		.weather-indicator{
+			display: flex;
+			justify-content: space-around;
 			background: rgba(255, 255, 255, 0.3);
 			margin-top: 1.25em;
 			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
+
+			.time-element {
+				text-align: center;
+			}
 		}
 
 		.side-info {
