@@ -22,10 +22,6 @@ export const actions:Actions = {
         const speedUnit = formData.get('speedUnit') as string;
         const temperatureUnit = formData.get('temperatureUnit') as string;
 
-        console.log(speedUnit);
-        console.log(temperatureUnit);
-        console.log(formData.get("email") as string);
-
         const session = await locals.getSession();
 
         const { error:err } = await locals.supabase.from('settings').upsert({

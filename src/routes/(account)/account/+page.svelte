@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
     import type { ActionData, PageData } from './$types';
 
     export let data: PageData;
@@ -12,30 +13,52 @@
     let temperatureUnit: string | null = settings?.temperature_unit;
     let speedUnit: string | null = settings?.speed_unit;
 
+    // if js enabled, then just run layout stuff and dont refresh browser
+    function handleSubmit() {
+		loading = true;
+		return async () => {
+			loading = false;
+		};
+	}
+
 </script>
 
-<div>
+<div >
+    <h1>
+        Account
+    </h1>
     <form
+        class="submit-form"
         method="post"
         action="?/update"
         bind:this={settingsForm}
+        use:enhance={handleSubmit}
     >
-        <div>
+        <div class="submit-form">
             <label for="email">E-Mail</label>
             <input id="email" type="text" value={session.user.email} disabled/>
         </div>
 
-        <div>
+        <div class="submit-form">
             <label for="temperatureUnit">Temperatureinheit</label>
-            <input id="temperatureUnit" name="temperatureUnit" type="text" value={form?.temperatureUnit ?? temperatureUnit} />
+            <select name="temperatureUnit" id="temperatureUnit">
+                <option value="celsius"     selected={temperatureUnit == "celsius"}     >Celsius</option>
+                <option value="kelvin"      selected={temperatureUnit == "kelvin"}      >Kelvin</option>
+                <option value="fahrenheit"  selected={temperatureUnit == "fahrenheit"}  >Fahrenheit</option>
+            </select>
         </div>
 
-        <div>
-            <label for="speedUnit">Geschwindigkeitseinheit</label>
-            <input id="speedUnit" name="speedUnit" type="text" value={form?.speedUnit ?? speedUnit} />
+        <div class="submit-form">
+            <label for="speedUnit">Geschwindigkeitseinheit</label> 
+            <select name="speedUnit" id="speedUnit">
+                <option value="kmh"         selected={speedUnit == "kmh"}       >km/h</option>
+                <option value="ms"          selected={speedUnit == "ms"}        >m/s</option>
+                <option value="beaufort"    selected={speedUnit == "beaufort"}  >Beaufort</option>
+                <option value="knot"        selected={speedUnit == "knot"}      >Knoten</option>
+            </select>
         </div>
 
-        <div>
+        <div class="submit-form">
             <input
                 type="submit"
                 value={loading ? 'Laden ...': 'Aktualisieren'}
@@ -49,3 +72,13 @@
         <button type="submit" class="button">LogOut</button>
     </form>
 </div>
+
+<style>
+    /* only there to test, can be thrown away */
+    .submit-form {
+        margin: 4px;
+        padding: 4px;
+        border: 1px solid black;
+        border-radius: 4px;
+    }
+</style>

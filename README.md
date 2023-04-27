@@ -18,7 +18,8 @@ data:
 - locationName
 ```
 create table saved_locations (
-  id uuid not null references auth.users on delete cascade,
+  id uuid default uuid_generate_v4(),
+  user_id uuid not null references auth.users on delete cascade,
   location_name text not null,
 
   primary key (id)
@@ -28,15 +29,19 @@ alter table saved_locations enable row level security;
 
 create policy "Users can view their saved_locations."
   on saved_locations for select
-  using ( auth.uid() = id );
+  using ( auth.uid() = user_id );
 
 create policy "Users can insert their own saved_locations."
   on saved_locations for insert
-  with check ( auth.uid() = id );
+  with check ( auth.uid() = user_id );
 
 create policy "Users can update own saved_locations."
   on saved_locations for update
-  using ( auth.uid() = id );
+  using ( auth.uid() = user_id );
+
+create policy "Users can delete their own saved_locations."
+  on saved_locations for delete
+  using ( auth.uid() = user_id );
 ```
 
 
