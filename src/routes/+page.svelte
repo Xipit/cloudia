@@ -105,16 +105,18 @@
 			{/if}
 
 		{/await} -->
-		
-		<input placeholder="Ort eintragen" bind:value={location}>
-		<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
+		<form>
+			<input placeholder="Ort eintragen" bind:value={location}>
+			<input class="button" type="submit" value="Wetterdaten bekommen" on:click={handleWeatherDataClick}>
+		</form>
+			
 	</section>
 </main>
 
 
 <style lang="scss">
 	/* The following lines are just temporary */
-	button {
+	.button {
 		background-color: azure;		
 		padding: 0.3em;
 
