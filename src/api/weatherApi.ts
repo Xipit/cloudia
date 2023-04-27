@@ -129,9 +129,12 @@ export async function getNextHoursWeatherData(location: String){
 			let forecastday = data.forecast.forecastday[dayIndex];
 			let forecastHour = forecastday.hour[nextHourDate.getHours()];
 
+			let time = new Date(forecastHour.time_epoch * 1000);
+			let timeString = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
+
 			forecastHours.hour.push({
-				date: forecastday.date.toString(),
-				time: forecastHour.time.toString(),
+				date: formattedDateString,
+				time: timeString,
 				temp_c: forecastHour.temp_c.toString(),
 			})
 		}
