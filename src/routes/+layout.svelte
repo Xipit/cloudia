@@ -66,9 +66,4 @@
 		box-sizing: border-box;
 	}
 
-    .icon {
-        position: absolute;
-        left: 1.25em;
-    }
-
 </style>

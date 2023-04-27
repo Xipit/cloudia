@@ -10,6 +10,7 @@ const forecastHours = {
 		date: "",
 		time: "",
 		temp_c: "",
+		conditionIconURL: "",
 	}]
 }
 
@@ -131,11 +132,13 @@ export async function getNextHoursWeatherData(location: String){
 
 			let time = new Date(forecastHour.time_epoch * 1000);
 			let timeString = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
+			let iconURL = getIconURL(forecastHour.condition.code);
 
 			forecastHours.hour.push({
 				date: formattedDateString,
 				time: timeString,
 				temp_c: forecastHour.temp_c.toString(),
+				conditionIconURL: iconURL, 
 			})
 		}
 		return forecastHours;
@@ -175,4 +178,16 @@ function getFormattedDate(date: Date){
 		(date.getMonth() + 1).toString().padStart(2, '0'),
 		(date.getDate()).toString().padStart(2, '0'),
 	  ].join('-')
+}
+
+function getIconURL(conditionCode:number){
+	switch (conditionCode) {
+		case 1000:
+			return "src\\img\\sun.png"; 
+			break;
+	
+		default:
+			return "src\\img\\sun.png";
+			break;
+	}
 }
