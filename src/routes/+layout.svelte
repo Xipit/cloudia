@@ -36,6 +36,11 @@
 
 </script>
 
+<!--background cloud layers-->
+<img src="src\img\layer1.svg" class="layer" id="layer1" alt="moving clouds">
+<img src="src\img\layer2.svg" class="layer" id="layer2" alt="moving clouds">
+<img src="src\img\layer3.svg" class="layer" id="layer3" alt="moving clouds">
+
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
 
@@ -46,7 +51,7 @@
 
 <style>
 	:global(html) {
-        background-image: linear-gradient(to top, #ffdd55, #80d9cf);
+        background-image: linear-gradient(to top, #626060, #394651);
         font-family: 'Atkinson Hyperlegible', sans-serif;
     }
 	.app {
@@ -65,10 +70,37 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-
-    .icon {
-        position: absolute;
-        left: 1.25em;
-    }
-
+	/*cloud layers*/
+	.layer {
+    	position: absolute;
+    	filter: drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+		min-width: 2000px;
+	}
+	#layer1 {
+		animation: cloud-movement1 5s linear infinite alternate;
+		/*change color svg???, https://stackoverflow.com/questions/22252472/how-can-i-change-the-color-of-an-svg-element/53336754#53336754
+		filter: invert(99%) sepia(3%) saturate(377%) hue-rotate(208deg) brightness(116%) contrast(100%);*/
+		z-index: -20;
+	}
+	#layer2 {
+		z-index: -50;
+		animation: cloud-movement2 5s linear infinite alternate;
+	}
+	#layer3 {
+		z-index: -100;
+		animation: cloud-movement3 5s linear infinite alternate;
+	}
+	/*animation cloud layers*/
+	@keyframes cloud-movement1 {
+		from {top: -95px; right:-40px;}
+		to {top: -95px; right: 0px;}
+	}
+	@keyframes cloud-movement2 {
+		from {top: -35px; right:0px;}
+		to {top: -35px; right: -30px;}
+	}
+	@keyframes cloud-movement3 {
+		from {top: 0px; right:-15px;}
+		to {top: 0px; right: 10px;}
+	}
 </style>
