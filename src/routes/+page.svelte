@@ -9,18 +9,22 @@
 	import { supabaseClient } from "$lib/js/supabase";
 	import type { PageData } from "./$types";
 
-	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
+	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
 
     export let data:PageData;
 
 	// Weather API
-	let location = "Dresden";
+	let location = "";
 	let weatherData = getCurrentWeatherData(location);
+	let nextHoursWeatherData = getNextHoursWeatherData(location);
+	let nextDaysWeatherData = getNextDaysWeatherData(location);
 
 	function handleWeatherDataClick(){
 		weatherData = getCurrentWeatherData(location);
+		nextHoursWeatherData = getNextHoursWeatherData(location);
+		nextDaysWeatherData = getNextDaysWeatherData(location);
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -37,6 +41,7 @@
         visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
     }
 
+
 </script>
 
 <main>
@@ -47,13 +52,12 @@
             <button type="submit" class="button">LogOut</button>
         </form>
     {:else}
-        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p>
+        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p> <br>
     {/if}
     </section>
-    <section>
-        <h1>API Prototype</h1>
-        <h2>Wetter API</h2>
-		
+
+<!-- BEGIN: general weather information -->
+    <section>		
         {#await weatherData}
             <p>hole Wetterinformationen...</p>
         {:then data}
@@ -65,17 +69,79 @@
 				<div class="location">{data.location.name}</div>
 			</div>
 
-			<div class="weather-indicator"></div>
-
-			<div class="side-info">
+		
+			<!-- div class="side-info">
+				<h3>Tagesübersicht: </h3>
 	                <p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
 	                <p>Wetterkondition: {data.current.condition.text}</p>
 	                <p>Luftfeuchtigkeit: {data.current.humidity} %</p>
-			</div>
+			</div -->
             {/if}		
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}
+
+
+<!-- BEGIN: weather for the next hours -->
+		{#await nextHoursWeatherData}
+			<p>checke Wetter für die nächsten Stunden</p>
+		{:then data} 
+			{#if data.error}
+				<p>{data.error.message}</p>
+			{:else}
+				<div class="weather-indicator">
+					{#each data.hour as hour}
+						<div class="time-element">
+							<div class="temp-hour">
+								{hour.temp_c}°C
+							</div>
+							<img src={hour.conditionIconURL} alt="Sun">
+							<hr>
+							{hour.time}
+						</div>
+					{/each}
+				</div>
+			{/if}	
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}
+		<br>
+
+<!-- BEGIN: weater of the day overview -->
+
+		{#await weatherData}
+		<p>hole Wetterinformationen...</p>
+		{:then data}
+		{#if data.error}
+			<p>{data.error.message}</p>
+		{:else}
+		<div class="side-info">
+			<h3>Tagesübersicht: </h3>
+				<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
+				<p>Wetterkondition: {data.current.condition.text}</p>
+				<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
+		</div>
+		{/if}		
+		{:catch error}
+		<p style="color: red">{error.message}</p>
+		{/await}
+
+		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+		{#await nextDaysWeatherData}
+			<p>checke Wetter für die nächsten Tage</p>
+		{:then data} 
+			{#if data.error}
+				<p>{data.error.message}</p>
+			{:else}
+				{#each data.day as day}
+					<p>{day.date}</p>
+					<p>- max temp: {day.maxtemp_c}°C</p>
+					<p>- min temp: {day.mintemp_c}°C</p>
+				{/each}
+			{/if}	
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}-->
 
 		<!-- <h2>APOD - Astronomy Picture of the Day</h2>
 		<button on:click={handleAPODClick}>Picture of the Day</button>
@@ -105,16 +171,22 @@
 			{/if}
 
 		{/await} -->
-		
-		<input placeholder="Ort eintragen" bind:value={location}>
-		<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
+		<form>
+			<input placeholder="Ort eintragen" bind:value={location}>
+			<input class="button" type="submit" value="Wetterdaten bekommen" on:click={handleWeatherDataClick}>
+		</form>
+			
 	</section>
 </main>
 
 
 <style lang="scss">
+	$font-accent: 'Chewy', cursive;
+	$light-color: white;
+
+
 	/* The following lines are just temporary */
-	button {
+	.button {
 		background-color: azure;		
 		padding: 0.3em;
 
@@ -131,11 +203,11 @@
 		.main-info {
 			margin-top: 4.375em;
 			margin-left: 0.625em;
-			color: white;
+			color: $light-color;
 			text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
 
 			.temperature {
-				font-family: 'Chewy', cursive;
+				font-family: $font-accent;
 				font-size: 3.5em;
 			}
 
@@ -146,11 +218,35 @@
 		}
 
 		.weather-indicator{
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
 			background: rgba(255, 255, 255, 0.3);
 			margin-top: 1.25em;
 			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
+
+			.time-element {
+				text-align: center;
+				font-family: $font-accent;
+				color: $light-color;
+				font-size: 16px;
+
+				.temp-hour {
+					font-size: 21px;
+				}
+
+				hr {
+					border-top: 3px solid $light-color;
+					padding-bottom: 5px;
+				}
+			}
+
+			img {
+				width: 50px;
+				padding: 10px;
+			}
 		}
 
 		.side-info {
