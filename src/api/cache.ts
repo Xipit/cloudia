@@ -11,6 +11,16 @@ export class Cache{
     }
 
     async fetchWithCache(localStorageKey: string, url: string, fetchOptions: RequestInit, expiresAfterMinutes: number, oneRefreshPerDay = false): Promise<any>{
+        if (typeof localStorage === "undefined") {
+            let data = {
+               error: {
+                   code: "404",
+                   message: "localStorage NOT FOUND"
+               }  
+            }
+            return data;
+        }
+
         const cachedData = localStorage.getItem(localStorageKey);
 
         if (cachedData) {
