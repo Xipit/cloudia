@@ -1,5 +1,3 @@
-import { CacheExpire } from "./expireEnum";
-
 export class Cache{
     // make this class a Singleton:
     private static instance: Cache;
@@ -12,13 +10,13 @@ export class Cache{
         return this;
     }
 
-    async fetchWithCache(localStorageKey: string, url: string, fetchOptions: RequestInit, expiresAfterMinutes: number): Promise<any>{
+    async fetchWithCache(localStorageKey: string, url: string, fetchOptions: RequestInit, expiresAfterMinutes: number, oneRefreshPerDay = false): Promise<any>{
         const cachedData = localStorage.getItem(localStorageKey);
 
         if (cachedData) {
             let data = JSON.parse(cachedData);
 
-            if (data.expiresAfterMinutes == CacheExpire.DAILY_REFRESH) {
+            if (data.oneRefreshPerDay == oneRefreshPerDay) {
                 let createdDate = new Date(data.cacheCreatedTimestamp).getDate();
                 let dateToday = new Date(Date.now()).getDate();
 
@@ -46,6 +44,7 @@ export class Cache{
             let timestampNow = Date.now();
             data.cacheCreatedTimestamp = timestampNow;
             data.expiresAfterMinutes = expiresAfterMinutes;
+            data.oneRefreshPerDay = oneRefreshPerDay;
             localStorage.setItem(localStorageKey, JSON.stringify(data));
         } else {
             console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);

@@ -1,6 +1,5 @@
 import { PUBLIC_API_KEY_NASA } from "$env/static/public";
 import { Cache } from './cache';
-import { CacheExpire } from "./expireEnum";
 
 const cache = new Cache();
 
@@ -20,7 +19,7 @@ async function API_REQUEST(){
 	}
 
 	let localStorageKey = "apodApi";
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, CacheExpire.DAILY_REFRESH);
+	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 0, true);
 }
 
 // this function can be called from the outside to get the information for the APOD
