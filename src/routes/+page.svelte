@@ -115,12 +115,20 @@
 		{#if data.error}
 			<p>{data.error.message}</p>
 		{:else}
-		<div class="side-info">
+		<!--<div class="side-info">
 			<h3>Tagesübersicht: </h3>
 				<p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
 				<p>Wetterkondition: {data.current.condition.text}</p>
 				<p>Luftfeuchtigkeit: {data.current.humidity} %</p>
-		</div>
+		</div>-->
+		<div class="flex-container">
+			<div><p class="number-tiles">{data.current.feelslike_c} °C</p><p>gefühlte Temperatur</p></div>
+			<div><p class="number-tiles">{data.current.condition.text}</p><p>Wetterkondition</p></div>
+			<div><p class="number-tiles">{data.current.humidity} %</p><p>Luftfeuchtigkeit</p></div>
+			<div>4</div>
+			<div>5</div>
+			<div>6</div>
+		  </div> 
 		{/if}		
 		{:catch error}
 		<p style="color: red">{error.message}</p>
@@ -254,8 +262,33 @@
 			margin-top: 1.25em;
 			padding: 0.625em;
 			height: 18.75em;
-			width: 100%;;
+			width: 100%;
 			border-radius: 0.438em;
+		}
+		.flex-container {
+			display: flex;
+			flex-wrap: wrap;			
+		}
+
+		.flex-container > div {
+			width: 22%;
+			height: 100px;
+			margin: 10px;
+			padding-top: 5em;
+			padding-bottom: 5em;
+			text-align: center;
+			
+			
+			background: rgba(255, 255, 255, 0.3);
+			margin-top: 1.25em;
+			padding: 0.625em;
+			
+			border-radius: 0.438em;
+		}
+		.number-tiles {
+			font-size: larger;
+			font-family: "Chewy";
+			color: white;
 		}
 	}	
 </style>
