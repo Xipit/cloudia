@@ -50,14 +50,14 @@ export async function getCurrentWeatherData(location: String){
 
 	const data = await API_REQUEST_CURRENT(location);
 
-	if (!data.error) {
-		latitude = data.location.lat;
-		longitude = data.location.lon;
-		return data;
-	} else {
+	if (data.error) {
 		latitude = null;
 		longitude = null;
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
+		return data;
+	} else {
+		latitude = data.location.lat;
+		longitude = data.location.lon;
 		return data;
 	}
 }
@@ -92,12 +92,11 @@ async function getForecastWeatherData(location: String){
 
 	const data = await API_REQUEST_FORECAST(location);
 
-	if (!data.error) {
-		return data;
-	} else {
+	if (data.error) {
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
-		return data;
-	}
+	} 
+
+	return data;
 }
 
 export async function getNextHoursWeatherData(location: String){
