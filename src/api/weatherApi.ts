@@ -38,12 +38,11 @@ async function API_REQUEST_CURRENT(location: String){
 
 export async function getCurrentWeatherData(location: String){
 	if (location == ""){
-		const data = {
-			error: {
-				message: "No location was set",
-			}
-		}
-		return data;
+		return	{
+					error: {
+						message: "No location was set",
+					}
+				};
 	}
 
 	const response = await API_REQUEST_CURRENT(location);
@@ -79,12 +78,11 @@ async function API_REQUEST_FORECAST(location: String){
 
 async function getForecastWeatherData(location: String){
 	if (location == ""){
-		const data = {
-			error: {
-				message: "No location was set",
-			}
-		}
-		return data;
+		return	{
+					error: {
+						message: "No location was set",
+					}
+				};
 	}
 
 	const response = await API_REQUEST_FORECAST(location);
