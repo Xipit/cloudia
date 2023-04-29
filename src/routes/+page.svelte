@@ -12,14 +12,18 @@
 	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
+	import { page } from "$app/stores";
+	import { goto, invalidate } from "$app/navigation";
+	import { _replaceStateWithQuery } from "./+page";
+	//import { _replaceStateWithQuery } from "./+page.server";
 
     export let data:PageData;
 
 	// Weather API
-	let location = "";
-	let weatherData = getCurrentWeatherData(location);
-	let nextHoursWeatherData = getNextHoursWeatherData(location);
-	let nextDaysWeatherData = getNextDaysWeatherData(location);
+	let location = data.location;
+	let weatherData = data.weatherData;
+	let nextHoursWeatherData = data.nextHoursWeatherData;
+	let nextDaysWeatherData = data.nextDaysWeatherData;
 
 	function handleWeatherDataClick(){
 		weatherData = getCurrentWeatherData(location);
@@ -142,7 +146,17 @@
 		{/await} -->
 		
 		<input placeholder="Ort eintragen" bind:value={location}>
-		<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
+		<button on:click={ () => {
+			/*$page.url.searchParams.set('location', 'berlin');
+			goto(`?${$page.url.searchParams.toString()}`);
+			invalidate($page.url);
+			*/
+			_replaceStateWithQuery({
+				"location": 'berlin'
+			});
+			
+			
+		}}>Wetterdaten bekommen</button>
 	</section>
 </main>
 
