@@ -9,18 +9,22 @@
 	import { supabaseClient } from "$lib/js/supabase";
 	import type { PageData } from "./$types";
 
-	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
+	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
 
     export let data:PageData;
 
 	// Weather API
-	let location = "Dresden";
+	let location = "";
 	let weatherData = getCurrentWeatherData(location);
+	let nextHoursWeatherData = getNextHoursWeatherData(location);
+	let nextDaysWeatherData = getNextDaysWeatherData(location);
 
 	function handleWeatherDataClick(){
 		weatherData = getCurrentWeatherData(location);
+		nextHoursWeatherData = getNextHoursWeatherData(location);
+		nextDaysWeatherData = getNextDaysWeatherData(location);
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -36,7 +40,6 @@
     function handleVisiblePlanetsClick(){
         visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
     }
-
 </script>
 
 <main>
@@ -76,6 +79,38 @@
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}
+
+		<!--<h3>Wetterdaten für die nächsten 5 Stunden:</h3>
+		{#await nextHoursWeatherData}
+			<p>checke Wetter für die nächsten Stunden</p>
+		{:then data} 
+			{#if data.error}
+				<p>{data.error.message}</p>
+			{:else}
+				{#each data.hour as hour}
+					<p>{hour.time}: {hour.temp_c}°C</p>
+				{/each}
+			{/if}	
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}
+		<br>
+		<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+		{#await nextDaysWeatherData}
+			<p>checke Wetter für die nächsten Tage</p>
+		{:then data} 
+			{#if data.error}
+				<p>{data.error.message}</p>
+			{:else}
+				{#each data.day as day}
+					<p>{day.date}</p>
+					<p>- max temp: {day.maxtemp_c}°C</p>
+					<p>- min temp: {day.mintemp_c}°C</p>
+				{/each}
+			{/if}	
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}-->
 
 		<!-- <h2>APOD - Astronomy Picture of the Day</h2>
 		<button on:click={handleAPODClick}>Picture of the Day</button>
