@@ -11,19 +11,7 @@ export const load = (async ({ url }) => {
     let weatherData = getCurrentWeatherData(location);
 	  let nextHoursWeatherData = getNextHoursWeatherData(location);
 	  let nextDaysWeatherData = getNextDaysWeatherData(location);
-    
+
     return { weatherData, nextHoursWeatherData, nextDaysWeatherData, location };
 
 }) satisfies PageLoad;
-
-export const _replaceStateWithQuery = (values: Record<string, string>) => {
-    const url = new URL(window.location.toString());
-    for (let [k, v] of Object.entries(values)) {
-      if (!!v) {
-        url.searchParams.set(k, v);
-      } else {
-        url.searchParams.delete(k);
-      }
-    }
-    history.pushState(history.state, '', url);
-  };

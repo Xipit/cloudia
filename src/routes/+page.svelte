@@ -14,21 +14,30 @@
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
 	import { page } from "$app/stores";
 	import { goto, invalidate } from "$app/navigation";
-	import { _replaceStateWithQuery } from "./+page";
-	//import { _replaceStateWithQuery } from "./+page.server";
+	import { browser } from "$app/environment";
 
     export let data:PageData;
 
 	// Weather API
 	let location = data.location;
-	let weatherData = data.weatherData;
-	let nextHoursWeatherData = data.nextHoursWeatherData;
-	let nextDaysWeatherData = data.nextDaysWeatherData;
+	$:weatherData = data.weatherData;
+	$:nextHoursWeatherData = data.nextHoursWeatherData;
+	$:nextDaysWeatherData = data.nextDaysWeatherData;
 
-	function handleWeatherDataClick(){
-		weatherData = getCurrentWeatherData(location);
-		nextHoursWeatherData = getNextHoursWeatherData(location);
-		nextDaysWeatherData = getNextDaysWeatherData(location);
+	let onLocationSubmit = async () => {
+		let currentLocationParam: string | null = '';
+
+		if(browser){
+			const urlParams = new URLSearchParams(window.location.search);
+			currentLocationParam = urlParams.get('location');
+		}
+
+		if(location.trim() === currentLocationParam?.trim())
+			return;
+
+		await goto(`/?location=${encodeURIComponent(location.trim())}`, {
+			keepFocus: true
+		})
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -38,7 +47,7 @@
 		apodData = getAPOD();
 	}
 
-    	// Visible Planets API
+	// Visible Planets API
 	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
 
     function handleVisiblePlanetsClick(){
@@ -144,19 +153,10 @@
 			{/if}
 
 		{/await} -->
-		
-		<input placeholder="Ort eintragen" bind:value={location}>
-		<button on:click={ () => {
-			/*$page.url.searchParams.set('location', 'berlin');
-			goto(`?${$page.url.searchParams.toString()}`);
-			invalidate($page.url);
-			*/
-			_replaceStateWithQuery({
-				"location": 'berlin'
-			});
-			
-			
-		}}>Wetterdaten bekommen</button>
+		<form on:submit|preventDefault={onLocationSubmit}>
+			<input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
+			<button type="submit">Wetterdaten bekommen</button>
+		</form>
 	</section>
 </main>
 
