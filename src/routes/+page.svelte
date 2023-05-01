@@ -24,6 +24,7 @@
 	$:nextHoursWeatherData = data.nextHoursWeatherData;
 	$:nextDaysWeatherData = data.nextDaysWeatherData;
 
+	// adapted from : https://www.thinkprogramming.co.uk/search-via-querystring-sveltekit/ 
 	let onLocationSubmit = async () => {
 		let currentLocationParam: string | null = '';
 
