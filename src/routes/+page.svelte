@@ -12,19 +12,33 @@
 	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
+	import { page } from "$app/stores";
+	import { goto, invalidate } from "$app/navigation";
+	import { browser } from "$app/environment";
 
     export let data:PageData;
 
 	// Weather API
-	let location = "";
-	let weatherData = getCurrentWeatherData(location);
-	let nextHoursWeatherData = getNextHoursWeatherData(location);
-	let nextDaysWeatherData = getNextDaysWeatherData(location);
+	let location = data.location;
+	$:weatherData = data.weatherData;
+	$:nextHoursWeatherData = data.nextHoursWeatherData;
+	$:nextDaysWeatherData = data.nextDaysWeatherData;
 
-	function handleWeatherDataClick(){
-		weatherData = getCurrentWeatherData(location);
-		nextHoursWeatherData = getNextHoursWeatherData(location);
-		nextDaysWeatherData = getNextDaysWeatherData(location);
+	// adapted from : https://www.thinkprogramming.co.uk/search-via-querystring-sveltekit/ 
+	let onLocationSubmit = async () => {
+		let currentLocationParam: string | null = '';
+
+		if(browser){
+			const urlParams = new URLSearchParams(window.location.search);
+			currentLocationParam = urlParams.get('location');
+		}
+
+		if(location.trim() === currentLocationParam?.trim())
+			return;
+
+		await goto(`/?location=${encodeURIComponent(location.trim())}`, {
+			keepFocus: true
+		})
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -34,7 +48,7 @@
 		apodData = getAPOD();
 	}
 
-    	// Visible Planets API
+	// Visible Planets API
 	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
 
     function handleVisiblePlanetsClick(){
@@ -140,9 +154,10 @@
 			{/if}
 
 		{/await} -->
-		
-		<input placeholder="Ort eintragen" bind:value={location}>
-		<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
+		<form on:submit|preventDefault={onLocationSubmit}>
+			<input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
+			<button type="submit">Wetterdaten bekommen</button>
+		</form>
 	</section>
 </main>
 
