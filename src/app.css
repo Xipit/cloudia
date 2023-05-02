@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: 'Chewy';
+        src: local('Chewy'), local('chewy'),
+			url('/fonts/chewy/Chewy-Regular.ttf');
+            font-weight: normal;
+            font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Atkinson Hyperlegible';
+        src: local('Atkinson Hyperlegible'), local('Atkinson-Hyperlegible'), local('atkinson hyperlegible'), local('atkinson-hyperlegible'),
+        url('/fonts/atkinson-hyperlegible/AtkinsonHyperlegible-Regular.ttf');
+        font-weight: normal;
+        font-display: swap;
+    }
+}

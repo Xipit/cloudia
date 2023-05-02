@@ -1,12 +1,3 @@
-<head>
-	 <!-- The following lines are just temporary  -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true">
-	<link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-</head>
-
 <script lang="ts">
 	import Header from './Header.svelte';
 	import '../app.css';
@@ -15,6 +6,10 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
+
+	import Storm from './(weather-backgrounds)/storm.svelte';
+
+	
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -34,6 +29,13 @@
 
 </script>
 
+<!--
+	to display different weather backgrounds add a switch statement
+	that looks current weather condition to determent the right component
+-->
+
+<Storm />
+
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
 
@@ -44,7 +46,7 @@
 
 <style>
 	:global(html) {
-        background-image: linear-gradient(to top, #ffdd55, #80d9cf);
+        background-image: linear-gradient(to top, #626060, #394651);
         font-family: 'Atkinson Hyperlegible', sans-serif;
     }
 	.app {
@@ -63,5 +65,5 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-
+	
 </style>
