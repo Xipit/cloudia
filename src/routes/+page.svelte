@@ -54,6 +54,8 @@
     function handleVisiblePlanetsClick(){
         visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
     }
+
+
 </script>
 
 <main>
@@ -64,13 +66,12 @@
             <button type="submit" class="button">LogOut</button>
         </form>
     {:else}
-        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p>
+        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p> <br>
     {/if}
     </section>
-    <section>
-        <h1>API Prototype</h1>
-        <h2>Wetter API</h2>
-		
+
+<!-- BEGIN: general weather information -->
+    <section>		
         {#await weatherData}
             <p>hole Wetterinformationen...</p>
         {:then data}
@@ -79,37 +80,40 @@
             {:else}
                 <div class="main-info">
 	                <div class="temperature">{data.current.temp_c} °C</div>
-				<div class="location">{data.location.name}</div>
-			</div>
-
-			<div class="weather-indicator"></div>
-
-			<div class="side-info">
-	                <p>gefühlte Temperatur: {data.current.feelslike_c} °C</p>
-	                <p>Wetterkondition: {data.current.condition.text}</p>
-	                <p>Luftfeuchtigkeit: {data.current.humidity} %</p>
-			</div>
+					<div class="location">{data.location.name}</div>
+				</div>
             {/if}		
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}
 
-		<!--<h3>Wetterdaten für die nächsten 5 Stunden:</h3>
+
+<!-- BEGIN: weather for the next hours -->
 		{#await nextHoursWeatherData}
 			<p>checke Wetter für die nächsten Stunden</p>
 		{:then data} 
 			{#if data.error}
 				<p>{data.error.message}</p>
 			{:else}
-				{#each data.hour as hour}
-					<p>{hour.time}: {hour.temp_c}°C</p>
-				{/each}
+				<div class="weather-indicator">
+					{#each data.hour as hour}
+						<div class="time-element">
+							<div class="temp-hour">
+								{hour.temp_c}°C
+							</div>
+							<img src={hour.conditionIconURL} alt="Sun">
+							<hr>
+							{hour.time}
+						</div>
+					{/each}
+				</div>
 			{/if}	
 		{:catch error}
 			<p style="color: red">{error.message}</p>
 		{/await}
 		<br>
-		<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+
+	<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
 		{#await nextDaysWeatherData}
 			<p>checke Wetter für die nächsten Tage</p>
 		{:then data} 
@@ -126,34 +130,84 @@
 			<p style="color: red">{error.message}</p>
 		{/await}-->
 
-		<!-- <h2>APOD - Astronomy Picture of the Day</h2>
-		<button on:click={handleAPODClick}>Picture of the Day</button>
 
-		{#await apodData}
-			<p>hole Astronomy Picture of the Day</p>
-		{:then data} 
-			<p>{data.title} - {data.date}</p> -->
-			<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
-			<!-- svelte-ignore a11y-img-redundant-alt -->
-			<!-- <img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await} -->
-
-		<!-- <h2>Visible Planets</h2>
-		<button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
-		{#await visiblePlanetsData}
-			<p>Suche sichtbare Planeten...</p>
-		{:then visiblePlanetsData} 
-			{#if visiblePlanetsData.error}
-				<p>{visiblePlanetsData.error.message}</p>
+<!-- BEGIN: weater of the day overview -->
+		<div class="grid-container">
+			{#await weatherData}
+			<p>hole Wetterinformationen...</p>
+			{:then data}
+			{#if data.error}
+				<p>{data.error.message}</p>
 			{:else}
-				{#each visiblePlanetsData as data}
-					<p>{data.name}</p>
-				{/each}
-			{/if}
+			
+				<div class="feelslike">
+					<p class="description">gefühlte Temperatur</p>
+					<p>	{data.current.feelslike_c} °C </p>
+				</div>
+				<div class="condition">
+					<p class="description">Wetter&shykondition</p>
+					<p> {data.current.condition.text} </p>
+				</div>
+				<div class="humidity">
+					<p class="description">Luftfeuchtig&shykeit</p>
+					<p>	{data.current.humidity} % </p>
+				</div>
+				<div class="temp-range">Maximale und Minimale Temperatur</div>
+				<div class="sun-and-moon">Sonnenauf- und -untergang</div>
+				
+			 
+			{/if}		
+			{:catch error}
+			<p style="color: red">{error.message}</p>
+			{/await}
 
-		{/await} -->
+		
+
+		
+
+	<!-- APOD - Astronomy Picture of the Day -->
+
+			<!-- button on:click={handleAPODClick}>Picture of the Day</button-->
+
+			{#await apodData}
+				<p>hole Astronomy Picture of the Day</p>
+			{:then data} 
+
+				<div class="apod">
+					<p class="description">{data.title}</p> 
+					<!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
+					<!-- svelte-ignore a11y-img-redundant-alt -->
+					<img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
+				</div>
+				
+			{:catch error}
+				<p style="color: red">{error.message}</p>
+			{/await} 
+
+		
+
+	<!-- Visible Planets -->
+
+			<button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
+
+			{#await visiblePlanetsData}
+				<p>Suche sichtbare Planeten...</p>
+			{:then visiblePlanetsData} 
+				{#if visiblePlanetsData.error}
+					<p>{visiblePlanetsData.error.message}</p>
+				{:else}
+
+					<div class="visiblePlanet">
+						<p class="description">zu sehende Planeten:</p>
+						{#each visiblePlanetsData as data}
+							<p>{data.name}</p>
+						{/each}
+					</div>
+					
+				{/if}
+			{/await} 
+
+		<!--{/await}-->
 		<form on:submit|preventDefault={onLocationSubmit}>
 			<input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
 			<button type="submit">Wetterdaten bekommen</button>
@@ -163,8 +217,13 @@
 
 
 <style lang="scss">
+	$font-accent: 'Chewy', cursive;
+	$light-color: white;
+	$background-tiles-color: rgba(88, 88, 88, 0.3);
+
+
 	/* The following lines are just temporary */
-	button {
+	.button {
 		background-color: azure;		
 		padding: 0.3em;
 
@@ -181,11 +240,11 @@
 		.main-info {
 			margin-top: 4.375em;
 			margin-left: 0.625em;
-			color: white;
+			color: $light-color;
 			text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
 
 			.temperature {
-				font-family: 'Chewy', cursive;
+				font-family: $font-accent;
 				font-size: 3.5em;
 			}
 
@@ -196,20 +255,99 @@
 		}
 
 		.weather-indicator{
-			background: rgba(255, 255, 255, 0.3);
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			background: $background-tiles-color;
 			margin-top: 1.25em;
 			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
+
+			.time-element {
+				text-align: center;
+				font-family: $font-accent;
+				color: $light-color;
+				font-size: 16px;
+
+				.temp-hour {
+					font-size: 21px;
+				}
+
+				hr {
+					border-top: 3px solid $light-color;
+					padding-bottom: 5px;
+				}
+			}
+
+			img {
+				width: 50px;
+				padding: 10px;
+			}
 		}
 
-		.side-info {
-			background: rgba(255, 255, 255, 0.3);
-			margin-top: 1.25em;
+		//BEGIN: everything for the grid-container
+		.grid-container {
+			display: grid;
+			grid-template-columns: 33% 33% 33%;
+			grid-template-rows: 120px 120px 120px 120px;
+			gap: 10px;
+			padding-right: 1em;
+		}
+			
+		.grid-container > div {
+			text-align: center;
+			background: $background-tiles-color;
+			gap: 1.25em;
 			padding: 0.625em;
-			height: 18.75em;
-			width: 100%;;
 			border-radius: 0.438em;
 		}
+
+		.humidity {
+			grid-column-start: 2;
+			grid-column-end: 3;
+			grid-row-start: 2;
+			grid-row-end: 3;
+		}
+
+		.visiblePlanet {
+			grid-column-start: 3;
+			grid-column-end: 4;
+			grid-row-start: 1;
+			grid-row-end: 3;
+		}
+
+		.apod {
+			grid-column-start: 2;
+			grid-column-end: 4;
+			grid-row-start: 3;
+			grid-row-end: 5;
+
+			img {
+				width: 100%;
+			}
+		}
+
+		.sun-and-moon {
+			grid-column-start: 1;
+			grid-column-end: 2;
+			grid-row-start: 2;
+			grid-row-end: 4;
+		}
+
+		.temp-range {
+			grid-column-start: 1;
+			grid-column-end: 2;
+			grid-row-start: 4;
+			grid-row-end: 5;
+		}
+		//END: everything for the grid-container
+
+		.description {
+			font-size: larger;
+		 	font-family: "Chewy";
+		 	color: $light-color;
+		}
+		
 	}	
 </style>
