@@ -1,0 +1,17 @@
+:root{
+    
+    --text-color: white;
+    --primary-bg-color: rgb(45, 45, 45);
+    --secondary-bg-color: black;
+    --primary-accent-color: teal;
+    --secondary-accent-color: goldenrod;
+
+    &[data-theme="storm"] {
+        --text-color: white;
+        --primary-bg-color: #626060;
+        --secondary-bg-color: #394651;
+        --primary-accent-color: #7c9cd0;
+        --secondary-accent-color: #fff700;
+    }
+
+}

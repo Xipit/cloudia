@@ -1,3 +1,5 @@
+@use 'variables';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,4 +20,12 @@
         font-weight: normal;
         font-display: swap;
     }
+   
 }
+
+$base: 4px;
+$spacing-xs: $base;
+$spacing-sm: calc(2*$base);
+$spacing-md: calc(4*$base);
+$spacing-lg: calc(8*$base);
+$spacing-xl: calc(16*$base);

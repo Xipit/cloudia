@@ -291,7 +291,7 @@
 			display: grid;
 			grid-template-columns: 33% 33% 33%;
 			grid-template-rows: 120px 120px 120px 120px;
-			gap: 10px;
+			gap: $spacing-sm;
 			padding-right: 1em;
 		}
 			

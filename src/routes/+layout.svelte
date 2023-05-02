@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Header from './Header.svelte';
-	import '../app.css';
+	import '../app.scss';
 
 
 	import { invalidate } from '$app/navigation';
@@ -44,11 +44,13 @@
 	</main>
 </div>
 
-<style>
+<style lang="scss">
 	:global(html) {
-        background-image: linear-gradient(to top, #626060, #394651);
+        background-image: linear-gradient(to top, var(--primary-bg-color), var(--secondary-bg-color));
         font-family: 'Atkinson Hyperlegible', sans-serif;
+		color: var(--text-color);
     }
+	
 	.app {
 		display: flex;
 		flex-direction: column;
