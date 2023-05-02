@@ -10,7 +10,6 @@
     const menuItems = [
         ...(isLoggedIn 
             ? [
-                { name: 'Logout', href: '/' },
                 { name: 'Account', href: '/account' },
                 { name: 'Orte', href: '/savedLocations' }
             ] 
@@ -19,10 +18,25 @@
                 { name: 'Registrieren', href: '/register' },
             ]
         ),
-        { name: 'Einstellungen' },
-        { name: 'Ortsauswahl' },
-        { name: 'Favoriten' }
+        // { name: 'Einstellungen' }
     ];
+    const menuItemsBottom = [
+        ...(isLoggedIn
+            ? [
+                { name: 'Logout', href: '/' },
+            ]
+            : []
+        ),
+    ];
+
+    
+    export const load = (async ({ locals: {supabase} }) => {
+        const { data: savedLocations } = await supabase
+            .from('saved_locations')
+            .select('*');
+
+        return { savedLocations };
+    })
 </script>
   <div class="icon">
     <Hamburger
@@ -32,12 +46,14 @@
   
   {#if open}
     <div class="burger-menu">
-        <p transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </p>
+        <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </a>
         {#each menuItems as link, i}
             <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
                 {link.name}
             </a>
         {/each}
+
+        <a href='/' transition:fly={{ x: -70, duration: 1000, delay: 50 }} class="logout">Logout</a>
         
         <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
     </div>
@@ -60,6 +76,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        height: 90vh;
 
         .cloudia {
             position: absolute;
@@ -75,12 +92,18 @@
             word-break: break-word;
 
             &:hover, &:active, &:focus {
-                text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
-                backdrop-filter: blur( 0.65em );
-                -webkit-backdrop-filter: blur( 0.65em );
-                border-radius: 0.2em;
-                padding: 0.1em;
-            }
+                text-shadow: 2px 4px 4px #716666; // horizontal vertiacal blur color
+            //    backdrop-filter: blur( 0.65em );
+            //    -webkit-backdrop-filter: blur( 0.65em );
+            //    border-radius: 0.2em;
+            //    padding: 0.1em;
+            } 
+        }
+
+        .logout{
+            position: absolute;
+            bottom: 1em;
+            left: 1rem;
         }
 
         .burger-menu-background {
