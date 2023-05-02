@@ -17,6 +17,11 @@
 	import type { LayoutData } from './$types';
 	import Menu from './Menu.svelte';
 	import { Hamburger } from 'svelte-hamburgers';
+
+	import layer1 from '$lib/assets/img/layer1.svg';
+	import layer2 from '$lib/assets/img/layer2.svg';
+	import layer3 from '$lib/assets/img/layer3.svg';
+
 	// AUTHENTICATION 
 	export let data: LayoutData;
 	$: ({ supabase, session } = data);
@@ -37,9 +42,9 @@
 </script>
 
 <!--background cloud layers-->
-<img src="src\img\layer1.svg" class="layer" id="layer1" alt="moving clouds">
-<img src="src\img\layer2.svg" class="layer" id="layer2" alt="moving clouds">
-<img src="src\img\layer3.svg" class="layer" id="layer3" alt="moving clouds">
+<img src={layer1} class="clouds" id="layer1" alt="moving clouds">
+<img src={layer2} class="clouds" id="layer2" alt="moving clouds">
+<img src={layer3} class="clouds" id="layer3" alt="moving clouds">
 
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
@@ -71,7 +76,7 @@
 		box-sizing: border-box;
 	}
 	/*cloud layers*/
-	.layer {
+	.clouds {
     	position: absolute;
     	filter: drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		min-width: 2000px;
