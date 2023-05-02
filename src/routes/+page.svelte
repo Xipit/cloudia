@@ -9,18 +9,36 @@
 	import { supabaseClient } from "$lib/js/supabase";
 	import type { PageData } from "./$types";
 
-	import {getCurrentWeatherData, latitude, longitude} from "../api/weatherApi"
+	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
 	import {getAPOD} from "../api/apodApi";
 	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
+	import { page } from "$app/stores";
+	import { goto, invalidate } from "$app/navigation";
+	import { browser } from "$app/environment";
 
     export let data:PageData;
 
 	// Weather API
-	let location = "Dresden";
-	let weatherData = getCurrentWeatherData(location);
+	let location = data.location;
+	$:weatherData = data.weatherData;
+	$:nextHoursWeatherData = data.nextHoursWeatherData;
+	$:nextDaysWeatherData = data.nextDaysWeatherData;
 
-	function handleWeatherDataClick(){
-		weatherData = getCurrentWeatherData(location);
+	// adapted from : https://www.thinkprogramming.co.uk/search-via-querystring-sveltekit/ 
+	let onLocationSubmit = async () => {
+		let currentLocationParam: string | null = '';
+
+		if(browser){
+			const urlParams = new URLSearchParams(window.location.search);
+			currentLocationParam = urlParams.get('location');
+		}
+
+		if(location.trim() === currentLocationParam?.trim())
+			return;
+
+		await goto(`/?location=${encodeURIComponent(location.trim())}`, {
+			keepFocus: true
+		})
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -30,13 +48,12 @@
 		apodData = getAPOD();
 	}
 
-    	// Visible Planets API
+	// Visible Planets API
 	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
 
     function handleVisiblePlanetsClick(){
         visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
     }
-
 </script>
 
 <main>
@@ -77,6 +94,38 @@
             <p style="color: red">{error.message}</p>
         {/await}
 
+		<!--<h3>Wetterdaten für die nächsten 5 Stunden:</h3>
+		{#await nextHoursWeatherData}
+			<p>checke Wetter für die nächsten Stunden</p>
+		{:then data} 
+			{#if data.error}
+				<p>{data.error.message}</p>
+			{:else}
+				{#each data.hour as hour}
+					<p>{hour.time}: {hour.temp_c}°C</p>
+				{/each}
+			{/if}	
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}
+		<br>
+		<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+		{#await nextDaysWeatherData}
+			<p>checke Wetter für die nächsten Tage</p>
+		{:then data} 
+			{#if data.error}
+				<p>{data.error.message}</p>
+			{:else}
+				{#each data.day as day}
+					<p>{day.date}</p>
+					<p>- max temp: {day.maxtemp_c}°C</p>
+					<p>- min temp: {day.mintemp_c}°C</p>
+				{/each}
+			{/if}	
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}-->
+
 		<!-- <h2>APOD - Astronomy Picture of the Day</h2>
 		<button on:click={handleAPODClick}>Picture of the Day</button>
 
@@ -105,9 +154,10 @@
 			{/if}
 
 		{/await} -->
-		
-		<input placeholder="Ort eintragen" bind:value={location}>
-		<button on:click={handleWeatherDataClick}>Wetterdaten bekommen</button>
+		<form on:submit|preventDefault={onLocationSubmit}>
+			<input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
+			<button type="submit">Wetterdaten bekommen</button>
+		</form>
 	</section>
 </main>
 

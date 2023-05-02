@@ -9,7 +9,11 @@
 
     const menuItems = [
         ...(isLoggedIn 
-            ? [{ name: 'Logout', href: '/' }] 
+            ? [
+                { name: 'Logout', href: '/' },
+                { name: 'Account', href: '/account' },
+                { name: 'Orte', href: '/savedLocations' }
+            ] 
             : [ 
                 { name: 'Login', href: '/login' },
                 { name: 'Registrieren', href: '/register' },
