@@ -51,6 +51,8 @@
 	{/if}
 -->
 
+<Storm />
+
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
 
