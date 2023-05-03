@@ -5,8 +5,6 @@
 </script>
 
 <!--background cloud layers-->
-
-<!--keeps the page size from changing when cloud layers move-->
 <div class="background-images">
 	<img src={layer1} class="clouds" id="layer1" alt="moving clouds">
 	<img src={layer2} class="clouds" id="layer2" alt="moving clouds">
