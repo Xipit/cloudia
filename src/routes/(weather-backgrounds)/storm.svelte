@@ -5,18 +5,29 @@
 </script>
 
 <!--background cloud layers-->
-<img src={layer1} class="clouds" id="layer1" alt="moving clouds">
-<img src={layer2} class="clouds" id="layer2" alt="moving clouds">
-<img src={layer3} class="clouds" id="layer3" alt="moving clouds">
+
 <!--keeps the page size from changing when cloud layers move-->
-<div style="width:3000px; position:absolute; background-color:blue; top:0px; right:0px;"></div>
+<div class="background-images">
+	<img src={layer1} class="clouds" id="layer1" alt="moving clouds">
+	<img src={layer2} class="clouds" id="layer2" alt="moving clouds">
+	<img src={layer3} class="clouds" id="layer3" alt="moving clouds">
+</div>
 
 <style>
 /*cloud layers*/
-	.clouds {
-    	position: absolute;
-    	min-width: 2000px;
+	.background-images {
+		position: fixed;
+		top:0px;
+		right:0px;
+		z-index: -20;
 	}
+
+	.clouds {
+    	position: fixed;
+		max-width: unset;
+		top: -170px;
+	}
+
 	#layer1 {
 		z-index: -20;
 		filter: invert(26%) sepia(5%) saturate(3436%) hue-rotate(161deg) brightness(90%) contrast(83%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
@@ -34,16 +45,16 @@
 	}
 	/*animation cloud layers*/
 	@keyframes cloud-movement1 {
-		from {top: -95px; right:-65px;}
-		to {top: -95px; right: -25px;}
+		from {right:-65px;}
+		to {right: -25px;}
 	}
 	@keyframes cloud-movement2 {
-		from {top: -35px; right:-25px;}
-		to {top: -35px; right: -55px;}
+		from {right:-25px;}
+		to { right: -55px;}
 	}
 	@keyframes cloud-movement3 {
-		from {top: 0px; right:-35px;}
-		to {top: 0px; right: -10px;}
+		from {right:-35px;}
+		to {right: -10px;}
 	}
 
 </style>

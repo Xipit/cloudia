@@ -64,7 +64,6 @@
 	:global(html) {
         background-image: linear-gradient(to top, #626060, #394651);
         font-family: 'Atkinson Hyperlegible', sans-serif;
-		overflow: hidden;
     }
 	.app {
 		display: flex;
