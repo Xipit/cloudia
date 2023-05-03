@@ -1,8 +1,7 @@
 import { latestLocation, latestWeatherCondition } from "$lib/stores";
 import { get } from "svelte/store";
 
-export function setLatestLocation(location:string, weatherCondition:string){
-    console.log('SET LATEST LOCATION');
+export function handleLatestLocation(location:string, weatherCondition:string){
     latestLocation.set(location);
     latestWeatherCondition.set(weatherCondition);
 
@@ -14,11 +13,16 @@ export function getLatestLocation() {
 }
 
 function setDataAttribute(weatherCondition:string){
+    // sets data-theme="WEATHERCONDITION" on html root element
     document.documentElement.setAttribute('data-theme', weatherCondition);
 }
 
 export function setLocationParameter(location:string) {
-    var searchParams = new URLSearchParams(window.location.search)
+    if(location == ""){
+        return;
+    }
+
+    const searchParams = new URLSearchParams(window.location.search)
     searchParams.set('location', location)
     window.location.search = searchParams.toString()
   }

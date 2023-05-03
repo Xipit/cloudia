@@ -1,5 +1,5 @@
 import { page } from "$app/stores";
-import { setLocationParameter, getLatestLocation, setLatestLocation } from "$lib/js/latestLocationUtil";
+import { setLocationParameter, getLatestLocation, handleLatestLocation } from "$lib/js/latestLocationUtil";
 
 import type { Actions } from "@sveltejs/kit";
 import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "$lib/js/api/weatherApi";
@@ -8,15 +8,6 @@ import type { PageLoad } from "./$types";
 
 export const load = (async ({ url }) => {
 
-    /*
-    const location:string = url.searchParams.get('location')?.toString() ?? "";
-
-    if(location == ""){
-        const latestLocation = getLatestLocation();
-        await goto(`/?location=${encodeURIComponent(latestLocation.trim())}`)   ; 
-    }
-    */
-    
     const location:string = (() => {
         const locationParam = url.searchParams.get('location')?.toString();
         if(locationParam && locationParam != ""){
@@ -28,9 +19,7 @@ export const load = (async ({ url }) => {
             return latestLocation
         }
     })();
-    
 
-    console.log(location);
 
     let weatherData = await getCurrentWeatherData(location);
 	let nextHoursWeatherData = getNextHoursWeatherData(location);
@@ -38,7 +27,7 @@ export const load = (async ({ url }) => {
 
     // used to style pages conditionally by weather condition
     if(!weatherData.error && location != ""){
-        setLatestLocation(location, weatherData.current.condition.text);
+        handleLatestLocation(location, weatherData.current.condition.text);
     }
 
     return { weatherData, nextHoursWeatherData, nextDaysWeatherData, location };
