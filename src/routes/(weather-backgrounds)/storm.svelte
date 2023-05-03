@@ -32,7 +32,7 @@
 		filter: invert(14%) sepia(3%) saturate(4825%) hue-rotate(163deg) brightness(95%) contrast(81%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement3 5s linear infinite alternate;
 	}
-	/*animation cloud layers*/
+	/*animation cloud layers
 	@keyframes cloud-movement1 {
 		from {top: -95px; right:-65px;}
 		to {top: -95px; right: -25px;}
@@ -44,6 +44,6 @@
 	@keyframes cloud-movement3 {
 		from {top: 0px; right:-35px;}
 		to {top: 0px; right: -10px;}
-	}
+	}*/
 
 </style>
