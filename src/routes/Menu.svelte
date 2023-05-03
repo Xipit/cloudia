@@ -6,6 +6,7 @@
   
     export let open:boolean;
     export let isLoggedIn:boolean;
+    export let savedLocations: {[x: string]: any;}[] | null;
 
     const menuItems = [
         ...(isLoggedIn 
@@ -28,15 +29,6 @@
             : []
         ),
     ];
-
-    
-    export const load = (async ({ locals: {supabase} }) => {
-        const { data: savedLocations } = await supabase
-            .from('saved_locations')
-            .select('*');
-
-        return { savedLocations };
-    })
 </script>
   <div class="icon">
     <Hamburger
@@ -52,6 +44,14 @@
                 {link.name}
             </a>
         {/each}
+
+        {#if savedLocations}
+            <ul>
+                {#each savedLocations as location}
+                    <p>{location.location_name}</p>
+                {/each}
+            </ul>
+        {/if}
 
         <a href='/' transition:fly={{ x: -70, duration: 1000, delay: 50 }} class="logout">Logout</a>
         

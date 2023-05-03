@@ -6,10 +6,11 @@
 	let open:boolean;
 
     export let isLoggedIn:boolean;
+    export let savedLocations: {[x: string]: any;}[] | null;
 </script>
 
 <div class="header">
-	<Menu bind:open bind:isLoggedIn/>
+	<Menu bind:open bind:isLoggedIn bind:savedLocations/>
 </div>
 
 

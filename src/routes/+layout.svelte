@@ -13,7 +13,8 @@
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
-	$: ({ supabase, session } = data);
+	$: ({ savedLocations, supabase, session } = data);
+
 	onMount(() => {
 		const {
 			data: { subscription },
@@ -37,7 +38,7 @@
 <Storm />
 
 <div class="app">
-	<Header bind:isLoggedIn={isLoggedIn}/>
+	<Header bind:isLoggedIn={isLoggedIn} bind:savedLocations={savedLocations}/>
 
 	<main>
 		<slot />
