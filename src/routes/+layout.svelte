@@ -7,9 +7,12 @@
 	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
 
+	// Import different Weather Backgrounds
 	import Storm from './(weather-backgrounds)/storm.svelte';
-
-	
+	import Cloud from './(weather-backgrounds)/cloud.svelte';
+	import Sun from './(weather-backgrounds)/sun.svelte';
+	import Snow from './(weather-backgrounds)/snow.svelte';
+	import Rain from './(weather-backgrounds)/rain.svelte';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -32,9 +35,21 @@
 <!--
 	to display different weather backgrounds add a switch statement
 	that looks current weather condition to determent the right component
--->
 
-<Storm />
+	{#if weather === 'Storm'}
+		<Storm />
+	{:else if weather === 'Rain'}
+		<Rain />
+	{:else if weather === 'Snow'}
+		<Snow />
+	{:else if weather === 'Cloud'}
+		<Cloud />
+	{:else if weather === 'Sun'}
+		<Sun />
+	{:else}
+		<Default />
+	{/if}
+-->
 
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
@@ -48,6 +63,7 @@
 	:global(html) {
         background-image: linear-gradient(to top, #626060, #394651);
         font-family: 'Atkinson Hyperlegible', sans-serif;
+		overflow: hidden;
     }
 	.app {
 		display: flex;
