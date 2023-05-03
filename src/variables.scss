@@ -1,0 +1,25 @@
+
+:root{
+    --base: 4px;
+    --spacing-xs: $base;
+    --spacing-sm: calc(2*var(--base));
+    --spacing-md: calc(4*var(--base));
+    --spacing-lg: calc(8*var(--base));
+    --spacing-xl: calc(16*var(--base));
+
+
+    --text-color: white;
+    --primary-bg-color: rgb(45, 45, 45);
+    --secondary-bg-color: black;
+    --primary-accent-color: teal;
+    --secondary-accent-color: goldenrod;
+
+    &[data-theme="storm"] {
+        --text-color: white;
+        --primary-bg-color: #626060;
+        --secondary-bg-color: #394651;
+        --primary-accent-color: #7c9cd0;
+        --secondary-accent-color: #fff700;
+    }
+
+}
