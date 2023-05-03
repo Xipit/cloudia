@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Header from './Header.svelte';
-	import '../app.scss';
-
 
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -45,10 +43,13 @@
 </div>
 
 <style lang="scss">
+	@import '../app.scss';
+
 	:global(html) {
         background-image: linear-gradient(to top, var(--primary-bg-color), var(--secondary-bg-color));
         font-family: 'Atkinson Hyperlegible', sans-serif;
 		color: var(--text-color);
+		padding: $spacing-md;
     }
 	
 	.app {
