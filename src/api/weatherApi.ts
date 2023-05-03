@@ -37,6 +37,10 @@ const forecastDays = {
 		date: "",
 		maxtemp_c: "",
 		mintemp_c: "",
+		sunrise: "",
+		sunset: "",
+		moonrise: "",
+		moonset: "",
 	}]
 }
 
@@ -147,7 +151,7 @@ export async function getNextHoursWeatherData(location: String){
 
 			let time = new Date(forecastHour.time_epoch * 1000);
 			let timeString = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
-			let iconURL = getIconURL(forecastHour.condition.code);
+			let iconURL = getIconURL(forecastHour.condition.code, forecastday.astro.sunrise, forecastday.astro.sunset, timeString);
 
 			forecastHours.hour.push({
 				date: formattedDateString,
@@ -179,6 +183,10 @@ export async function getNextDaysWeatherData(location: String) {
 					date: forecastday.date.toString(),
 					maxtemp_c: forecastday.day.maxtemp_c.toString(),
 					mintemp_c: forecastday.day.mintemp_c.toString(),
+					sunrise: forecastday.astro.sunrise.toString(),
+					sunset: forecastday.astro.sunset.toString(),
+					moonrise: forecastday.astro.moonrise.toString(),
+					moonset: forecastday.astro.moonset.toString(),
 				})
 			}
 		}
@@ -195,7 +203,23 @@ function getFormattedDate(date: Date){
 	  ].join('-')
 }
 
-function getIconURL(conditionCode:number){
+function getIconURL(conditionCode:number, sunrise:string, sunset:string, now:string){
+
+	let now_array = now.split(":");
+	let now_hour = parseInt(now_array[0]);
+	let now_time = 60 * now_hour;
+
+	let sunrise_array = sunrise.split(":");
+	let sunrise_hour = parseInt(sunrise_array[0]);
+	let sunrise_minutes = parseInt(sunrise_array[1]);
+	let sunrise_time = 60 * sunrise_hour + sunrise_minutes;
+
+	let sunset_array = sunset.split(":");
+	let sunset_hour = parseInt(sunset_array[0]);
+	let sunset_minutes = parseInt(sunset_array[1]);
+	let sunset_time = 60 * sunset_hour + sunset_minutes + 720;
+	
+
 	switch (conditionCode) {
 		case 1006: 
 		case 1009:
@@ -221,7 +245,11 @@ function getIconURL(conditionCode:number){
 			return lightSnow;
 			break;
 		case 1003:
-			return partlyCloudy;
+			if((sunrise_time < now_time) && (sunset_time > now_time)) {
+				return partlyCloudy;
+			} else {
+				return partlyCloudyNight;
+			}
 			break;
 		case 1276:
 		case 1273:
@@ -264,7 +292,12 @@ function getIconURL(conditionCode:number){
 			return snow;
 			break;
 		case 1000: 
-			return sunny;
+			if((sunrise_time < now_time) && (sunset_time > now_time)) {
+				return sunny;
+			} else {
+				return clear;
+			}
+			
 			break;
 		case 1087:
 			return thunder;
