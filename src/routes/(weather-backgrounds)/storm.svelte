@@ -9,7 +9,7 @@
 <img src={layer2} class="clouds" id="layer2" alt="moving clouds">
 <img src={layer3} class="clouds" id="layer3" alt="moving clouds">
 <!--keeps the page size from changing when cloud layers move-->
-<div style="width:3000px; position:absolute;background-color:blue;"><p>HI</p></div>
+<div style="width:3000px; position:absolute; background-color:blue; top:0px; right:0px;"></div>
 
 <style>
 /*cloud layers*/
