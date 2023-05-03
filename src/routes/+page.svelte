@@ -88,7 +88,7 @@
         {/await}
 
 
-<!-- BEGIN: weather for the next hours -->
+<!-- BEGIN: weather for the next 5 hours -->
 		{#await nextHoursWeatherData}
 			<p>checke Wetter für die nächsten Stunden</p>
 		{:then data} 
