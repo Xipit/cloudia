@@ -32,7 +32,11 @@
 	that looks current weather condition to determent the right component
 -->
 
-<Storm />
+
+<!--
+	TODO: caused performance problems
+	<Storm />
+-->
 
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
@@ -49,7 +53,6 @@
         background-image: linear-gradient(to top, var(--primary-bg-color), var(--secondary-bg-color));
         font-family: 'Atkinson Hyperlegible', sans-serif;
 		color: var(--text-color);
-		padding: $spacing-md;
     }
 	
 	.app {

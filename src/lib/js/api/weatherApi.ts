@@ -83,10 +83,10 @@ async function API_REQUEST_FORECAST(location: String){
 async function getForecastWeatherData(location: String){
 	if (location == ""){
 		return	{
-					error: {
-						message: "No location was set",
-					}
-				};
+			error: {
+				message: "No location was set",
+			}
+		};
 	}
 
 	const data = await API_REQUEST_FORECAST(location);

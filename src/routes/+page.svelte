@@ -1,17 +1,11 @@
-<!--
-
-	This is based on: https://svelte.dev/tutorial/await-blocks
-
--->
-
 <script lang="ts">
 	import { enhance, type SubmitFunction } from "$app/forms";
 	import { supabaseClient } from "$lib/js/supabase";
 	import type { PageData } from "./$types";
 
-	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../api/weatherApi"
-	import {getAPOD} from "../api/apodApi";
-	import {getVisiblePlanetsData} from "../api/visiblePlanetsAPI";
+	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../lib/js/api/weatherApi"
+	import {getAPOD} from "../lib/js/api/apodApi";
+	import {getVisiblePlanetsData} from "../lib/js/api/visiblePlanetsAPI";
 	import { page } from "$app/stores";
 	import { goto, invalidate } from "$app/navigation";
 	import { browser } from "$app/environment";
@@ -291,7 +285,7 @@
 			display: grid;
 			grid-template-columns: 33% 33% 33%;
 			grid-template-rows: 120px 120px 120px 120px;
-			gap: $spacing-sm;
+			gap: var(--spacing-sm);
 			padding-right: 1em;
 		}
 			
