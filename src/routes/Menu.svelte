@@ -3,16 +3,23 @@
     import { fly, scale } from 'svelte/transition';
     import { quadOut } from 'svelte/easing';
     import { Hamburger } from 'svelte-hamburgers';
+    import { page } from '$app/stores';
   
     export let open:boolean;
     export let isLoggedIn:boolean;
     export let savedLocations: {[x: string]: any;}[] | null;
 
+    function closeMenu() {
+        open = false;
+    }
+
     const menuItems = [
+        { name: 'Home', href: '/' },
         ...(isLoggedIn 
             ? [
                 { name: 'Account', href: '/account' },
-                { name: 'Orte', href: '/savedLocations' }
+                { name: 'Orte', href: '/savedLocations' },
+                { savedLocations }
             ] 
             : [ 
                 { name: 'Login', href: '/login' },
@@ -40,20 +47,25 @@
     <div class="burger-menu">
         <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </a>
         {#each menuItems as link, i}
-            <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
-                {link.name}
-            </a>
+            
+            {#if link.savedLocations}
+                <ul class="savedLocations" transition:fly={{ x: -70, duration: 1000, delay: 50}}>
+                    {#each link.savedLocations as location}
+                        <li><a href="/?location={location.location_name}" on:click={closeMenu}>{location.location_name}</a></li>
+                    {/each}
+                </ul>
+            {:else}
+                <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }} on:click={closeMenu}>
+                    {link.name}
+                </a>
+            {/if}
+        
         {/each}
 
-        {#if savedLocations}
-            <ul>
-                {#each savedLocations as location}
-                    <p>{location.location_name}</p>
-                {/each}
-            </ul>
+        {#if isLoggedIn}
+            <a href='/' transition:fly={{ x: -70, duration: 1000, delay: 50 }} class="logout" on:click={closeMenu}>Logout</a>
         {/if}
-
-        <a href='/' transition:fly={{ x: -70, duration: 1000, delay: 50 }} class="logout">Logout</a>
+        
         
         <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
     </div>
@@ -104,6 +116,11 @@
             position: absolute;
             bottom: 1em;
             left: 1rem;
+        }
+
+        .savedLocations{
+            margin-left: 1em;
+            font-size:large;
         }
 
         .burger-menu-background {
