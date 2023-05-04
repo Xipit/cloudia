@@ -11,6 +11,9 @@
 	import Sun from './(weather-backgrounds)/sun.svelte';
 	import Snow from './(weather-backgrounds)/snow.svelte';
 	import Rain from './(weather-backgrounds)/rain.svelte';
+	import { generalWeatherCondition, getGeneralisedWeatherCondition } from '$lib/js/latestLocationUtil';
+	import { latestWeatherCondition } from '$lib/stores';
+	import { get } from 'svelte/store';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -28,26 +31,27 @@
 
 	let isLoggedIn:boolean = data.session !== null;
 
+	let weatherCondition = get(latestWeatherCondition);
 </script>
 
 <!--
 	to display different weather backgrounds add a switch statement
 	that looks current weather condition to determent the right component
-
-	{#if weather === 'Storm'}
-		<Storm />
-	{:else if weather === 'Rain'}
-		<Rain />
-	{:else if weather === 'Snow'}
-		<Snow />
-	{:else if weather === 'Cloud'}
-		<Cloud />
-	{:else if weather === 'Sun'}
-		<Sun />
-	{:else}
-		<Default />
-	{/if}
 -->
+
+{#if weatherCondition === generalWeatherCondition.storm}
+	<Storm />
+{:else if weatherCondition === generalWeatherCondition.rain}
+	<Rain />
+{:else if weatherCondition === generalWeatherCondition.snow}
+	<Snow />
+{:else if weatherCondition === generalWeatherCondition.cloud}
+	<Cloud />
+{:else if weatherCondition === generalWeatherCondition.sun}
+	<Sun />
+{:else}
+	<Sun />
+{/if}
 
 
 <!--
