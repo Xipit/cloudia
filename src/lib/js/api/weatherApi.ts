@@ -1,4 +1,5 @@
 import { PUBLIC_API_KEY_WEATHER } from "$env/static/public";
+import { getIconURL } from "$lib/js/weatherIcons";
 import { Cache } from './cache';
 
 const cache = new Cache();
@@ -21,6 +22,10 @@ const forecastDays = {
 		date: "",
 		maxtemp_c: "",
 		mintemp_c: "",
+		sunrise: "",
+		sunset: "",
+		moonrise: "",
+		moonset: "",
 	}]
 }
 
@@ -83,10 +88,10 @@ async function API_REQUEST_FORECAST(location: String){
 async function getForecastWeatherData(location: String){
 	if (location == ""){
 		return	{
-					error: {
-						message: "No location was set",
-					}
-				};
+			error: {
+				message: "No location was set",
+			}
+		};
 	}
 
 	const data = await API_REQUEST_FORECAST(location);
@@ -131,7 +136,7 @@ export async function getNextHoursWeatherData(location: String){
 
 			let time = new Date(forecastHour.time_epoch * 1000);
 			let timeString = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
-			let iconURL = getIconURL(forecastHour.condition.code);
+			let iconURL = getIconURL(forecastHour.condition.code, forecastday.astro.sunrise, forecastday.astro.sunset, timeString);
 
 			forecastHours.hour.push({
 				date: formattedDateString,
@@ -156,13 +161,17 @@ export async function getNextDaysWeatherData(location: String) {
 		// Pushes the data for the next i-Days into forecastDays.day
 		// What we get: Weatherdata for today, tomorrow, the day after tomorrow
 		for (let i = 0; i < 3; i++) {
-			let forecastday = data.forecast.forecastday[i];
+			let forecastDay = data.forecast.forecastday[i];
 
-			if (forecastday != null) {
+			if (forecastDay != null) {
 				forecastDays.day.push({
-					date: forecastday.date.toString(),
-					maxtemp_c: forecastday.day.maxtemp_c.toString(),
-					mintemp_c: forecastday.day.mintemp_c.toString(),
+					date: forecastDay.date.toString(),
+					maxtemp_c: forecastDay.day.maxtemp_c.toString(),
+					mintemp_c: forecastDay.day.mintemp_c.toString(),
+					sunrise: forecastDay.astro.sunrise.toString(),
+					sunset: forecastDay.astro.sunset.toString(),
+					moonrise: forecastDay.astro.moonrise.toString(),
+					moonset: forecastDay.astro.moonset.toString(),
 				})
 			}
 		}
@@ -177,16 +186,4 @@ function getFormattedDate(date: Date){
 		(date.getMonth() + 1).toString().padStart(2, '0'),
 		(date.getDate()).toString().padStart(2, '0'),
 	  ].join('-')
-}
-
-function getIconURL(conditionCode:number){
-	switch (conditionCode) {
-		case 1000:
-			return "src\\img\\sun.png"; 
-			break;
-	
-		default:
-			return "src\\img\\sun.png";
-			break;
-	}
 }

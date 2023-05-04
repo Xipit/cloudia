@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Header from './Header.svelte';
-	import '../app.css';
 
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -50,7 +49,11 @@
 	{/if}
 -->
 
-<Storm />
+
+<!--
+	TODO: caused performance problems
+	<Storm />
+-->
 
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
@@ -60,11 +63,15 @@
 	</main>
 </div>
 
-<style>
+<style lang="scss">
+	@import '../app.scss';
+
 	:global(html) {
-        background-image: linear-gradient(to top, #626060, #394651);
+        background-image: linear-gradient(to top, var(--primary-bg-color), var(--secondary-bg-color));
         font-family: 'Atkinson Hyperlegible', sans-serif;
+		color: var(--text-color);
     }
+	
 	.app {
 		display: flex;
 		flex-direction: column;
