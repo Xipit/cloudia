@@ -15,6 +15,7 @@ export function getLatestLocation() {
 }
 
 export function getGeneralisedWeatherCondition(){
+    console.log('run getGeneralisedWeatherCondition');
     return get(latestWeatherCondition);
 }
 

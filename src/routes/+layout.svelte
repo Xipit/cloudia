@@ -2,7 +2,7 @@
 	import Header from './Header.svelte';
 
 	import { invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import type { LayoutData } from './$types';
 
 	// Import different Weather Backgrounds
@@ -12,8 +12,8 @@
 	import Snow from './(weather-backgrounds)/snow.svelte';
 	import Rain from './(weather-backgrounds)/rain.svelte';
 	import { generalWeatherCondition, getGeneralisedWeatherCondition } from '$lib/js/latestLocationUtil';
-	import { latestWeatherCondition } from '$lib/stores';
 	import { get } from 'svelte/store';
+	import { latestWeatherCondition } from '$lib/stores';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -31,7 +31,14 @@
 
 	let isLoggedIn:boolean = data.session !== null;
 
-	let weatherCondition = get(latestWeatherCondition);
+	// WEATHER CONDITION
+	let weatherCondition:string;
+
+	const unsubscribeWeatherCondition = latestWeatherCondition.subscribe(value => {
+		weatherCondition = value;
+	})
+
+	onDestroy(unsubscribeWeatherCondition);
 </script>
 
 <!--
