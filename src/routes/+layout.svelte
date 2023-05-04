@@ -2,12 +2,18 @@
 	import Header from './Header.svelte';
 
 	import { invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import type { LayoutData } from './$types';
 
+	// Import different Weather Backgrounds
 	import Storm from './(weather-backgrounds)/storm.svelte';
-
-	
+	import Cloud from './(weather-backgrounds)/cloud.svelte';
+	import Sun from './(weather-backgrounds)/sun.svelte';
+	import Snow from './(weather-backgrounds)/snow.svelte';
+	import Rain from './(weather-backgrounds)/rain.svelte';
+	import { generalWeatherCondition, getGeneralisedWeatherCondition } from '$lib/js/latestLocationUtil';
+	import { get } from 'svelte/store';
+	import { latestWeatherCondition } from '$lib/stores';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -25,12 +31,34 @@
 
 	let isLoggedIn:boolean = data.session !== null;
 
+	// WEATHER CONDITION
+	let weatherCondition:string;
+
+	const unsubscribeWeatherCondition = latestWeatherCondition.subscribe(value => {
+		weatherCondition = value;
+	})
+
+	onDestroy(unsubscribeWeatherCondition);
 </script>
 
 <!--
 	to display different weather backgrounds add a switch statement
 	that looks current weather condition to determent the right component
 -->
+
+{#if weatherCondition === generalWeatherCondition.storm}
+	<Storm />
+{:else if weatherCondition === generalWeatherCondition.rain}
+	<Rain />
+{:else if weatherCondition === generalWeatherCondition.snow}
+	<Snow />
+{:else if weatherCondition === generalWeatherCondition.cloud}
+	<Cloud />
+{:else if weatherCondition === generalWeatherCondition.sun}
+	<Sun />
+{:else}
+	<Sun />
+{/if}
 
 
 <!--
