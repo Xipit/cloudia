@@ -28,17 +28,17 @@
 
 	#layer1 {
 		z-index: -20;
-		filter: invert(26%) sepia(5%) saturate(3436%) hue-rotate(161deg) brightness(90%) contrast(83%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+        filter: invert(100%) sepia(0%) saturate(6441%) hue-rotate(14deg) brightness(136%) contrast(80%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement1 5s linear infinite alternate;		
 	}
 	#layer2 {
 		z-index: -50;
-		filter: invert(18%) sepia(34%) saturate(321%) hue-rotate(163deg) brightness(98%) contrast(89%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+		filter: invert(93%) sepia(0%) saturate(70%) hue-rotate(159deg) brightness(95%) contrast(89%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement2 5s linear infinite alternate;
 	}
 	#layer3 {
 		z-index: -100;
-		filter: invert(14%) sepia(3%) saturate(4825%) hue-rotate(163deg) brightness(95%) contrast(81%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+		filter: invert(62%) sepia(0%) saturate(3162%) hue-rotate(96deg) brightness(92%) contrast(90%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement3 5s linear infinite alternate;
 	}
 	/*animation cloud layers*/

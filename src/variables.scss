@@ -1,12 +1,11 @@
 
 :root{
     --base: 4px;
-    --spacing-xs: $base;
+    --spacing-xs: var(--base);
     --spacing-sm: calc(2*var(--base));
     --spacing-md: calc(4*var(--base));
     --spacing-lg: calc(8*var(--base));
     --spacing-xl: calc(16*var(--base));
-
 
     --text-color: white;
     --primary-bg-color: rgb(45, 45, 45);
@@ -20,6 +19,38 @@
         --secondary-bg-color: #394651;
         --primary-accent-color: #7c9cd0;
         --secondary-accent-color: #fff700;
+    }
+
+    &[data-theme="sun"] {
+        --text-color: white;
+        --primary-bg-color: #ffdd55;
+        --secondary-bg-color: #80d9cf;
+        --primary-accent-color: #f8ad20;
+        --secondary-accent-color: #fb6d25;
+    }
+
+    &[data-theme="rain"] {
+        --text-color: white;
+        --primary-bg-color: #728aa1;
+        --secondary-bg-color: #006eff;
+        --primary-accent-color: #004195;
+        --secondary-accent-color: #7bb0e2;
+    }
+
+    &[data-theme="snow"] {
+        --text-color: white;
+        --primary-bg-color: #d1d9e6;
+        --secondary-bg-color: #ffffff;
+        --primary-accent-color: #898b89;
+        --secondary-accent-color: #9aa1a2;
+    }
+
+    &[data-theme="cloud"] {
+        --text-color: white;
+        --primary-bg-color: #6d7876;
+        --secondary-bg-color: #d7d6d6;
+        --primary-accent-color: #090b0b;
+        --secondary-accent-color: #e6e6e6;
     }
 
 }
