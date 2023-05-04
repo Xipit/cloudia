@@ -1,7 +1,7 @@
 
 :root{
     --base: 4px;
-    --spacing-xs: $base;
+    --spacing-xs: var(--base);
     --spacing-sm: calc(2*var(--base));
     --spacing-md: calc(4*var(--base));
     --spacing-lg: calc(8*var(--base));
