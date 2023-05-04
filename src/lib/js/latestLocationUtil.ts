@@ -35,10 +35,11 @@ export function setLocationParameter(location:string) {
 }
 
 const cloudList = [
-    'Cloudy', 
+    'Cloudy',
+    'cloudy', 
     'Overcast', 
-    'fog', 
     'Fog', 
+    'fog', 
     'Mist'
 ];
 const rainList = [
