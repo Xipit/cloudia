@@ -92,12 +92,12 @@
 				<div class="weather-indicator">
 					{#each data.hour as hour}
 						<div class="time-element">
+							{hour.time}
+							<img src={hour.conditionIconURL} alt="Sun">
+							<hr>
 							<div class="temp-hour">
 								{hour.temp_c}°C
 							</div>
-							<img src={hour.conditionIconURL} alt="Sun">
-							<hr>
-							{hour.time}
 						</div>
 					{/each}
 				</div>
@@ -146,8 +146,7 @@
 					<p class="description">Luftfeuchtig&shykeit</p>
 					<p>	{data.current.humidity} % </p>
 				</div>
-				<div class="temp-range">Maximale und Minimale Temperatur</div>
-				<div class="sun-and-moon">Sonnenauf- und -untergang</div>
+				
 				
 			 
 			{/if}		
@@ -155,8 +154,29 @@
 			<p style="color: red">{error.message}</p>
 			{/await}
 
-		
 
+
+			{#await nextDaysWeatherData}
+			<p>hole Wetterinformationen...</p>
+			{:then data}
+				{#if data.error}
+					<p>{data.error.message}</p>
+				{:else}
+					<div class="temp-range">
+						<div class="description">Max: </div> {data.day[0].maxtemp_c} °C
+						<div class="description">Min: </div> {data.day[0].mintemp_c} °C
+					</div>
+					<div class="sun-and-moon">
+						<div class="description">Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span></div> 
+						<div class="description">Sonnen&shyuntergang: <span class="value">{data.day[0].sunset}</span></div> 
+						<div class="description">Mond&shyaufgang: <span class="value">{data.day[0].moonrise}</span></div> 
+						<div class="description">Mond&shyuntergang: <span class="value">{data.day[0].moonset}</span></div> 
+						<p></p>
+					</div>
+				{/if}		
+			{:catch error}
+			<p style="color: red">{error.message}</p>
+			{/await}
 		
 
 	<!-- APOD - Astronomy Picture of the Day -->
@@ -244,7 +264,6 @@
 
 			.location {
 				font-size: 1.55em;
-				margin-top: -1em;
 			}
 		}
 
@@ -254,29 +273,32 @@
 			align-items: center;
 			background: $background-tiles-color;
 			margin-top: 1.25em;
+			margin-right: 500px;
 			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
+			padding: var(--spacing-sm);
 
 			.time-element {
 				text-align: center;
 				font-family: $font-accent;
 				color: $light-color;
-				font-size: 16px;
+				font-size: 20px;
 
 				.temp-hour {
-					font-size: 21px;
+					// font-size: 16px;
+					padding-top: 5px;
 				}
 
 				hr {
 					border-top: 3px solid $light-color;
-					padding-bottom: 5px;
+					width: 70%;
 				}
 			}
 
 			img {
-				width: 50px;
-				padding: 10px;
+				height: 35px;
+				padding-top: 10px;
 			}
 		}
 
@@ -284,7 +306,7 @@
 		.grid-container {
 			display: grid;
 			grid-template-columns: 33% 33% 33%;
-			grid-template-rows: 120px 120px 120px 120px;
+			grid-template-rows: 120px 120px 120px 120px 120px;
 			gap: var(--spacing-sm);
 			padding-right: 1em;
 		}
@@ -293,7 +315,7 @@
 			text-align: center;
 			background: $background-tiles-color;
 			gap: 1.25em;
-			padding: 0.625em;
+			padding: 0 10px 10px 10px;
 			border-radius: 0.438em;
 		}
 
@@ -312,10 +334,10 @@
 		}
 
 		.apod {
-			grid-column-start: 2;
+			grid-column-start: 1;
 			grid-column-end: 4;
-			grid-row-start: 3;
-			grid-row-end: 5;
+			grid-row-start: 4;
+			grid-row-end: 6;
 
 			img {
 				width: 100%;
@@ -324,23 +346,30 @@
 
 		.sun-and-moon {
 			grid-column-start: 1;
-			grid-column-end: 2;
-			grid-row-start: 2;
+			grid-column-end: 3;
+			grid-row-start: 3;
 			grid-row-end: 4;
+			text-align: left !important;
 		}
 
 		.temp-range {
 			grid-column-start: 1;
 			grid-column-end: 2;
-			grid-row-start: 4;
-			grid-row-end: 5;
+			grid-row-start: 2;
+			grid-row-end: 3;
 		}
 		//END: everything for the grid-container
 
 		.description {
-			font-size: larger;
-		 	font-family: "Chewy";
+			font-size: 18px;
+		 	// font-family: "Chewy";
+			font-weight: bold;
 		 	color: $light-color;
+
+			.value {
+				font-weight: normal;
+				font-size: 16px;
+			}
 		}
 		
 	}	
