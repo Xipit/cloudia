@@ -25,7 +25,7 @@
 	.clouds {
     	position: fixed;
 		max-width: unset;
-		top: -170px;
+		top: -190px;
 	}
 
 	/*

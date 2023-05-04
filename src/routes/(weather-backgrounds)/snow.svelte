@@ -22,7 +22,9 @@
 </div>
 
 <style>
-/*cloud layers*/
+    @import './cloud-animations.scss';
+
+    /*cloud layers*/
 	.background-images {
 		position: fixed;
 		top:0px;
@@ -33,7 +35,7 @@
 	.clouds {
     	position: fixed;
 		max-width: unset;
-		top: -170px;
+		top: -190px;
 	}
 
     /*
@@ -93,20 +95,7 @@
     .animation-small-delay {
         animation: snowfall 20s linear 11s infinite
     }
-    
-	/*animation cloud layers*/
-	@keyframes cloud-movement1 {
-		from {right:-65px;}
-		to {right: -25px;}
-	}
-	@keyframes cloud-movement2 {
-		from {right:-25px;}
-		to {right: -55px;}
-	}
-	@keyframes cloud-movement3 {
-		from {right:-35px;}
-		to {right: -10px;}
-	}
+
 
     /*animation snowflakes*/
 
