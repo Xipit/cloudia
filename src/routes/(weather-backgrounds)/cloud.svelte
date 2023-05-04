@@ -11,8 +11,10 @@
 	<img src={layer3} class="clouds" id="layer3" alt="moving clouds">
 </div>
 
-<style>
-/*cloud layers*/
+<style lang="scss">
+	@import './cloud-animations.scss';
+
+	/*cloud layers*/
 	.background-images {
 		position: fixed;
 		top:0px;
@@ -49,18 +51,6 @@
 		drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement3 5s linear infinite alternate;
 	}
-	/*animation cloud layers*/
-	@keyframes cloud-movement1 {
-		from {right:-65px;}
-		to {right: -25px;}
-	}
-	@keyframes cloud-movement2 {
-		from {right:-25px;}
-		to { right: -55px;}
-	}
-	@keyframes cloud-movement3 {
-		from {right:-35px;}
-		to {right: -10px;}
-	}
+
 
 </style>
