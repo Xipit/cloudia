@@ -1,6 +1,7 @@
-import { latestLocation, latestWeatherCondition } from "$lib/stores";
+//import { latestLocation, latestWeatherCondition } from "$lib/stores";
 import { get } from "svelte/store";
 
+/*
 export function handleLatestLocation(location:string, weatherCondition:string){
     latestLocation.set(location);
 
@@ -17,8 +18,9 @@ export function getLatestLocation() {
 export function getGeneralisedWeatherCondition(){
     return get(latestWeatherCondition);
 }
+*/
 
-function setDataAttribute(weatherCondition:string){
+export function setDataAttribute(weatherCondition:string){
     // sets data-theme="WEATHERCONDITION" on html root element
     document.documentElement.setAttribute('data-theme', weatherCondition);
 }
@@ -69,7 +71,7 @@ export enum generalWeatherCondition {
     sun     = "sun"
 }
 
-function generaliseWeatherCondition (weatherCondition:string):generalWeatherCondition {
+export function generaliseWeatherCondition (weatherCondition:string):generalWeatherCondition {
     const isCloud:boolean   = cloudList.some((text) =>  weatherCondition.includes(text));
     const isRain:boolean    = rainList.some((text) =>   weatherCondition.includes(text));
     const isSnow:boolean    = snowList.some((text) =>   weatherCondition.includes(text));

@@ -11,9 +11,9 @@
 	import Sun from './(weather-backgrounds)/sun.svelte';
 	import Snow from './(weather-backgrounds)/snow.svelte';
 	import Rain from './(weather-backgrounds)/rain.svelte';
-	import { generalWeatherCondition, getGeneralisedWeatherCondition } from '$lib/js/latestLocationUtil';
+	import { generalWeatherCondition } from '$lib/js/latestLocationUtil';
 	import { get } from 'svelte/store';
-	import { latestWeatherCondition } from '$lib/stores';
+	import { weather } from '$lib/js/weatherStore';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -32,13 +32,13 @@
 	let isLoggedIn:boolean = data.session !== null;
 
 	// WEATHER CONDITION
-	let weatherCondition:string;
+	let generalisedWeatherCondition:string;
 
-	const unsubscribeWeatherCondition = latestWeatherCondition.subscribe(value => {
-		weatherCondition = value;
+	const unsubscribeWeather = weather.subscribe(() => {
+		generalisedWeatherCondition = weather.getGeneralisedWeatherCondition();
 	})
 
-	onDestroy(unsubscribeWeatherCondition);
+	onDestroy(unsubscribeWeather);
 </script>
 
 <!--
@@ -46,15 +46,15 @@
 	that looks current weather condition to determent the right component
 -->
 
-{#if weatherCondition === generalWeatherCondition.storm}
+{#if generalisedWeatherCondition === generalWeatherCondition.storm}
 	<Storm />
-{:else if weatherCondition === generalWeatherCondition.rain}
+{:else if generalisedWeatherCondition === generalWeatherCondition.rain}
 	<Rain />
-{:else if weatherCondition === generalWeatherCondition.snow}
+{:else if generalisedWeatherCondition === generalWeatherCondition.snow}
 	<Snow />
-{:else if weatherCondition === generalWeatherCondition.cloud}
+{:else if generalisedWeatherCondition === generalWeatherCondition.cloud}
 	<Cloud />
-{:else if weatherCondition === generalWeatherCondition.sun}
+{:else if generalisedWeatherCondition === generalWeatherCondition.sun}
 	<Sun />
 {:else}
 	<Sun />

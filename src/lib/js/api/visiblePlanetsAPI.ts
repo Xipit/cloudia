@@ -21,12 +21,7 @@ async function API_REQUEST(latitude: number, longitude: number){
 	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
 }
 
-export async function getVisiblePlanetsData(latitude: any, longitude: any){
-	if ((typeof latitude !== "number") || (typeof longitude !== "number")) {
-		console.log("location could not be found");
-		return errorData;
-	}
-	
+export async function getVisiblePlanetsData(latitude: number, longitude: number){
 	const data = await API_REQUEST(latitude, longitude);
 
 	if ((latitude == data.meta.latitude) && (longitude == data.meta.longitude)){
