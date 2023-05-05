@@ -163,8 +163,8 @@
 					<p>{data.error.message}</p>
 				{:else}
 					<div class="temp-range">
-						<div class="description">Max: </div> {data.day[0].maxtemp_c} °C
-						<div class="description">Min: </div> {data.day[0].mintemp_c} °C
+						<div class="description">Max: <span class="value">{data.day[0].maxtemp_c} °C</span></div> 
+						<div class="description">Min: <span class="value">{data.day[0].mintemp_c} °C</span></div> 
 					</div>
 					<div class="sun-and-moon">
 						<div class="description">Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span></div> 
@@ -305,7 +305,7 @@
 		//BEGIN: everything for the grid-container
 		.grid-container {
 			display: grid;
-			grid-template-columns: 33% 33% 33%;
+			grid-template-columns: 34.5% 34.5% 34.5%;
 			grid-template-rows: 120px 120px 120px 120px 120px;
 			gap: var(--spacing-sm);
 			padding-right: 1em;
@@ -340,7 +340,8 @@
 			grid-row-end: 6;
 
 			img {
-				width: 100%;
+				width: 70%;
+				height:70%;
 			}
 		}
 
@@ -350,6 +351,8 @@
 			grid-row-start: 3;
 			grid-row-end: 4;
 			text-align: left !important;
+			padding: 15px 0 0 15px !important;
+			
 		}
 
 		.temp-range {
@@ -357,6 +360,8 @@
 			grid-column-end: 2;
 			grid-row-start: 2;
 			grid-row-end: 3;
+			text-align: left !important;
+			padding: 35px 0 0 15px !important;
 		}
 		//END: everything for the grid-container
 
