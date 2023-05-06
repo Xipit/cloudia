@@ -25,7 +25,11 @@ function createWeather() {
     const location = writable(locationInitialValue);
     toLocalStorage(location, 'location');
 
-    const generalisedWeatherConditionInitialValue: GeneralWeatherCondition = fromLocalStorage('generalisedWeatherCondition', '');
+    const generalisedWeatherConditionInitialValue: GeneralWeatherCondition = fromLocalStorage(
+        get(location) != '' 
+            ? 'generalisedWeatherCondition' 
+            : ''
+        , '');
     const generalisedWeatherCondition = createGeneralisedWeatherCondition(generalisedWeatherConditionInitialValue);
     toLocalStorage(generalisedWeatherCondition, 'generalisedWeatherCondition');
 
