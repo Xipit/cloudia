@@ -66,9 +66,6 @@
 
 <!-- BEGIN: general weather information -->
     <section>	
-		{#if !weatherData}
-			YOOOOOO
-		{/if}	
         {#await weatherData}
             <p>hole Wetterinformationen...</p>
         {:then data}
