@@ -3,36 +3,37 @@
 	import { supabaseClient } from "$lib/js/supabase";
 	import type { PageData } from "./$types";
 
-	import {getCurrentWeatherData, latitude, longitude, getNextHoursWeatherData, getNextDaysWeatherData} from "../lib/js/api/weatherApi"
+	import { latitude, longitude } from "../lib/js/api/weatherApi"
 	import {getAPOD} from "../lib/js/api/apodApi";
 	import {getVisiblePlanetsData} from "../lib/js/api/visiblePlanetsAPI";
 	import { page } from "$app/stores";
 	import { goto, invalidate } from "$app/navigation";
 	import { browser } from "$app/environment";
+	import { weather } from "$lib/js/weatherStore";
+	import { onDestroy } from "svelte";
+	import { get } from "svelte/store";
 
-    export let data:PageData;
+    export let data: PageData;
 
 	// Weather API
-	let location = data.location;
-	$:weatherData = data.weatherData;
-	$:nextHoursWeatherData = data.nextHoursWeatherData;
-	$:nextDaysWeatherData = data.nextDaysWeatherData;
+	let weatherData: any		  = data.weatherData;
+	let nextHoursWeatherData: any = data.nextHoursWeatherData;
+	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
+	
+	const unsubscribeWeather = weather.subscribe(() => {
+		const weatherDataObject = weather.getWeather();
+		
+		weatherData 			= weatherDataObject.weatherData;
+		nextHoursWeatherData 	= weatherDataObject.nextHoursWeatherData;
+		nextDaysWeatherData 	= weatherDataObject.nextDaysWeatherData;
+	})
 
-	// adapted from : https://www.thinkprogramming.co.uk/search-via-querystring-sveltekit/ 
+	onDestroy(unsubscribeWeather);
+	
+	let newLocation: string = "";
+
 	let onLocationSubmit = async () => {
-		let currentLocationParam: string | null = '';
-
-		if(browser){
-			const urlParams = new URLSearchParams(window.location.search);
-			currentLocationParam = urlParams.get('location');
-		}
-
-		if(location.trim() === currentLocationParam?.trim())
-			return;
-
-		await goto(`/?location=${encodeURIComponent(location.trim())}`, {
-			keepFocus: true
-		})
+		weather.set(newLocation)
 	}
 	
 	// APOD - Astronomy Picture of the Day
@@ -49,7 +50,6 @@
         visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
     }
 
-
 </script>
 
 <main>
@@ -65,7 +65,7 @@
     </section>
 
 <!-- BEGIN: general weather information -->
-    <section>		
+    <section>	
         {#await weatherData}
             <p>hole Wetterinformationen...</p>
         {:then data}
@@ -203,7 +203,7 @@
 
 		<!--{/await}-->
 		<form on:submit|preventDefault={onLocationSubmit}>
-			<input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
+			<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
 			<button type="submit">Wetterdaten bekommen</button>
 		</form>
 	</section>
