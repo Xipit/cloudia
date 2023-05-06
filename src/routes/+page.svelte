@@ -232,7 +232,6 @@
 
 <style lang="scss">
 	$font-accent: 'Chewy', cursive;
-	$light-color: white;
 	$background-tiles-color: rgba(88, 88, 88, 0.3);
 
 
@@ -254,7 +253,7 @@
 		.main-info {
 			margin-top: 4.375em;
 			margin-left: 0.625em;
-			color: $light-color;
+			color: var(--text-color);
 			text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
 
 			.temperature {
@@ -282,7 +281,7 @@
 			.time-element {
 				text-align: center;
 				font-family: $font-accent;
-				color: $light-color;
+				color: var(--text-color);
 				font-size: 20px;
 
 				.temp-hour {
@@ -291,7 +290,7 @@
 				}
 
 				hr {
-					border-top: 3px solid $light-color;
+					border-top: 3px solid var(--text-color);
 					width: 70%;
 				}
 			}
@@ -369,7 +368,7 @@
 			font-size: 18px;
 		 	// font-family: "Chewy";
 			font-weight: bold;
-		 	color: $light-color;
+		 	color: var(--text-color);
 
 			.value {
 				font-weight: normal;
