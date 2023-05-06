@@ -11,29 +11,6 @@ import { get } from "svelte/store";
 
 export const load = (async ({ url }) => {
 
-    /*const location:string = (() => {
-        const locationParam = url.searchParams.get('location')?.toString();
-        if(locationParam && locationParam != ""){
-            return locationParam;
-        } else {
-            // read latest location from localstorage and set URL parameter
-            const latestLocation = getLatestLocation();
-            setLocationParameter(latestLocation);
-            return latestLocation
-        }
-    })();
-
-
-    let weatherData = await getCurrentWeatherData(location);
-	let nextHoursWeatherData = getNextHoursWeatherData(location);
-    let nextDaysWeatherData = getNextDaysWeatherData(location);
-
-    // used to style pages conditionally by weather condition
-    if(!weatherData.error && location != ""){
-        handleLatestLocation(location, weatherData.current.condition.text);
-    }
-    */
-
     const locationParam = weather.getURLParam(url);
 
     if(browser){

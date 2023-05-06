@@ -11,9 +11,9 @@
 	import Sun from './(weather-backgrounds)/sun.svelte';
 	import Snow from './(weather-backgrounds)/snow.svelte';
 	import Rain from './(weather-backgrounds)/rain.svelte';
-	import { generalWeatherCondition } from '$lib/js/latestLocationUtil';
 	import { get } from 'svelte/store';
 	import { weather } from '$lib/js/weatherStore';
+	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -46,15 +46,15 @@
 	that looks current weather condition to determent the right component
 -->
 
-{#if generalisedWeatherCondition === generalWeatherCondition.storm}
+{#if generalisedWeatherCondition === GeneralWeatherCondition.storm}
 	<Storm />
-{:else if generalisedWeatherCondition === generalWeatherCondition.rain}
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.rain}
 	<Rain />
-{:else if generalisedWeatherCondition === generalWeatherCondition.snow}
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.snow}
 	<Snow />
-{:else if generalisedWeatherCondition === generalWeatherCondition.cloud}
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.cloud}
 	<Cloud />
-{:else if generalisedWeatherCondition === generalWeatherCondition.sun}
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.sun}
 	<Sun />
 {:else}
 	<Sun />

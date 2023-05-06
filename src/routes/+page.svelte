@@ -16,11 +16,9 @@
     export let data: PageData;
 
 	// Weather API
-
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
-
 	
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
@@ -51,7 +49,6 @@
     function handleVisiblePlanetsClick(){
         visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
     }
-
 
 </script>
 

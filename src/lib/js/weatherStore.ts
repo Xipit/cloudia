@@ -1,21 +1,20 @@
 import { browser } from "$app/environment";
 import { get, writable, type Writable } from "svelte/store";
 import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "./api/weatherApi";
-import { generaliseWeatherCondition, setDataAttribute, type generalWeatherCondition } from "./latestLocationUtil";
+import { createGeneralisedWeatherCondition, generaliseWeatherCondition, type GeneralWeatherCondition } from "./util/weatherStoreUtils";
 import { fromLocalStorage, toLocalStorage } from "./util/localStorageWrapper";
 import { replaceStateWithSearchParam } from "./util/url";
 
 
 function createWeather() {
+    // dummy store object used to trigger [subscribe] 
+    const { subscribe, update, set } = writable(0);
     
     const notFetchedError = {
         error: {
             message: 'Not fetched yet.'
         }
     };
-
-    const { subscribe, update, set } = writable(0);
-
     const weatherObject = writable({
         weatherData: notFetchedError,
         nextHoursWeatherData: notFetchedError,
@@ -26,7 +25,7 @@ function createWeather() {
     const location = writable(locationInitialValue);
     toLocalStorage(location, 'location');
 
-    const generalisedWeatherConditionInitialValue: generalWeatherCondition = fromLocalStorage('generalisedWeatherCondition', '');
+    const generalisedWeatherConditionInitialValue: GeneralWeatherCondition = fromLocalStorage('generalisedWeatherCondition', '');
     const generalisedWeatherCondition = createGeneralisedWeatherCondition(generalisedWeatherConditionInitialValue);
     toLocalStorage(generalisedWeatherCondition, 'generalisedWeatherCondition');
 
@@ -35,13 +34,6 @@ function createWeather() {
             console.warn("Tried to set empty location.");
             return;
         }
-        /*
-        if(newLocation == get(location)){
-            console.log("Tried to set new Location, but newLocation == location.");
-            return;
-        }
-        */
-
    
         const newWeatherData = await getCurrentWeatherData(newLocation);
         const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation);
@@ -75,7 +67,7 @@ function createWeather() {
 
     function setURLParamWithoutReload () {
         if(get(location) == ""){
-            console.warn("Tried setting '?location=' URL-Search-Param before setting location!");
+            console.warn("Tried setting '?location=' URL-Search-Param before setting internal location!");
             return;
         }
 
@@ -104,15 +96,3 @@ function createWeather() {
 export const weather = createWeather();
 
 
-function createGeneralisedWeatherCondition(initialValue:string):Writable<string> {
-    const { subscribe, set, update } = writable(initialValue);
-
-    return{
-        subscribe,
-        set: (value:generalWeatherCondition) => {
-            set(value);
-            setDataAttribute(value);
-        },
-        update: update
-    }
-}
