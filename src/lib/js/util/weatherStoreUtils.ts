@@ -67,7 +67,7 @@ export function generaliseWeatherCondition (weatherCondition:string):GeneralWeat
 }
 
 
-export function createGeneralisedWeatherCondition(initialValue:GeneralWeatherCondition):Writable<string> {
+export function createGeneralisedWeatherCondition(initialValue:GeneralWeatherCondition):Writable<GeneralWeatherCondition> {
     const { subscribe, set, update } = writable(initialValue);
 
     return{

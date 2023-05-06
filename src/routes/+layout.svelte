@@ -11,7 +11,6 @@
 	import Sun from './(weather-backgrounds)/sun.svelte';
 	import Snow from './(weather-backgrounds)/snow.svelte';
 	import Rain from './(weather-backgrounds)/rain.svelte';
-	import { get } from 'svelte/store';
 	import { weather } from '$lib/js/weatherStore';
 	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';
 
@@ -32,7 +31,7 @@
 	let isLoggedIn:boolean = data.session !== null;
 
 	// WEATHER CONDITION
-	let generalisedWeatherCondition:string;
+	let generalisedWeatherCondition:GeneralWeatherCondition;
 
 	const unsubscribeWeather = weather.subscribe(() => {
 		generalisedWeatherCondition = weather.getGeneralisedWeatherCondition();
@@ -43,7 +42,7 @@
 
 <!--
 	to display different weather backgrounds add a switch statement
-	that looks current weather condition to determent the right component
+	that looks at current weather condition to determent the right component
 -->
 
 {#if generalisedWeatherCondition === GeneralWeatherCondition.storm}
@@ -59,12 +58,6 @@
 {:else}
 	<Sun />
 {/if}
-
-
-<!--
-	TODO: caused performance problems
-	<Storm />
--->
 
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
