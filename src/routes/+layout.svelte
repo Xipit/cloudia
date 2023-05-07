@@ -44,7 +44,7 @@
 <!--
 	to display different weather backgrounds add a switch statement
 	that looks current weather condition to determent the right component
--->
+
 
 {#if weatherCondition === generalWeatherCondition.storm}
 	<Storm />
@@ -58,8 +58,8 @@
 	<Sun />
 {:else}
 	<Sun />
-{/if}
-
+{/if}-->
+<Storm />
 
 <!--
 	TODO: caused performance problems
