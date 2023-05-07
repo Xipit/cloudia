@@ -4,9 +4,9 @@
 	import { goto } from "$app/navigation";
 	import { browser } from "$app/environment";
 
-	import MainWeatherInfo from "./mainWeatherInfo.svelte";
-	import NextHoursWeather from "./nextHoursWeather.svelte";
-	import WeatherOverview from "./weatherOverview.svelte";
+	import MainWeatherInfo from "../components/weather-tiles/mainWeatherInfo.svelte";
+	import NextHoursWeather from "../components/weather-tiles/nextHoursWeather.svelte";
+	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 
     export let data:PageData;
 

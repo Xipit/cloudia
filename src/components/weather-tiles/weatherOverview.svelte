@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
+	import type { PageData } from "../../routes/$types";
 
-	import {latitude, longitude} from "../lib/js/api/weatherApi"
-	import {getAPOD} from "../lib/js/api/apodApi";
-	import {getVisiblePlanetsData} from "../lib/js/api/visiblePlanetsAPI";
+	import {latitude, longitude} from "../../lib/js/api/weatherApi"
+	import {getAPOD} from "../../lib/js/api/apodApi";
+	import {getVisiblePlanetsData} from "../../lib/js/api/visiblePlanetsAPI";
 
     export let data:PageData;
 
@@ -14,10 +14,6 @@
 	
 	// APOD - Astronomy Picture of the Day
 	let apodData = getAPOD();
-
-	function handleAPODClick(){
-		apodData = getAPOD();
-	}
 
 	// Visible Planets API
 	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
@@ -31,36 +27,34 @@
 
 <div class="grid-container">
     {#await weatherData}
-    <p>hole Wetterinformationen...</p>
+        <p>hole Wetterinformationen...</p>
     {:then data}
-    {#if data.error}
-        <p>{data.error.message}</p>
-    {:else}
-    
-        <div class="feelslike">
-            <p class="description">gefühlte Temperatur</p>
-            <p>	{data.current.feelslike_c} °C </p>
-        </div>
-        <div class="condition">
-            <p class="description">Wetter&shykondition</p>
-            <p> {data.current.condition.text} </p>
-        </div>
-        <div class="humidity">
-            <p class="description">Luftfeuchtig&shykeit</p>
-            <p>	{data.current.humidity} % </p>
-        </div>
+        {#if data.error}
+            <p>{data.error.message}</p>
+        {:else}
         
-        
-     
-    {/if}		
+            <div class="feelslike">
+                <p class="description">gefühlte Temperatur</p>
+                <p>	{data.current.feelslike_c} °C </p>
+            </div>
+            <div class="condition">
+                <p class="description">Wetter&shykondition</p>
+                <p> {data.current.condition.text} </p>
+            </div>
+            <div class="humidity">
+                <p class="description">Luftfeuchtig&shykeit</p>
+                <p>	{data.current.humidity} % </p>
+            </div>
+
+        {/if}		
     {:catch error}
-    <p style="color: red">{error.message}</p>
+        <p style="color: red">{error.message}</p>
     {/await}
 
 
 
     {#await nextDaysWeatherData}
-    <p>hole Wetterinformationen...</p>
+        <p>hole Wetterinformationen...</p>
     {:then data}
         {#if data.error}
             <p>{data.error.message}</p>
@@ -78,13 +72,11 @@
             </div>
         {/if}		
     {:catch error}
-    <p style="color: red">{error.message}</p>
+        <p style="color: red">{error.message}</p>
     {/await}
 
 
-<!-- APOD - Astronomy Picture of the Day -->
-
-    <!-- button on:click={handleAPODClick}>Picture of the Day</button-->
+    <!-- APOD - Astronomy Picture of the Day -->
 
     {#await apodData}
         <p>hole Astronomy Picture of the Day</p>
@@ -94,7 +86,7 @@
             <p class="description">{data.title}</p> 
             <!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
             <!-- svelte-ignore a11y-img-redundant-alt -->
-            <img src={data.url} alt="APOD - Astronomy Picture of the Day" width="50%">
+            <img src={data.url} alt="APOD - Astronomy Picture of the Day">
         </div>
         
     {:catch error}
@@ -103,7 +95,7 @@
 
 
 
-<!-- Visible Planets -->
+    <!-- Visible Planets -->
 
     <button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
 
