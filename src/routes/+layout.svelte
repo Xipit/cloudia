@@ -6,13 +6,17 @@
 	import type { LayoutData } from './$types';
 
 	// Import different Weather Backgrounds
-	import Storm from './(weather-backgrounds)/storm.svelte';
-	import Cloud from './(weather-backgrounds)/cloud.svelte';
-	import Sun from './(weather-backgrounds)/sun.svelte';
-	import Snow from './(weather-backgrounds)/snow.svelte';
-	import Rain from './(weather-backgrounds)/rain.svelte';
+	import Storm from '../components/weather-backgrounds/storm.svelte';
+	import Rain from '../components/weather-backgrounds/rain.svelte';
+	import Snow from '../components/weather-backgrounds/snow.svelte';
+	import Cloud from '../components/weather-backgrounds/cloud.svelte';
+	import Sun from '../components/weather-backgrounds/sun.svelte';
+
 	import { weather } from '$lib/js/weatherStore';
+
 	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';
+
+
 
 	// AUTHENTICATION 
 	export let data: LayoutData;

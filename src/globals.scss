@@ -3,7 +3,9 @@
     background-color: var(--secondary-bg-color);
 
     font-family: 'Atkinson Hyperlegible', sans-serif;
+    
     color: var(--text-color);
+    word-break: break-word;
 
     transition: color, background-color 300ms ease-in-out;
 }
