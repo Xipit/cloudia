@@ -20,12 +20,11 @@
 
 
 <style lang="scss">
-    $font-accent: 'Chewy', cursive;
+	@import './weather-tiles.scss';
 
     .main-info {
 			margin-top: 4.375em;
 			margin-left: 0.625em;
-			color: var(--text-color);
 			text-shadow: 2px 4px 4px #716666; /* horizontal vertiacal blur color */
 
 			.temperature {

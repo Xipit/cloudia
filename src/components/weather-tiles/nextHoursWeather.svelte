@@ -9,13 +9,15 @@
     {#if data.error}
         <p>{data.error.message}</p>
     {:else}
-        <div class="weather-indicator">
+        <div class="weather-indicator tile">
             {#each data.hour as hour}
                 <div class="time-element">
-                    {hour.time}
+                    <div class="hour">
+						{hour.time}
+					</div>
                     <img src={hour.conditionIconURL} alt="Sun">
                     <hr>
-                    <div class="temp-hour">
+                    <div class="temp">
                         {hour.temp_c}°C
                     </div>
                 </div>
@@ -25,32 +27,30 @@
 {:catch error}
     <p style="color: red">{error.message}</p>
 {/await}
-<br>
-
 
 <style lang="scss">
-    $font-accent: 'Chewy', cursive;
-	$background-tiles-color: rgba(88, 88, 88, 0.3);
+	@import './weather-tiles.scss';
 
     .weather-indicator{
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
-			background: $background-tiles-color;
 			margin-top: 1.25em;
-			margin-right: 500px;
 			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
-			padding: var(--spacing-sm);
+			padding: var(--spacing-sm), 0;
 
 			.time-element {
 				text-align: center;
 				font-family: $font-accent;
-				color: var(--text-color);
 				font-size: 20px;
 
-				.temp-hour {
+				.hour, .temp{
+					width: 100%;
+				}
+
+				.temp {
 					padding-top: 5px;
 				}
 

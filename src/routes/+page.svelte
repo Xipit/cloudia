@@ -1,15 +1,13 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 
-	import { goto } from "$app/navigation";
-	import { browser } from "$app/environment";
 	import { weather } from "$lib/js/weatherStore";
 	import { onDestroy } from "svelte";
-	import { get } from "svelte/store";
 
 	import MainWeatherInfo from "../components/weather-tiles/mainWeatherInfo.svelte";
 	import NextHoursWeather from "../components/weather-tiles/nextHoursWeather.svelte";
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
+	import Apod from "../components/weather-tiles/apod.svelte";
 
     export let data: PageData;
 
@@ -49,9 +47,10 @@
 
 
     <section>		
-        <MainWeatherInfo bind:weatherData/>
-		<NextHoursWeather bind:nextHoursWeatherData/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData/>
+        <MainWeatherInfo bind:weatherData />
+		<NextHoursWeather bind:nextHoursWeatherData />
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData />
+		<Apod />
 
 
 	<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
@@ -93,6 +92,6 @@
 	}
 
 	section {
-		margin: 0.5em;
+		margin: 0.5em 0;
 	}	
 </style>
