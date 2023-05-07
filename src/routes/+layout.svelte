@@ -59,7 +59,7 @@
 {:else}
 	<Sun />
 {/if}-->
-<Storm />
+<Rain />
 
 <!--
 	TODO: caused performance problems
