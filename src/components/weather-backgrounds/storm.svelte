@@ -11,8 +11,10 @@
 	<img src={layer3} class="clouds" id="layer3" alt="moving clouds">
 </div>
 
-<style>
-/*cloud layers*/
+<style lang = "scss">
+	@import './cloud-animations.scss';
+
+	/*cloud layers*/
 	.background-images {
 		position: fixed;
 		top:0px;
@@ -23,36 +25,31 @@
 	.clouds {
     	position: fixed;
 		max-width: unset;
-		top: -170px;
+		top: -190px;
 	}
+
+	/*
+	Filter generated with: https://codepen.io/sosuke/pen/Pjoqqp
+	Original color of SVG must be black, in order to get the right color with the filter
+	*/
 
 	#layer1 {
 		z-index: -20;
-		filter: invert(26%) sepia(5%) saturate(3436%) hue-rotate(161deg) brightness(90%) contrast(83%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+		filter: invert(26%) sepia(5%) saturate(3436%) hue-rotate(161deg) brightness(90%) contrast(83%) 
+		drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement1 5s linear infinite alternate;		
 	}
 	#layer2 {
 		z-index: -50;
-		filter: invert(18%) sepia(34%) saturate(321%) hue-rotate(163deg) brightness(98%) contrast(89%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+		filter: invert(18%) sepia(34%) saturate(321%) hue-rotate(163deg) brightness(98%) contrast(89%) 
+		drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement2 5s linear infinite alternate;
 	}
 	#layer3 {
 		z-index: -100;
-		filter: invert(14%) sepia(3%) saturate(4825%) hue-rotate(163deg) brightness(95%) contrast(81%) drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+		filter: invert(14%) sepia(3%) saturate(4825%) hue-rotate(163deg) brightness(95%) contrast(81%) 
+		drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 		animation: cloud-movement3 5s linear infinite alternate;
-	}
-	/*animation cloud layers*/
-	@keyframes cloud-movement1 {
-		from {right:-65px;}
-		to {right: -25px;}
-	}
-	@keyframes cloud-movement2 {
-		from {right:-25px;}
-		to { right: -55px;}
-	}
-	@keyframes cloud-movement3 {
-		from {right:-35px;}
-		to {right: -10px;}
 	}
 
 </style>

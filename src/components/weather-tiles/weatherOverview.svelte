@@ -1,15 +1,10 @@
 <script lang="ts">
-	import type { PageData } from "../../routes/$types";
-
 	import {latitude, longitude} from "../../lib/js/api/weatherApi"
 	import {getAPOD} from "../../lib/js/api/apodApi";
 	import {getVisiblePlanetsData} from "../../lib/js/api/visiblePlanetsAPI";
 
-    export let data:PageData;
-
-	// Weather API
-	$:weatherData = data.weatherData;
-	$:nextDaysWeatherData = data.nextDaysWeatherData;
+	export let weatherData:any;
+	export let nextDaysWeatherData:any;
 
 	
 	// APOD - Astronomy Picture of the Day

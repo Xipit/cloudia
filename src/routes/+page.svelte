@@ -3,31 +3,35 @@
 
 	import { goto } from "$app/navigation";
 	import { browser } from "$app/environment";
+	import { weather } from "$lib/js/weatherStore";
+	import { onDestroy } from "svelte";
+	import { get } from "svelte/store";
 
 	import MainWeatherInfo from "../components/weather-tiles/mainWeatherInfo.svelte";
 	import NextHoursWeather from "../components/weather-tiles/nextHoursWeather.svelte";
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 
-    export let data:PageData;
+    export let data: PageData;
 
 	// Weather API
-	let location = data.location;
+	let weatherData: any		  = data.weatherData;
+	let nextHoursWeatherData: any = data.nextHoursWeatherData;
+	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
+	
+	const unsubscribeWeather = weather.subscribe(() => {
+		const weatherDataObject = weather.getWeather();
+		
+		weatherData 			= weatherDataObject.weatherData;
+		nextHoursWeatherData 	= weatherDataObject.nextHoursWeatherData;
+		nextDaysWeatherData 	= weatherDataObject.nextDaysWeatherData;
+	})
 
-	// adapted from : https://www.thinkprogramming.co.uk/search-via-querystring-sveltekit/ 
+	onDestroy(unsubscribeWeather);
+	
+	let newLocation: string = "";
+
 	let onLocationSubmit = async () => {
-		let currentLocationParam: string | null = '';
-
-		if(browser){
-			const urlParams = new URLSearchParams(window.location.search);
-			currentLocationParam = urlParams.get('location');
-		}
-
-		if(location.trim() === currentLocationParam?.trim())
-			return;
-
-		await goto(`/?location=${encodeURIComponent(location.trim())}`, {
-			keepFocus: true
-		})
+		weather.set(newLocation)
 	}
 </script>
 
@@ -45,9 +49,9 @@
 
 
     <section>		
-        <MainWeatherInfo bind:data/>
-		<NextHoursWeather bind:data/>
-		<WeatherOverview bind:data/>
+        <MainWeatherInfo bind:weatherData/>
+		<NextHoursWeather bind:nextHoursWeatherData/>
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData/>
 
 
 	<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
@@ -69,7 +73,7 @@
 		
 
 		<form on:submit|preventDefault={onLocationSubmit}>
-			<input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
+			<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
 			<button type="submit">Wetterdaten bekommen</button>
 		</form>
 		

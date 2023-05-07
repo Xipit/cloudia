@@ -1,10 +1,5 @@
 <script lang="ts">
-	import type { PageData } from "../../routes/$types";
-
-    export let data:PageData;
-
-	// Weather API
-	$:weatherData = data.weatherData;
+    export let weatherData:any;
 </script>
 
 
