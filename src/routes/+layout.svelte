@@ -11,8 +11,9 @@
 	import Sun from './(weather-backgrounds)/sun.svelte';
 	import Snow from './(weather-backgrounds)/snow.svelte';
 	import Rain from './(weather-backgrounds)/rain.svelte';
-	import { weather } from '$lib/js/weatherStore';
-	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';
+	import { generalWeatherCondition, getGeneralisedWeatherCondition } from '$lib/js/latestLocationUtil';
+	import { get } from 'svelte/store';
+	import { latestWeatherCondition } from '$lib/stores';
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
@@ -31,33 +32,39 @@
 	let isLoggedIn:boolean = data.session !== null;
 
 	// WEATHER CONDITION
-	let generalisedWeatherCondition:GeneralWeatherCondition;
+	let weatherCondition:string;
 
-	const unsubscribeWeather = weather.subscribe(() => {
-		generalisedWeatherCondition = weather.getGeneralisedWeatherCondition();
+	const unsubscribeWeatherCondition = latestWeatherCondition.subscribe(value => {
+		weatherCondition = value;
 	})
 
-	onDestroy(unsubscribeWeather);
+	onDestroy(unsubscribeWeatherCondition);
 </script>
 
 <!--
 	to display different weather backgrounds add a switch statement
-	that looks at current weather condition to determent the right component
+	that looks current weather condition to determent the right component
 -->
 
-{#if generalisedWeatherCondition === GeneralWeatherCondition.storm}
+{#if weatherCondition === generalWeatherCondition.storm}
 	<Storm />
-{:else if generalisedWeatherCondition === GeneralWeatherCondition.rain}
+{:else if weatherCondition === generalWeatherCondition.rain}
 	<Rain />
-{:else if generalisedWeatherCondition === GeneralWeatherCondition.snow}
+{:else if weatherCondition === generalWeatherCondition.snow}
 	<Snow />
-{:else if generalisedWeatherCondition === GeneralWeatherCondition.cloud}
+{:else if weatherCondition === generalWeatherCondition.cloud}
 	<Cloud />
-{:else if generalisedWeatherCondition === GeneralWeatherCondition.sun}
+{:else if weatherCondition === generalWeatherCondition.sun}
 	<Sun />
 {:else}
-	<!-- no location selected -->
+	<Sun />
 {/if}
+
+
+<!--
+	TODO: caused performance problems
+	<Storm />
+-->
 
 <div class="app">
 	<Header bind:isLoggedIn={isLoggedIn}/>
@@ -70,6 +77,12 @@
 <style lang="scss">
 	@import '../app.scss';
 
+	:global(html) {
+        background-image: linear-gradient(to top, var(--primary-bg-color), var(--secondary-bg-color));
+        font-family: 'Atkinson Hyperlegible', sans-serif;
+		color: var(--text-color);
+    }
+	
 	.app {
 		display: flex;
 		flex-direction: column;

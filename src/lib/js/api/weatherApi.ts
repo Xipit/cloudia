@@ -1,5 +1,5 @@
 import { PUBLIC_API_KEY_WEATHER } from "$env/static/public";
-import { getIconURL } from "$lib/js/util/weatherIconUtils";
+import { getIconURL } from "$lib/js/weatherIcons";
 import { Cache } from './cache';
 
 const cache = new Cache();
