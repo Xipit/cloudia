@@ -1,5 +1,8 @@
 <script lang="ts">
-    export let weatherData:any;
+	import { applySettingToTemp } from "$lib/js/util/settingsUtils";
+
+    export let weatherData: any;
+    export let settings: any;
 </script>
 
 
@@ -10,7 +13,7 @@
         <p>{data.error.message}</p>
     {:else}
         <div class="main-info">
-            <div class="temperature">{data.current.temp_c} °C</div>
+            <div class="temperature">{applySettingToTemp(settings, data.temp)}</div>
             <div class="location">{data.location.name}</div>
         </div>
     {/if}		

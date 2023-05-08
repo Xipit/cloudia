@@ -53,9 +53,9 @@
 
 
     <section>		
-        <MainWeatherInfo bind:weatherData />
+        <MainWeatherInfo bind:weatherData bind:settings/>
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData />
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:settings/>
 		<Apod />
 
 
@@ -68,8 +68,8 @@
 			{:else}
 				{#each data.day as day}
 					<p>{day.date}</p>
-					<p>- max temp: {day.maxtemp_c}°C</p>
-					<p>- min temp: {day.mintemp_c}°C</p>
+					<p>- max temp: {day.maxtemp.c}°C</p>
+					<p>- min temp: {day.mintemp.c}°C</p>
 				{/each}
 			{/if}	
 		{:catch error}

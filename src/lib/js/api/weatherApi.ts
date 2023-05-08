@@ -21,8 +21,16 @@ const forecastHours = {
 const forecastDays = {
 	day: [{
 		date: "",
-		maxtemp_c: "",
-		mintemp_c: "",
+		maxTemp: {
+			c: "",
+			k: "",
+			f: ""
+		},
+		minTemp: {
+			c: "",
+			k: "",
+			f: ""
+		},
 		sunrise: "",
 		sunset: "",
 		moonrise: "",
@@ -60,7 +68,21 @@ export async function getCurrentWeatherData(location: String){
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
 		return data;
 	} else {
-		return data;
+		return {
+			...data,
+			// append temperature data to pure API data
+			// is necessary to switch temperature unit
+			temp: {
+				f: data.current.temp_f.toString(),
+				c: data.current.temp_c.toString(),
+				k: (data.current.temp_c + 273).toString(),
+			},
+			feelslike: {
+				f: data.current.feelslike_f.toString(),
+				c: data.current.feelslike_c.toString(),
+				k: (data.current.feelslike_c + 273).toString()
+			}
+		};
 	}
 }
 
@@ -167,8 +189,16 @@ export async function getNextDaysWeatherData(location: String) {
 			if (forecastDay != null) {
 				forecastDays.day.push({
 					date: forecastDay.date.toString(),
-					maxtemp_c: forecastDay.day.maxtemp_c.toString(),
-					mintemp_c: forecastDay.day.mintemp_c.toString(),
+					maxTemp: {
+						f: forecastDay.day.maxtemp_f,
+						c: forecastDay.day.maxtemp_c.toString(),
+						k: (forecastDay.day.maxtemp_c + 273).toString()
+					},
+					minTemp: {
+						f: forecastDay.day.mintemp_f.toString(),
+						c: forecastDay.day.mintemp_c.toString(),
+						k: (forecastDay.day.mintemp_c + 273).toString(),
+					},
 					sunrise: forecastDay.astro.sunrise.toString(),
 					sunset: forecastDay.astro.sunset.toString(),
 					moonrise: forecastDay.astro.moonrise.toString(),

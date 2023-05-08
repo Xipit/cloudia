@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { applySettingToTemp } from "$lib/js/util/settingsUtils";
+
 
 	export let weatherData:any;
 	export let nextDaysWeatherData:any;
     export let visiblePlanetsData:any;
+    export let settings:any;
 
 </script>
 
@@ -18,7 +21,7 @@
         
             <div class="feelslike tile">
                 <p class="description">gefühlte Temperatur</p>
-                <p>	{data.current.feelslike_c} °C </p>
+                <p>	{applySettingToTemp(settings, data.feelslike)} </p>
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
@@ -43,8 +46,8 @@
             <p>{data.error.message}</p>
         {:else}
             <div class="temp-range tile">
-                <div class="description">Max: <span class="value">{data.day[0].maxtemp_c} °C</span></div> 
-                <div class="description">Min: <span class="value">{data.day[0].mintemp_c} °C</span></div> 
+                <div class="description">Max: <span class="value">{applySettingToTemp(settings, data.day[0].maxTemp)}</span></div> 
+                <div class="description">Min: <span class="value">{applySettingToTemp(settings, data.day[0].minTemp)}</span></div> 
             </div>
             <div class="sun-and-moon tile">
                 <div class="description">Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span></div> 
