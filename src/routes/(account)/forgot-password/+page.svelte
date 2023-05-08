@@ -6,10 +6,15 @@
 
 
 <form action="?/sendRecovery" method="POST" class="auth-form">
-    <label for=""> Email </label>
-    <input type="text" name="email" />
-
-    <button type="submit">Passwort zurücksetzen</button>
+    <div class= "FPMail">
+        <label for=""> Email </label>
+        <input type="text" name="email" />
+    </div>
+    
+<div class= "resetPassword">
+    <button  type="submit">Passwort zurücksetzen</button>
+</div>
+    
 </form>
 
 {#if form?.error}
@@ -23,3 +28,8 @@
            response to a form submission. it will vanish if the user reloads -->
     <p>Es wurde eine E-Mail mit Passwort-zurücksetzen Link an {form?.email} geschickt.</p>
 {/if}
+
+<style lang="scss">
+	@import 'src/routes/(account)/accountpage-layout.scss';
+
+</style>

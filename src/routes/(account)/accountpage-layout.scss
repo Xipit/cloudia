@@ -1,0 +1,50 @@
+@import 'src/components/weather-tiles/weather-tiles.scss';
+
+.headline {
+	color:var(--text-color);
+	font-family: $font-accent;
+	text-shadow: 2px 4px 4px #716666;
+	font-size: 60px;
+	padding-top:var(--spacing-xl);
+}
+
+.fieldMail {
+	font-size: 20px;
+
+	.labelMail {
+		padding-right: 65px;
+	}
+}
+.fieldPassword {
+	padding-top: var(--spacing-md);
+	font-size: 20px;
+
+	.labelPassword {
+		padding-right: var(--spacing-lg);
+	}
+}
+
+.buttonLogin {
+	padding-top: var(--spacing-lg);
+	padding-left: 175px;
+
+}
+
+.forgotPassword {
+	padding-top: var(--spacing-sm);
+	padding-left: 130px;
+}
+.buttonRegister {
+    padding-top: var(--spacing-lg);
+	padding-left: 175px;
+}
+
+.FPMail {
+    padding-top:150px;
+	font-size: 20px;
+}
+
+.resetPassword {
+	padding-top: var(--spacing-lg);
+	padding-left: 61px;
+}

@@ -2,12 +2,24 @@
 </script>
 
 <main>
-	<h1>Register</h1>
+	<h1 class="headline">Register</h1>
 	<form action="?/register" method="POST" class="auth-form">
-		<label for=""> Email </label>
-		<input type="text" name="email" />
-		<label for=""> Password </label>
-		<input type="password" name="password" />
-		<button class="btn btn-primary">Register</button>
+		<div class="fieldMail">
+			<label class= "labelMail" for=""> Email </label>
+			<input type="text" name="email" />
+		</div>
+		<div class="fieldPassword">
+			<label class= "labelPassword" for=""> Password </label>
+			<input type="password" name="password" />
+		</div>
+		<div class="buttonRegister">
+			<button class="btn btn-primary">Register</button>
+		</div>
+		
 	</form>
 </main>
+
+<style lang="scss">
+	@import 'src/routes/(account)/accountpage-layout.scss';
+
+</style>
