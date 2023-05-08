@@ -1,35 +1,31 @@
 import { page } from "$app/stores";
-import { setLocationParameter, getLatestLocation, handleLatestLocation } from "$lib/js/latestLocationUtil";
+//import { setLocationParameter, getLatestLocation, handleLatestLocation } from "$lib/js/latestLocationUtil";
 
-import type { Actions } from "@sveltejs/kit";
-import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "$lib/js/api/weatherApi";
 import type { PageLoad } from "./$types";
+import { weather } from "$lib/js/weatherStore";
+import { browser } from "$app/environment";
 
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, data }) => {
 
-    const location:string = (() => {
-        const locationParam = url.searchParams.get('location')?.toString();
-        if(locationParam && locationParam != ""){
-            return locationParam;
+    const locationParam = weather.getURLParam(url);
+
+    if(browser){
+        if(locationParam != undefined){
+            weather.set(locationParam);
         } else {
-            // read latest location from localstorage and set URL parameter
-            const latestLocation = getLatestLocation();
-            setLocationParameter(latestLocation);
-            return latestLocation
+            weather.set(weather.getLocation());
         }
-    })();
-
-
-    let weatherData = await getCurrentWeatherData(location);
-	let nextHoursWeatherData = getNextHoursWeatherData(location);
-    let nextDaysWeatherData = getNextDaysWeatherData(location);
-
-    // used to style pages conditionally by weather condition
-    if(!weatherData.error && location != ""){
-        handleLatestLocation(location, weatherData.current.condition.text);
     }
 
-    return { weatherData, nextHoursWeatherData, nextDaysWeatherData, location };
+    const { 
+        weatherData, 
+        nextHoursWeatherData, 
+        nextDaysWeatherData 
+    } = weather.getWeather();
+
+    const visiblePlanetsData:any = weather.getVisiblePlanets();
+
+    return { weatherData, nextHoursWeatherData, nextDaysWeatherData, visiblePlanetsData };
 
 }) satisfies PageLoad;

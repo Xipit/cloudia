@@ -1,0 +1,27 @@
+/*animation cloud layers*/
+$svgWidth: -3000px;
+
+@keyframes cloud-movement1 {
+    from {
+        transform: translateX(calc(#{$svgWidth} - 65px));
+    }
+    to {
+        transform: translateX(calc(#{$svgWidth} - 25px));
+    }
+}
+@keyframes cloud-movement2 {
+    from {
+        transform: translateX(calc(#{$svgWidth} - 25px));
+    }
+    to {
+        transform: translateX(calc(#{$svgWidth} - 55px));
+    }
+}
+@keyframes cloud-movement3 {
+    from {
+        transform: translateX(calc(#{$svgWidth} - 35px));
+    }
+    to {
+        transform: translateX(calc(#{$svgWidth} - 10px));
+    }
+}

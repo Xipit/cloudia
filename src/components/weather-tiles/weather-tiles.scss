@@ -1,0 +1,9 @@
+$background-tiles-color: rgba(88, 88, 88, 0.3);
+$font-accent: 'Chewy', cursive;
+
+.tile{
+    text-align: center;
+    background: $background-tiles-color;
+    padding: 0 10px 10px 10px;
+    border-radius: 0.438em;
+}
