@@ -27,10 +27,12 @@
 	}
 
 </script>
+<!--transition:fly={{ x:'-100%', duration: 750, easing: quadOut }}-->
   <div class="burger-menu-top icon">
     <Hamburger
         bind:open
-        --color=var(--text-color) />
+        --color=var(--text-color) 
+        --active-color=#989898/>
     {#if open}
         <p class="cloudia">Cloudia</p>
     {/if}
@@ -44,20 +46,24 @@
                 <div class="account">
 
                 </div>
-                <div class="location">
+                <div class="locations">
                     {#if savedLocations}
-                        <ul class="savedLocations">
-                            {#each savedLocations as location}
-                                <li><a href="/?location={location.location_name}" >{location.location_name}</a></li>
-                            {/each}
-                        </ul>
+                        {#each savedLocations as location}
+                            <div class="savedLocations">
+                                <a href="/?location={location.location_name}" >{location.location_name}</a>
+                                <img src="src\lib\assets\svg\menu\star.svg" alt="star" class="star-icon">
+                            </div>
+                        {/each}
+                        
                     {/if}
 
                 </div>
 
                 <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
-                    <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
-                    <button type="submit">Wetterdaten bekommen</button>
+                    <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-button">
+                    <button type="submit" class="">
+                        <img src="src\lib\assets\svg\menu\search.svg" alt="search" class="search-icon">
+                    </button>
                 </form>
             </div>
             <div class="burger-menu-bottom">
@@ -69,7 +75,9 @@
             <div class="burger-menu-mid">
                 <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
                     <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
-                    <button type="submit">Wetterdaten bekommen</button>
+                    <button type="submit">
+                        <img src="src\lib\assets\svg\menu\search.svg" alt="search">
+                    </button>
                 </form>
                 
                 <p class="search-error-message">{errorMessage}</p>
@@ -80,7 +88,7 @@
             
         {/if}
         
-        <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} />
+        <div class="burger-menu-background"  />
     </div>
     {/if}
   
@@ -106,25 +114,22 @@
 
     .burger-menu-top {
         flex: 1;
-        background-color: aqua;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        padding-right: 1em;
     }
 
     .burger-menu-mid {
         flex: 10;
-        background-color: chartreuse;
         overflow-y: scroll;
     }
 
     .burger-menu-bottom {
         flex: 1;
-        background-color: coral;
     }
 
     .search-wrapper {
-        background-color: aqua;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -143,10 +148,17 @@
     }
 
     .search-button {
+        background: #FFFFFF;
+        border: 2px solid #a3a3a3;
+        box-shadow: inset 0px 0px 10px 2px rgba(168, 168, 168, 0.25);
+        border-radius: 50px;
+        padding: 1em;
+        width: 100%;
     }
 
     .cloudia {
-        font-size: large;
+        color: #716666;
+        font-size:x-large;
         font-family: 'Chewy', cursive;
     }
 
@@ -165,13 +177,39 @@
         } 
     }
 
-    .logout{
-        position: absolute;
-        bottom: 1em;
-        left: 1rem;
-    }
     
-    .location {
+    .locations {
+        display: flex;
+        flex-direction: column;
+
+        .savedLocations {
+            margin-bottom: 15px;
+            padding-left: 1em;
+            padding-right: 1em;
+            background: #D9D9D9;
+            box-shadow: -3px 4px 0px rgba(0, 0, 0, 0.25);
+            border-radius: 4px;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between
+        }
+        
+        a {
+            color: black;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 2em;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .star-icon {
+            height: 3em;
+            color: #606060;
+            align-self: center;
+        }
     }
 
     .savedLocations{
@@ -184,7 +222,7 @@
     width: 350px;
 	top: 0;
 	left: 0;
-	background: #ddd;
+	background: #ffffff;
 	padding: 1em;
 	height: 100vh;
 	border-left: 0.063em solid rgba(0, 0, 0, .1);
@@ -192,6 +230,13 @@
     z-index: -1;
     }
     
-
+    .button {
+        width: 10em;
+        height: 3em;
+        color: var(--secondary-accent-color);
+        background-color: var(--secondary-bg-color);
+        border: 0.063em solid rgba(0, 0, 0, .1);
+        border-radius: 5px;
+    }
     
   </style>
