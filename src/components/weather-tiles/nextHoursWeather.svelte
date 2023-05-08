@@ -40,10 +40,9 @@
 			justify-content: space-around;
 			align-items: center;
 			margin-top: 1.25em;
-			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
-			padding: var(--spacing-sm), 0;
+			padding: var(--spacing-sm) 0;
 
 			.time-element {
 				text-align: center;

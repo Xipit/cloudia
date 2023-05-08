@@ -46,8 +46,18 @@
             <p>{data.error.message}</p>
         {:else}
             <div class="temp-range tile">
-                <div class="description">Max: <span class="value">{applySettingToTemp(settings, data.day[0].maxTemp)}</span></div> 
-                <div class="description">Min: <span class="value">{applySettingToTemp(settings, data.day[0].minTemp)}</span></div> 
+                <p class="description">
+                    Max: 
+                    <span class="value">
+                        {applySettingToTemp(settings, data.day[0].maxTemp)}
+                    </span>
+                </p> 
+                <p class="description">
+                    Min: 
+                    <span class="value">
+                        {applySettingToTemp(settings, data.day[0].minTemp)}
+                    </span>
+                </p> 
             </div>
             <div class="sun-and-moon tile">
                 <div class="description">Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span></div> 
@@ -89,7 +99,7 @@
 
         display: grid;
         grid-template-columns: 33.3% 33.3% 33.3%;
-        grid-template-rows: 120px 120px 120px 120px;
+        grid-template-rows: auto auto auto auto;
         gap: var(--spacing-sm);
 		
 		.humidity {
@@ -113,7 +123,7 @@
 			grid-row-end: 4;
 			text-align: left !important;
 			padding: 15px 0 0 15px !important;
-			
+			word-break: initial;
 		}
 
 		.temp-range {
@@ -121,8 +131,6 @@
 			grid-column-end: 2;
 			grid-row-start: 2;
 			grid-row-end: 3;
-			text-align: left !important;
-			padding: 35px 0 0 15px !important;
 		}
 
 		.description {
