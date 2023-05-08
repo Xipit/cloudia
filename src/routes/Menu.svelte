@@ -84,16 +84,16 @@
         }
 
         .burger-menu-background {
-        position: absolute;
-        width: 100%;
-		top: 0;
-		left: 0;
-		background: #ddd;
-		padding: 1em;
-		height: 100vh;
-		border-left: 0.063em solid rgba(0, 0, 0, .1);
-		box-shadow: -0.125em 0px 0.375em -0.063em rgba(0, 0, 0, 0.1);
-        z-index: -1;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: #ddd;
+            padding: 1em;
+            height: 100vh;
+            border-left: 0.063em solid rgba(0, 0, 0, .1);
+            box-shadow: -0.125em 0px 0.375em -0.063em rgba(0, 0, 0, 0.1);
+            z-index: -1;
         }
     }
 

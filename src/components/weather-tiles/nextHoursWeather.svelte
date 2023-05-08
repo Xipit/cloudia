@@ -40,9 +40,9 @@
 			justify-content: space-around;
 			align-items: center;
 			margin-top: 1.25em;
-			width: 100%;
+			width: 99%;
 			border-radius: 0.438em;
-			padding: var(--spacing-sm) 0;
+			padding: var(--spacing-sm);
 
 			.time-element {
 				text-align: center;
@@ -66,6 +66,34 @@
 			img {
 				height: 35px;
 				padding-top: 10px;
+				filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
 			}
 		}
+
+	@media only screen and (min-width: 850px) {
+		.weather-indicator {
+			.time-element {
+				text-align: left;
+				width: 20%;
+				padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+				border-left: 2px solid rgba(88, 88, 88, 0.3);
+				border-right: 2px solid rgba(88, 88, 88, 0.3);
+
+				.hour {
+					margin-bottom: -70px;
+				}
+
+				hr {
+					border: 0;
+				}
+			}
+
+			img {
+				position: relative;
+				left: 60%;
+				top: 45px;
+				height: 40%;
+			}
+		}
+	}
 </style>
