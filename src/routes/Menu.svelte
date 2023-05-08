@@ -4,58 +4,78 @@
     import { quadOut } from 'svelte/easing';
     import { Hamburger } from 'svelte-hamburgers';
     import { page } from '$app/stores';
+    import { navigating } from '$app/stores'
+    import { goto, } from "$app/navigation";
   
     export let open:boolean;
     export let isLoggedIn:boolean;
     export let savedLocations: {[x: string]: any;}[] | null;
+    let location:string;
 
-    function closeMenu() {
+    $: if ($navigating){
         open = false;
     }
 
-    const menuItems = [
-        { name: 'Home', href: '/' },
-        ...(isLoggedIn 
-            ? [
-                { name: 'Account', href: '/account' },
-                { name: 'Orte', href: '/savedLocations' },
-                { savedLocations }
-            ] 
-            : [ 
-                { name: 'Login', href: '/login' },
-                { name: 'Registrieren', href: '/register' },
-            ]
-        ),
-        // { name: 'Einstellungen' }
-    ];
-    const menuItemsBottom = [
-        ...(isLoggedIn
-            ? [
-                { name: 'Logout', href: '/' },
-            ]
-            : []
-        ),
-    ];
+    $: errorMessage = "";
+
+
+	let onLocationSubmit = async () => {
+        //todo: Errorhandling when its a wrong location
+        errorMessage = "";
+
+		await goto('/?location=${location}')
+	}
+
 </script>
   <div class="icon">
     <Hamburger
         bind:open
-        --color="black" />
+        --color=var(--text-color) />
   </div>
   
   {#if open}
-    <div class="burger-menu">
-        <a href="/" transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </a>
+    <div class="burger-menu" >
+        <p class="cloudia">Cloudia</p>
+        {#if isLoggedIn}
+            <div class="burger-menu-top">
+                
+            </div>
+            <div class="burger-menu-mid">
+
+            </div>
+            <div class="burger-menu-bottom">
+
+            </div>
+        {:else}
+            <!--div class="search-div">
+                <input class="search-field" value={location}>
+                <input type="button" value="Los!" class="search-button" on:click={}>
+            </div-->
+
+            <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
+                <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
+                <button type="submit">Wetterdaten bekommen</button>
+            </form>
+            
+            <p class="search-error-message">{errorMessage}</p>
+            <input type="button" value="login" on:click={() => goto('/login')}>
+            <input type="button" value="register" on:click={() => goto('/register')}>
+        {/if}
+        
+        <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} />
+
+        <!-- 
+        <a href="/" data-sveltekit-preload-data="off" transition:fly={{ x: -70, duration: 1000, delay: 50}} class="cloudia"> Cloudia </a>
         {#each menuItems as link, i}
             
             {#if link.savedLocations}
                 <ul class="savedLocations" transition:fly={{ x: -70, duration: 1000, delay: 50}}>
                     {#each link.savedLocations as location}
-                        <li><a href="/?location={location.location_name}" on:click={closeMenu}>{location.location_name}</a></li>
+                        <li><a href="/?location={location.location_name}" >{location.location_name}</a></li>
                     {/each}
                 </ul>
             {:else}
-                <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }} on:click={closeMenu}>
+                <a href={link.href} transition:fly={{ x: -70, duration: 1000, delay: 50 * i }}>
                     {link.name}
                 </a>
             {/if}
@@ -63,11 +83,11 @@
         {/each}
 
         {#if isLoggedIn}
-            <a href='/' transition:fly={{ x: -70, duration: 1000, delay: 50 }} class="logout" on:click={closeMenu}>Logout</a>
+            <a href='/' transition:fly={{ x: -70, duration: 1000, delay: 50 }} class="logout" >Logout</a>
         {/if}
         
         
-        <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} /> 
+        <div class="burger-menu-background" transition:fly={{ x:'-100%', duration: 750, easing: quadOut }} />  -->
     </div>
     {/if}
   
@@ -89,6 +109,43 @@
         flex-direction: column;
         overflow: hidden;
         height: 90vh;
+
+        .burger-menu-top {
+            flex: 1;
+            background-color: aqua;
+        }
+
+        .burger-menu-mid {
+            flex: 10;
+            background-color: chartreuse;
+        }
+
+        .burger-menu-bottom {
+            flex: 1;
+            background-color: coral;
+        }
+
+        .search-wrapper {
+            background-color: aqua;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            margin-top: 1em;
+            justify-content: space-between;
+        }
+
+        .search-error-message {
+            color: red;
+            font-size: small;
+            letter-spacing: normal;
+        }
+
+        .search-input {
+
+        }
+
+        .search-button {
+        }
 
         .cloudia {
             position: absolute;
