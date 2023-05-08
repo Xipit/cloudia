@@ -6,7 +6,7 @@ import { weather } from "$lib/js/weatherStore";
 import { browser } from "$app/environment";
 
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, data }) => {
 
     const locationParam = weather.getURLParam(url);
 

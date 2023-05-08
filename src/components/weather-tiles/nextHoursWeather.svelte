@@ -1,5 +1,30 @@
 <script lang="ts">
     export let nextHoursWeatherData:any;
+	export let settings:any;
+
+	function applySettingToTemp(temp:any):string {
+		if(settings == undefined){
+			console.log('No settings in nextHoursWeather');
+
+			return `${temp.c}°C`;
+		}
+
+		switch(settings.temperature_unit){
+			case 'kelvin':
+				return `${temp.k}K`;
+				break;
+				
+			case 'fahrenheit':
+				return `${temp.f}°F`;
+				break;
+				
+			default:
+			case 'celsius':
+				return `${temp.c}°C`;
+				break;
+		}
+	}
+
 </script>
 
 
@@ -18,7 +43,7 @@
                     <img src={hour.conditionIconURL} alt="Sun">
                     <hr>
                     <div class="temp">
-                        {hour.temp_c}°C
+						{applySettingToTemp(hour.temp)}
                     </div>
                 </div>
             {/each}

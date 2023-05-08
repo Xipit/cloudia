@@ -9,7 +9,11 @@ const forecastHours = {
 	hour: [{
 		date: "",
 		time: "",
-		temp_c: "",
+		temp: {
+			c: "",
+			k: "",
+			f: ""
+		},
 		conditionIconURL: "",
 	}]
 }
@@ -134,7 +138,11 @@ export async function getNextHoursWeatherData(location: String){
 			forecastHours.hour.push({
 				date: formattedDateString,
 				time: timeString,
-				temp_c: forecastHour.temp_c.toString(),
+				temp: {
+					f: forecastHour.temp_f.toString(),
+					c: forecastHour.temp_c.toString(),
+					k: (forecastHour.temp_c + 273).toString()
+				},
 				conditionIconURL: iconURL, 
 			})
 		}

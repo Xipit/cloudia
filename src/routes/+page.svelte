@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
+	import type { LayoutData, LayoutServerData, PageData } from "./$types";
 
 	import { weather } from "$lib/js/weatherStore";
 	import { onDestroy } from "svelte";
@@ -10,6 +10,8 @@
 	import Apod from "../components/weather-tiles/apod.svelte";
 
     export let data: PageData;
+
+	let { settings } = data;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -52,7 +54,7 @@
 
     <section>		
         <MainWeatherInfo bind:weatherData />
-		<NextHoursWeather bind:nextHoursWeatherData />
+		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
 		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData />
 		<Apod />
 
