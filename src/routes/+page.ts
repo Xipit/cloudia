@@ -1,12 +1,9 @@
 import { page } from "$app/stores";
 //import { setLocationParameter, getLatestLocation, handleLatestLocation } from "$lib/js/latestLocationUtil";
 
-import type { Actions } from "@sveltejs/kit";
-import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "$lib/js/api/weatherApi";
 import type { PageLoad } from "./$types";
 import { weather } from "$lib/js/weatherStore";
 import { browser } from "$app/environment";
-import { get } from "svelte/store";
 
 
 export const load = (async ({ url }) => {
@@ -27,6 +24,8 @@ export const load = (async ({ url }) => {
         nextDaysWeatherData 
     } = weather.getWeather();
 
-    return { weatherData, nextHoursWeatherData, nextDaysWeatherData };
+    const visiblePlanetsData:any = weather.getVisiblePlanets();
+
+    return { weatherData, nextHoursWeatherData, nextDaysWeatherData, visiblePlanetsData };
 
 }) satisfies PageLoad;

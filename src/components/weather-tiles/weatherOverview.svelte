@@ -1,17 +1,9 @@
 <script lang="ts">
-	import {latitude, longitude} from "../../lib/js/api/weatherApi"
-	import {getAPOD} from "../../lib/js/api/apodApi";
-	import {getVisiblePlanetsData} from "../../lib/js/api/visiblePlanetsAPI";
 
 	export let weatherData:any;
 	export let nextDaysWeatherData:any;
+    export let visiblePlanetsData:any;
 
-	// Visible Planets API
-	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
-
-    function handleVisiblePlanetsClick(){
-        visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
-    }
 </script>
 
 
@@ -67,11 +59,8 @@
     {/await}
 
     <!-- Visible Planets -->
-
-    <button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
-
     {#await visiblePlanetsData}
-        <p>Suche sichtbare Planeten...</p>
+        <p>In den Sternenhimmel schauen ...</p>
     {:then visiblePlanetsData} 
         {#if visiblePlanetsData.error}
             <p>{visiblePlanetsData.error.message}</p>

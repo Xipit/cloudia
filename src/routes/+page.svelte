@@ -12,16 +12,20 @@
     export let data: PageData;
 
 	// Weather API
+	let visiblePlanetsData: any   = data.visiblePlanetsData;
+
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
 	
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
-		
 		weatherData 			= weatherDataObject.weatherData;
 		nextHoursWeatherData 	= weatherDataObject.nextHoursWeatherData;
 		nextDaysWeatherData 	= weatherDataObject.nextDaysWeatherData;
+	
+		visiblePlanetsData 		= weather.getVisiblePlanets();
+		//console.log(visiblePlanetsData.length ?? 'No array');
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -49,7 +53,7 @@
     <section>		
         <MainWeatherInfo bind:weatherData />
 		<NextHoursWeather bind:nextHoursWeatherData />
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData />
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData />
 		<Apod />
 
 

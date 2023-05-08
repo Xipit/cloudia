@@ -5,9 +5,6 @@ import { Cache } from './cache';
 const cache = new Cache();
 const BASE_URL = "http://api.weatherapi.com/v1/";
 
-export let latitude: any = null;
-export let longitude: any = null;
-
 const forecastHours = {
 	hour: [{
 		date: "",
@@ -56,13 +53,9 @@ export async function getCurrentWeatherData(location: String){
 	const data = await API_REQUEST_CURRENT(location);
 
 	if (data.error) {
-		latitude = null;
-		longitude = null;
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
 		return data;
 	} else {
-		latitude = data.location.lat;
-		longitude = data.location.lon;
 		return data;
 	}
 }
