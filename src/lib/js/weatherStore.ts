@@ -4,6 +4,7 @@ import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData 
 import { createGeneralisedWeatherCondition, generaliseWeatherCondition, type GeneralWeatherCondition } from "./util/weatherStoreUtils";
 import { fromLocalStorage, toLocalStorage } from "./util/localStorageWrapper";
 import { replaceStateWithSearchParam } from "./util/url";
+import { getVisiblePlanetsData } from "./api/visiblePlanetsAPI";
 
 
 function createWeather() {
@@ -33,6 +34,14 @@ function createWeather() {
     const generalisedWeatherCondition = createGeneralisedWeatherCondition(generalisedWeatherConditionInitialValue);
     toLocalStorage(generalisedWeatherCondition, 'generalisedWeatherCondition');
 
+    const visiblePlanetsInitialValue = fromLocalStorage(
+        get(location) != '' 
+            ? 'visiblePlanets' 
+            : ''
+        , '');
+    let visiblePlanets:Writable<Array<string>|any> = writable(visiblePlanetsInitialValue);
+    toLocalStorage(visiblePlanets, 'visiblePlanets');
+
     async function setLocation (newLocation:string) {
         if(newLocation == ""){
             console.warn("Tried to set empty location.");
@@ -53,6 +62,8 @@ function createWeather() {
             nextHoursWeatherData: newNextHoursWeatherData,
             nextDaysWeatherData: newNextDaysWeatherData
         });
+
+        visiblePlanets.set(getVisiblePlanetsData(newWeatherData.location.lat, newWeatherData.location.lat));
 
         location.set(newLocation);
         setURLParamWithoutReload();
@@ -91,6 +102,9 @@ function createWeather() {
         },
         getWeather: () => {
             return get(weatherObject);
+        },
+        getVisiblePlanets: () => {
+            return get(visiblePlanets);
         },
         setURLParamWithoutReload,
         getURLParam

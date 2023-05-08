@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { applySettingToTemp } from "$lib/js/util/settingsUtils";
+
     export let nextHoursWeatherData:any;
+	export let settings:any;
+
 </script>
 
 
@@ -18,7 +22,7 @@
                     <img src={hour.conditionIconURL} alt="Sun">
                     <hr>
                     <div class="temp">
-                        {hour.temp_c}°C
+						{applySettingToTemp(settings, hour.temp)}
                     </div>
                 </div>
             {/each}
@@ -36,10 +40,9 @@
 			justify-content: space-around;
 			align-items: center;
 			margin-top: 1.25em;
-			height: 9.375em;
 			width: 100%;
 			border-radius: 0.438em;
-			padding: var(--spacing-sm), 0;
+			padding: var(--spacing-sm) 0;
 
 			.time-element {
 				text-align: center;

@@ -15,6 +15,7 @@
 	import { weather } from '$lib/js/weatherStore';
 
 	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';
+	import { redirect } from '@sveltejs/kit';
 
 
 
@@ -25,6 +26,11 @@
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, _session) => {
+
+			if(event === "PASSWORD_RECOVERY"){
+				throw redirect(302, '/login/change-password?token=' + session?.access_token);
+			}
+
 			console.log('Auth state change detected');
 			invalidate('supabase:auth');
 

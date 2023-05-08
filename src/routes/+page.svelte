@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
+	import type { LayoutData, LayoutServerData, PageData } from "./$types";
 
 	import { weather } from "$lib/js/weatherStore";
 	import { onDestroy } from "svelte";
@@ -11,17 +11,23 @@
 
     export let data: PageData;
 
+	let { settings } = data;
+
 	// Weather API
+	let visiblePlanetsData: any   = data.visiblePlanetsData;
+
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
 	
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
-		
 		weatherData 			= weatherDataObject.weatherData;
 		nextHoursWeatherData 	= weatherDataObject.nextHoursWeatherData;
 		nextDaysWeatherData 	= weatherDataObject.nextDaysWeatherData;
+	
+		visiblePlanetsData 		= weather.getVisiblePlanets();
+		//console.log(visiblePlanetsData.length ?? 'No array');
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -47,9 +53,9 @@
 
 
     <section>		
-        <MainWeatherInfo bind:weatherData />
-		<NextHoursWeather bind:nextHoursWeatherData />
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData />
+        <MainWeatherInfo bind:weatherData bind:settings/>
+		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:settings/>
 		<Apod />
 
 
@@ -62,8 +68,8 @@
 			{:else}
 				{#each data.day as day}
 					<p>{day.date}</p>
-					<p>- max temp: {day.maxtemp_c}°C</p>
-					<p>- min temp: {day.mintemp_c}°C</p>
+					<p>- max temp: {day.maxtemp.c}°C</p>
+					<p>- min temp: {day.mintemp.c}°C</p>
 				{/each}
 			{/if}	
 		{:catch error}

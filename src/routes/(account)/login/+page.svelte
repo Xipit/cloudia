@@ -8,6 +8,7 @@
 		<input type="text" name="email" />
 		<label for=""> Password </label>
 		<input type="password" name="password" />
-		<button type="submit" class="btn btn-primary">Login</button>
+		<button type="submit">Login</button>
 	</form>
+	<a href="/forgot-password">Passwort vergessen</a>
 </main>

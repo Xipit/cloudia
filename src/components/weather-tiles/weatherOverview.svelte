@@ -1,17 +1,12 @@
 <script lang="ts">
-	import {latitude, longitude} from "../../lib/js/api/weatherApi"
-	import {getAPOD} from "../../lib/js/api/apodApi";
-	import {getVisiblePlanetsData} from "../../lib/js/api/visiblePlanetsAPI";
+	import { applySettingToTemp } from "$lib/js/util/settingsUtils";
+
 
 	export let weatherData:any;
 	export let nextDaysWeatherData:any;
+    export let visiblePlanetsData:any;
+    export let settings:any;
 
-	// Visible Planets API
-	let visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
-
-    function handleVisiblePlanetsClick(){
-        visiblePlanetsData = getVisiblePlanetsData(latitude, longitude);
-    }
 </script>
 
 
@@ -26,7 +21,7 @@
         
             <div class="feelslike tile">
                 <p class="description">gefühlte Temperatur</p>
-                <p>	{data.current.feelslike_c} °C </p>
+                <p>	{applySettingToTemp(settings, data.feelslike)} </p>
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
@@ -51,8 +46,18 @@
             <p>{data.error.message}</p>
         {:else}
             <div class="temp-range tile">
-                <div class="description">Max: <span class="value">{data.day[0].maxtemp_c} °C</span></div> 
-                <div class="description">Min: <span class="value">{data.day[0].mintemp_c} °C</span></div> 
+                <p class="description">
+                    Max: 
+                    <span class="value">
+                        {applySettingToTemp(settings, data.day[0].maxTemp)}
+                    </span>
+                </p> 
+                <p class="description">
+                    Min: 
+                    <span class="value">
+                        {applySettingToTemp(settings, data.day[0].minTemp)}
+                    </span>
+                </p> 
             </div>
             <div class="sun-and-moon tile">
                 <div class="description">Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span></div> 
@@ -67,11 +72,8 @@
     {/await}
 
     <!-- Visible Planets -->
-
-    <button on:click={handleVisiblePlanetsClick}>Suche Planeten am Himmel</button>
-
     {#await visiblePlanetsData}
-        <p>Suche sichtbare Planeten...</p>
+        <p>In den Sternenhimmel schauen ...</p>
     {:then visiblePlanetsData} 
         {#if visiblePlanetsData.error}
             <p>{visiblePlanetsData.error.message}</p>
@@ -97,7 +99,7 @@
 
         display: grid;
         grid-template-columns: 33.3% 33.3% 33.3%;
-        grid-template-rows: 120px 120px 120px 120px;
+        grid-template-rows: auto auto auto auto;
         gap: var(--spacing-sm);
 		
 		.humidity {
@@ -121,7 +123,7 @@
 			grid-row-end: 4;
 			text-align: left !important;
 			padding: 15px 0 0 15px !important;
-			
+			word-break: initial;
 		}
 
 		.temp-range {
@@ -129,8 +131,6 @@
 			grid-column-end: 2;
 			grid-row-start: 2;
 			grid-row-end: 3;
-			text-align: left !important;
-			padding: 35px 0 0 15px !important;
 		}
 
 		.description {

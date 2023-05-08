@@ -71,6 +71,8 @@
     <form action="/logout" method="POST">
         <button type="submit" class="button">LogOut</button>
     </form>
+
+    <a href="/change-password">Passwort ändern</a>
 </div>
 
 <style>
