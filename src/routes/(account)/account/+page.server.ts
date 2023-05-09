@@ -1,4 +1,5 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { error } from 'console';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: {supabase, getSession } }) => {
@@ -53,7 +54,7 @@ export const actions:Actions = {
 
         if(email == session?.user.email){
             
-            const { data, error } = await supabase.rpc('delete_user');
+            // const { data, error } = await supabase.rpc('delete_user');
 
                 /*
                     in supabase: 
@@ -67,9 +68,8 @@ export const actions:Actions = {
                     $$;
                 */
 
-            fetch(`${url.hostname}/logout`, {
-                method: 'post'
-            });
+        
+            await supabase.auth.signOut();
 
         } else {
             console.log('Email: ' + email, 'user email: ' + session?.user.email);
