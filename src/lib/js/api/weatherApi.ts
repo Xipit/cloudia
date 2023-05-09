@@ -122,7 +122,7 @@ async function getForecastWeatherData(location: String){
 	return data;
 }
 
-export async function getNextHoursWeatherData(location: String){
+export async function getNextHoursWeatherData(location: String, daysInToTheFuture:number = 0){
 	const data = await getForecastWeatherData(location);
 
 	if (data.error){		
@@ -131,17 +131,21 @@ export async function getNextHoursWeatherData(location: String){
 		// remove old items from list
 		forecastHours.hour.splice(0);
 
-		let timestampNow = Date.now();
-		let dateNow = new Date(timestampNow);
+		const timestampNow = Date.now();
+		let dateReference = new Date(timestampNow);
 
 		// This is used to get to know which is the next hour for the forecastHours.hour array
-		let nextHourDate = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate(), dateNow.getHours())
+		const nextHourDate = new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours())
 
 		let dayIndex = 0;
 
+		const hourIncrement = daysInToTheFuture > 0
+			? 3
+			: 1;
+		
 		// Pushes the data for the next i-Hours into forecastHour.hour
 		for (let i = 0; i < 5; i++) {
-			nextHourDate.setHours(nextHourDate.getHours() + 1);
+			nextHourDate.setHours(nextHourDate.getHours() + hourIncrement);
 
 			let formattedDateString = getFormattedDate(nextHourDate);
 

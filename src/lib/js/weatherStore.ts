@@ -23,7 +23,7 @@ function createWeather() {
     });
 
     const locationInitialValue: string = fromLocalStorage('location', '');
-    const location = writable(locationInitialValue);
+    const location = writable<string>(locationInitialValue);
     toLocalStorage(location, 'location');
 
     const generalisedWeatherConditionInitialValue: GeneralWeatherCondition = fromLocalStorage(
@@ -39,17 +39,25 @@ function createWeather() {
             ? 'visiblePlanets' 
             : ''
         , '');
-    let visiblePlanets:Writable<Array<string>|any> = writable(visiblePlanetsInitialValue);
+    const visiblePlanets = writable<Array<string>|any>(visiblePlanetsInitialValue);
     toLocalStorage(visiblePlanets, 'visiblePlanets');
 
-    async function setLocation (newLocation:string) {
+    const daysInToTheFutureInitialValue = fromLocalStorage(
+        get(location) != '' 
+            ? 'daysInToTheFuture' 
+            : ''
+        , 0);//TODO change to 0
+    const daysInToTheFuture = writable<number>(daysInToTheFutureInitialValue);
+    toLocalStorage(daysInToTheFuture, 'daysInToTheFuture');
+
+    async function setLocation (newLocation:string, daysInToTheFuture:number = 0) {
         if(newLocation == ""){
             console.warn("Tried to set empty location.");
             return;
         }
    
         const newWeatherData = await getCurrentWeatherData(newLocation);
-        const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation);
+        const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation, 2);
         const newNextDaysWeatherData = await getNextDaysWeatherData(newLocation);
         
         if(newWeatherData.error){
@@ -66,7 +74,7 @@ function createWeather() {
         visiblePlanets.set(getVisiblePlanetsData(newWeatherData.location.lat, newWeatherData.location.lat));
 
         location.set(newLocation);
-        setURLParamWithoutReload();
+        setLocationURLParamWithoutReload();
 
         const newGeneralisedWeatherCondition = generaliseWeatherCondition(newWeatherData.current.condition.text);
         generalisedWeatherCondition.set(newGeneralisedWeatherCondition);
@@ -76,11 +84,11 @@ function createWeather() {
         update(value => value + 1);
     }
 
-    function getURLParam(url:URL): string|undefined {
+    function getLocationURLParam(url:URL): string|undefined {
         return url.searchParams.get('location')?.toString();
     }
 
-    function setURLParamWithoutReload () {
+    function setLocationURLParamWithoutReload () {
         if(get(location) == ""){
             console.warn("Tried setting '?location=' URL-Search-Param before setting internal location!");
             return;
@@ -106,8 +114,11 @@ function createWeather() {
         getVisiblePlanets: () => {
             return get(visiblePlanets);
         },
-        setURLParamWithoutReload,
-        getURLParam
+        getDaysInToTheFuture: () => {
+            return get(daysInToTheFuture);
+        },
+        setURLParamWithoutReload: setLocationURLParamWithoutReload,
+        getURLParam: getLocationURLParam
     };
 }
 

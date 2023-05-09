@@ -1,4 +1,5 @@
-import { writable, type Writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
+import { replaceStateWithSearchParam } from "./url";
 
 const cloudList = [
     'Cloudy',
