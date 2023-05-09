@@ -23,7 +23,7 @@
 
 </script>
 
-<div >
+<main >
     <h1>
         Account
     </h1>
@@ -34,53 +34,39 @@
         bind:this={settingsForm}
         use:enhance={handleSubmit}
     >
-        <div class="submit-form">
-            <label for="email">E-Mail</label>
-            <input id="email" type="text" value={session.user.email} disabled/>
-        </div>
 
-        <div class="submit-form">
-            <label for="temperatureUnit">Temperatureinheit</label>
-            <select name="temperatureUnit" id="temperatureUnit">
-                <option value="celsius"     selected={temperatureUnit == "celsius"}     >Celsius</option>
-                <option value="kelvin"      selected={temperatureUnit == "kelvin"}      >Kelvin</option>
-                <option value="fahrenheit"  selected={temperatureUnit == "fahrenheit"}  >Fahrenheit</option>
-            </select>
-        </div>
+        <label for="email">E-Mail</label>
+        <input id="email" type="text" value={session.user.email} disabled/>
 
-        <div class="submit-form">
-            <label for="speedUnit">Geschwindigkeitseinheit</label> 
-            <select name="speedUnit" id="speedUnit">
-                <option value="kmh"         selected={speedUnit == "kmh"}       >km/h</option>
-                <option value="ms"          selected={speedUnit == "ms"}        >m/s</option>
-                <option value="beaufort"    selected={speedUnit == "beaufort"}  >Beaufort</option>
-                <option value="knot"        selected={speedUnit == "knot"}      >Knoten</option>
-            </select>
-        </div>
+        <label for="temperatureUnit">Temperatureinheit</label>
+        <select name="temperatureUnit" id="temperatureUnit">
+            <option value="celsius"     selected={temperatureUnit == "celsius"}     >Celsius</option>
+            <option value="kelvin"      selected={temperatureUnit == "kelvin"}      >Kelvin</option>
+            <option value="fahrenheit"  selected={temperatureUnit == "fahrenheit"}  >Fahrenheit</option>
+        </select>
 
-        <div class="submit-form">
-            <input
-                type="submit"
-                value={loading ? 'Laden ...': 'Aktualisieren'}
-                disabled={loading}
-            />
-        </div>
+        <label for="speedUnit">Geschwindigkeitseinheit</label> 
+        <select name="speedUnit" id="speedUnit">
+            <option value="kmh"         selected={speedUnit == "kmh"}       >km/h</option>
+            <option value="ms"          selected={speedUnit == "ms"}        >m/s</option>
+            <option value="beaufort"    selected={speedUnit == "beaufort"}  >Beaufort</option>
+            <option value="knot"        selected={speedUnit == "knot"}      >Knoten</option>
+        </select>
 
+        <input
+            type="submit"
+            value={loading ? 'Laden ...': 'Aktualisieren'}
+            disabled={loading}
+        />
     </form>
-    
+
     <form action="/logout" method="POST">
-        <button type="submit" class="button">LogOut</button>
+        <input type="submit" value="LogOut" />
     </form>
 
     <a href="/change-password">Passwort ändern</a>
-</div>
+</main>
 
 <style>
-    /* only there to test, can be thrown away */
-    .submit-form {
-        margin: 4px;
-        padding: 4px;
-        border: 1px solid black;
-        border-radius: 4px;
-    }
+	@import '../accountpage-layout.scss';
 </style>

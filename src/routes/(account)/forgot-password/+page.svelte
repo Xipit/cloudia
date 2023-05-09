@@ -4,18 +4,18 @@
     export let form:ActionData;
 </script>
 
+<main>
+    <h1>Passwort vergessen</h1>
+    <form action="?/sendRecovery" method="POST" class="auth-form">
 
-<form action="?/sendRecovery" method="POST" class="auth-form">
-    <div class= "FPMail">
         <label for=""> Email </label>
         <input type="text" name="email" />
-    </div>
-    
-<div class= "resetPassword">
-    <button  type="submit">Passwort zurücksetzen</button>
-</div>
-    
-</form>
+        
+        <input type="submit" value="Passwort zurücksetzen" />
+
+    </form>
+</main>
+
 
 {#if form?.error}
     <!-- this message is ephemeral; it exists because the page was rendered in
@@ -30,6 +30,5 @@
 {/if}
 
 <style lang="scss">
-	@import 'src/routes/(account)/accountpage-layout.scss';
-
+	@import '../accountpage-layout.scss';
 </style>

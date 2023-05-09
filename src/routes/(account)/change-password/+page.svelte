@@ -13,24 +13,31 @@
     const token = searchParams.get('token');
 </script>
   
-<div>
-    <span>Account: {data.session?.user.email}</span>
-    <br/>
-    <span>Passwort ändern</span>
+<main>
+
+    <h1>Passwort ändern </h1>
         <form method="POST" action="?/new_password" class="flex flex-col gap-2" use:enhance>
-            <label for="password">New password:<input type="password" name="password" id="password" required /></label>
+            <label for="email">E-Mail</label>
+            <input id="email" type="text" value={data.session?.user.email} disabled/>
+
+            <label for="password">New password:</label>
+            <input type="password" name="password" id="password" required />
             {#if form?.errors?.password}
                 <span class="text-red-500">{form?.errors?.password[0]}</span>
             {/if}
-            <label for="confirm_password">Confirm password:<input type="password" name="confirm_password" id="confirm_password" required /></label>
+
+            <label for="confirm_password">Confirm password:</label>
+            <input type="password" name="confirm_password" id="confirm_password" required />
             {#if form?.errors?.confirm_password}
                 <span class="text-red-500">{form?.errors?.confirm_password[0]}</span>
             {/if}
+
             <input type="hidden" name="token" value={token} />
             {#if form?.errors?.token}
                 <span class="text-red-500">{form?.errors?.token[0]}</span>
             {/if}
-            <button type="submit" class="bg-blue-300 text-black font-semibold text-lg border border-solid border-black p-1 w-44 mt-4">Send</button>
+            
+            <input type="submit" value="Absenden" />
         </form>
 
     {#if form && form.success === true }
@@ -44,4 +51,9 @@
             <p>Could not change password.</p>
         </div>
     {/if}
-</div>
+</main>
+
+
+<style lang="scss">
+	@import '../accountpage-layout.scss';
+</style>
