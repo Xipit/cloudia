@@ -14,7 +14,7 @@
     let speedUnit: string | null = settings?.speed_unit;
 
     // if js enabled, then just run layout stuff and dont refresh browser
-    function handleSubmit() {
+    function handleUpdateSettings() {
 		loading = true;
 		return async () => {
 			loading = false;
@@ -32,7 +32,7 @@
         method="post"
         action="?/update"
         bind:this={settingsForm}
-        use:enhance={handleSubmit}
+        use:enhance={handleUpdateSettings}
     >
 
         <label for="email">E-Mail</label>
@@ -65,6 +65,20 @@
     </form>
 
     <a href="/change-password">Passwort ändern</a>
+
+    
+    <h2>Account löschen</h2>
+    <form 
+        action="?/deleteUser" 
+        method="POST"
+        use:enhance
+    >
+        <label for="email">Bestätige E-Mail</label>
+        <input id="email" name="email" type="text" required/>
+
+        <input type="submit" value="Account löschen" />
+    </form>
+
 </main>
 
 <style>
