@@ -1,8 +1,6 @@
-@import 'src/components/weather-tiles/weather-tiles.scss';
-
 h1 {
 	color:var(--text-color);
-	font-family: $font-accent;
+	font-family: 'Chewy', cursive;
 	text-shadow: 2px 4px 4px #716666;
 	font-size: min(4.5em, 10vw);
 	padding-top:var(--spacing-xl);
