@@ -92,6 +92,7 @@
 				left: 60%;
 				top: 45px;
 				height: 40%;
+				width: 40%;
 			}
 		}
 	}
