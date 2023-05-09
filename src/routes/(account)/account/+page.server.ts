@@ -45,7 +45,7 @@ export const actions:Actions = {
 
         throw redirect(303, "/account"); // redirect to accountpage
     },
-    deleteUser: async ({ request, locals: { getSession, supabase} }) => {
+    deleteUser: async ({ request, url, locals: { getSession, supabase} }) => {
         const formData = await request.formData();
         const email = formData.get('email') as string;
         
@@ -67,7 +67,9 @@ export const actions:Actions = {
                     $$;
                 */
 
-            throw redirect(303, '/');
+            fetch(`${url.hostname}/logout`, {
+                method: 'post'
+            });
 
         } else {
             console.log('Email: ' + email, 'user email: ' + session?.user.email);

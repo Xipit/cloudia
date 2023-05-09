@@ -17,6 +17,7 @@
 
 	</form>
 
+	<a href="/register">Registrieren</a>
 	<a href="/forgot-password">Passwort vergessen</a>
 </main>
 
