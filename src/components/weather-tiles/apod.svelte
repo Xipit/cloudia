@@ -41,4 +41,12 @@
             width: 100%;
         }
     }
+
+	@media only screen and (min-width: 850px) {
+        .apod {
+            img {
+                width: 50%;
+            }
+        }
+    }
 </style>
