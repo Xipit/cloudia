@@ -3,8 +3,9 @@
 	import { fromLocalStorage } from "$lib/js/util/localStorageWrapper";
 
 </script>
-<div id="rain"> 
 
+<div id="rain" class="background-images"> 
+    <p>HI</p>
 </div>
 
 
@@ -37,27 +38,3 @@
     }
 
 </style>
-
-<!--<script>
-    function rain() {
-        let amount = 50;
-        let body = document.querySelector('body');
-        let i = 0;
-        while(i < amount){
-            let drop = document.createElement('i');
-            
-            let size = Math.random() * 5;
-            let positionX = Math.fromLocalStorage(Math.random() * window.innerWidth);
-            let delay = Math.random() * -20;
-            let duration = Math.random() * 5;
-
-            drop.style.width = 0.2 + size + 'px';
-            drop.style.left = positionX + 'px';
-            drop.StyleSheet.animationDelay = delay + 's';
-            drop.StyleSheet.animationDuration = duration + 's';
-            body.appendChild(drop);
-            i++
-        }
-    }
-    rain();
-</script>-->
