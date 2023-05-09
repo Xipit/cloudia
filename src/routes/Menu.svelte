@@ -89,8 +89,8 @@
                 </form>
                 
                 <p class="search-error-message">{errorMessage}</p>
-                <input type="button" value="login" on:click={() => goto('/login')}>
-                <input type="button" value="register" on:click={() => goto('/register')}>
+                <input type="button" value="login" on:click={() => goto('/login')} class="secondary-button">
+                <input type="button" value="register" on:click={() => goto('/register')} class="secondary-button">
             </div>
 
             
