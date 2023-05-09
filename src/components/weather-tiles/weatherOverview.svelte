@@ -88,7 +88,7 @@
         {:else}
 
             <div class="visiblePlanet tile">
-                <p class="description">zu sehende Planeten:</p>
+                <p class="description">sichtbare Planeten:</p>
                 {#each visiblePlanetsData as data}
                     <p class="value">{data.name}</p>
                 {/each}
@@ -107,7 +107,7 @@
 
         display: grid;
         grid-template-columns: 33.5% 33.5% 33.5%;
-        grid-template-rows: auto auto 120px auto;
+        grid-template-rows: auto auto auto auto;
         gap: var(--spacing-sm);
 		
 		.humidity {
@@ -159,6 +159,7 @@
 
 	@media only screen and (min-width: 850px) {
         .grid-container {
+            grid-template-rows: auto auto 120px auto;
             .sun-and-moon {
                 padding: 35px 50px 15px 30px !important;
 

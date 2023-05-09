@@ -40,7 +40,6 @@
 			justify-content: space-around;
 			align-items: center;
 			margin-top: 1.25em;
-			width: 99%;
 			border-radius: 0.438em;
 			padding: var(--spacing-sm);
 
