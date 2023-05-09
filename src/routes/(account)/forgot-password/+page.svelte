@@ -4,13 +4,18 @@
     export let form:ActionData;
 </script>
 
+<main>
+    <h1>Passwort vergessen</h1>
+    <form action="?/sendRecovery" method="POST" class="auth-form">
 
-<form action="?/sendRecovery" method="POST" class="auth-form">
-    <label for=""> Email </label>
-    <input type="text" name="email" />
+        <label for=""> Email </label>
+        <input type="text" name="email" />
+        
+        <input type="submit" value="Passwort zurücksetzen" />
 
-    <button type="submit">Passwort zurücksetzen</button>
-</form>
+    </form>
+</main>
+
 
 {#if form?.error}
     <!-- this message is ephemeral; it exists because the page was rendered in
@@ -23,3 +28,7 @@
            response to a form submission. it will vanish if the user reloads -->
     <p>Es wurde eine E-Mail mit Passwort-zurücksetzen Link an {form?.email} geschickt.</p>
 {/if}
+
+<style lang="scss">
+	@import '../accountpage-layout.scss';
+</style>

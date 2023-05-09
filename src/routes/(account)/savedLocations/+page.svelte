@@ -10,7 +10,7 @@
 
 </script>
 
-<div>
+<div class="form-wrapper">
     <form
     class="submit-form"
     method="post"
