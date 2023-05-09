@@ -31,27 +31,30 @@
   <div class="burger-menu-top icon">
     <Hamburger
         bind:open
-        --color=var(--text-color) 
-        --active-color=#989898/>
+        --color=var(--text-color) />
     {#if open}
-        <p class="cloudia">Cloudia</p>
+        <a class="cloudia" href="/" >cloudia</a>
     {/if}
   </div>
   
   {#if open}
     <div class="burger-menu" >
         {#if isLoggedIn}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="secondary-button account-button" on:click|preventDefault="{() => goto(`/account`)}">
+                <img src="src\lib\assets\svg\menu\person.svg" alt="person" class="person-icon">
+                <p>langemail@example.com</p>
+            </div>
             
             <div class="burger-menu-mid">
-                <div class="account">
-
-                </div>
                 <div class="locations">
                     {#if savedLocations}
                         {#each savedLocations as location}
-                            <div class="savedLocations">
-                                <a href="/?location={location.location_name}" >{location.location_name}</a>
+                            <!-- svelte-ignore a11y-click-events-have-key-events -->
+                            <div class="savedLocations" on:click|preventDefault="{() => goto(`/?location=${location.location_name}`)}">
                                 <img src="src\lib\assets\svg\menu\star.svg" alt="star" class="star-icon">
+                                <!--a href="/?location={location.location_name}" data-sveltekit-preload-data="off">{location.location_name}</a-->
+                                <p>{location.location_name}</p>
                             </div>
                         {/each}
                         
@@ -59,24 +62,29 @@
 
                 </div>
 
+                
+            </div>
+            <div class="burger-menu-bottom">
                 <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
-                    <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-button">
-                    <button type="submit" class="">
+                    <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
+                    <button type="submit" class="search-button">
                         <img src="src\lib\assets\svg\menu\search.svg" alt="search" class="search-icon">
                     </button>
                 </form>
-            </div>
-            <div class="burger-menu-bottom">
+
                 <form action="/logout" method="POST">
-                    <button type="submit" class="button">LogOut</button>
+                    <button type="submit" class="secondary-button">
+                        <img src="src\lib\assets\svg\menu\logout.svg" alt="person" class="person-icon">
+                        <p>Logout</p>
+                    </button>
                 </form>
             </div>
         {:else}
             <div class="burger-menu-mid">
                 <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
-                    <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" >
-                    <button type="submit">
-                        <img src="src\lib\assets\svg\menu\search.svg" alt="search">
+                    <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
+                    <button type="submit" class="search-button">
+                        <img src="src\lib\assets\svg\menu\search.svg" alt="search" class="search-icon">
                     </button>
                 </form>
                 
@@ -121,8 +129,23 @@
     }
 
     .burger-menu-mid {
-        flex: 10;
+        flex: 8;
+        overflow-x: hidden;
         overflow-y: scroll;
+        padding-right: 5px;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+      
+        &::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            //-webkit-box-shadow: inset 0 0 6px rgb(214, 214, 214); 
+            background: #fff6e563;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgb(158, 158, 158);
+        }
     }
 
     .burger-menu-bottom {
@@ -133,8 +156,14 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        width: 100%;
-        margin-top: 1em;
+        margin: 1em;
+
+        background: #FFFFFF;
+        border: 0;
+        border-radius: 50px;
+
+        display: flex;
+        flex-direction: row;
     }
 
     .search-error-message {
@@ -144,99 +173,126 @@
     }
 
     .search-input {
-
+        flex-grow: 1;
+        background-color: transparent;
+        border: 0;
+        border-radius: 50px 0px 0px 50px;
+        
+        padding-left: 1.5em;
+        font-size: large;
     }
 
     .search-button {
-        background: #FFFFFF;
-        border: 2px solid #a3a3a3;
-        box-shadow: inset 0px 0px 10px 2px rgba(168, 168, 168, 0.25);
+        background-color: var(--secondary-accent-color);
+        filter: brightness(1.4);
+        border: 0;
         border-radius: 50px;
-        padding: 1em;
-        width: 100%;
+        padding: 0.5em;
+        width: fit-content;
+
+        border-radius: 0 50px 50px 0;
+
+        &:hover {
+            cursor: pointer;
+            filter: brightness(1);
+        }
+
+        img {
+            margin-left: .5em;
+            margin-right: .5em;
+        }
     }
 
     .cloudia {
-        color: #716666;
+        color: var(--text-color);
         font-size:x-large;
         font-family: 'Chewy', cursive;
+        text-decoration: none;
     }
-
-    a {
-        width: 100%;
-        margin: 1rem auto;
-        padding: 0.1em;
-        word-break: break-word;
-
-        &:hover, &:active, &:focus {
-            text-shadow: 2px 4px 4px #716666; // horizontal vertiacal blur color
-        //    backdrop-filter: blur( 0.65em );
-        //    -webkit-backdrop-filter: blur( 0.65em );
-        //    border-radius: 0.2em;
-        //    padding: 0.1em;
-        } 
-    }
-
     
     .locations {
         display: flex;
         flex-direction: column;
+        margin-left: 1em;
 
         .savedLocations {
             margin-bottom: 15px;
             padding-left: 1em;
             padding-right: 1em;
-            background: #D9D9D9;
+            background: var(--primary-accent-color);
             box-shadow: -3px 4px 0px rgba(0, 0, 0, 0.25);
             border-radius: 4px;
 
             display: flex;
             flex-direction: row;
-            justify-content: space-between
+            justify-content: space-between;
+
+            p {
+                color: black;
+                font-size: xx-large;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin: 0.2em;
+            }
+
+            .star-icon {
+                height: 1.5em;
+                align-self: center;
+            }
+
+            &:hover {
+                cursor: pointer;
+                filter: brightness(1.2);
+            }
         }
+    }
+
+    .burger-menu-background {
+        position: absolute;
+        width: 350px;
+	    top: 0;
+	    left: 0;
+	    background: linear-gradient(0deg, rgba(128, 217, 207, 0.1), rgba(128, 217, 207, 0.1)), #000000;
+        box-shadow: 5px 0px 4px rgba(0, 0, 0, 0.25);
+	    padding: 1em;
+	    height: 100vh;
+	    border-left: 0.063em solid rgba(0, 0, 0, .1);
+        z-index: -1;
+    }
+    
+    .secondary-button {
+        height: fit-content;
+        min-height: 50px;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        background-color: var(--secondary-accent-color);
+        border-radius: 5px;
+        padding: .3em;
+        padding-right: 0.5em;
+        color: var(--text-color);
+        display: flex;
+        flex-direction: row;
+        border: 0;
+        align-items: center;
         
-        a {
-            color: black;
-            text-decoration: none;
-            font-weight: 400;
-            font-size: 2em;
+        img {
+            height: 34px;
+            margin: 5px;
+        }
+
+        p {
+            margin: 0.5em;
+            font-size: x-large;
+            letter-spacing: normal;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
 
-        .star-icon {
-            height: 3em;
-            color: #606060;
-            align-self: center;
+        &:hover {
+            cursor: pointer;
+            filter: brightness(1.4);
         }
     }
-
-    .savedLocations{
-        margin-left: 1em;
-        font-size:large;
-    }
-
-    .burger-menu-background {
-    position: absolute;
-    width: 350px;
-	top: 0;
-	left: 0;
-	background: #ffffff;
-	padding: 1em;
-	height: 100vh;
-	border-left: 0.063em solid rgba(0, 0, 0, .1);
-	box-shadow: -0.125em 0px 0.375em -0.063em rgba(0, 0, 0, 0.1);
-    z-index: -1;
-    }
-    
-    .button {
-        width: 10em;
-        height: 3em;
-        color: var(--secondary-accent-color);
-        background-color: var(--secondary-bg-color);
-        border: 0.063em solid rgba(0, 0, 0, .1);
-        border-radius: 5px;
-    }
-    
   </style>
