@@ -44,22 +44,21 @@
 <!--
 	to display different weather backgrounds add a switch statement
 	that looks current weather condition to determent the right component
+-->
 
-
-{#if weatherCondition === generalWeatherCondition.storm}
-	<Storm />
-{:else if weatherCondition === generalWeatherCondition.rain}
-	<Rain />
-{:else if weatherCondition === generalWeatherCondition.snow}
-	<Snow />
-{:else if weatherCondition === generalWeatherCondition.cloud}
-	<Cloud />
-{:else if weatherCondition === generalWeatherCondition.sun}
-	<Sun />
-{:else}
-	<Sun />
-{/if}-->
-<Rain />
+		{#if weatherCondition === generalWeatherCondition.storm}
+			<Storm />
+		{:else if weatherCondition === generalWeatherCondition.rain}
+			<Rain />
+		{:else if weatherCondition === generalWeatherCondition.snow}
+			<Snow />
+		{:else if weatherCondition === generalWeatherCondition.cloud}
+			<Cloud />
+		{:else if weatherCondition === generalWeatherCondition.sun}
+			<Sun />
+		{:else}
+			<Sun />
+		{/if}
 
 <!--
 	TODO: caused performance problems

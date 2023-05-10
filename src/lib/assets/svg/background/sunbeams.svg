@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1483.0243mm"
+   height="1481.4628mm"
+   viewBox="0 0 1483.0243 1481.4628"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="Hintergrund-Wetter.svg"
+   inkscape:export-filename="Hintergrund-Wetter.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.09064429"
+     inkscape:cx="8952.5771"
+     inkscape:cy="1914.0753"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Ebene 2"
+     transform="translate(-2029.8947,235.70271)">
+    <path
+       id="path15693-1-1-8-4"
+       style="fill:#000000;fill-opacity:1;stroke-width:1.172;stroke-linecap:round;-inkscape-stroke:none;stop-color:#000000"
+       d="m 2784.5665,547.8663 a 44.428509,44.428509 0 0 1 -10.773,1.35134 44.428509,44.428509 0 0 1 -9.0015,-0.9462 l -119.4677,697.48866 269.2265,-0.4769 z" />
+    <path
+       id="path15693-1-1-8-8-8"
+       style="fill:#000000;fill-opacity:1;stroke-width:1.172;stroke-linecap:round;-inkscape-stroke:none;stop-color:#000000"
+       d="m 2029.8947,399.76991 8.9622,269.07712 691.9211,-151.6693 a 44.428509,44.428509 0 0 1 -1.6862,-12.02252 44.428509,44.428509 0 0 1 0.7741,-8.08994 z" />
+    <path
+       id="path15693-1-1-8-9-7-8"
+       style="fill:#000000;fill-opacity:1;stroke-width:1.172;stroke-linecap:round;-inkscape-stroke:none;stop-color:#000000"
+       d="m 2736.9513,529.93148 -569.2666,420.02397 194.4538,186.20055 389.3592,-592.70235 a 44.428509,44.428509 0 0 1 -14.5464,-13.52217 z" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke-width:0.472453;stroke-linecap:round;-inkscape-stroke:none;stop-color:#000000"
+       id="rect23723"
+       width="4.0242538"
+       height="110.4831"
+       x="3508.8945"
+       y="436.74323" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke-width:0.391155;stroke-linecap:round;-inkscape-stroke:none;stop-color:#000000"
+       id="rect23725"
+       width="136.45949"
+       height="4.8639975"
+       x="2701.8245"
+       y="-235.7027" />
+  </g>
+</svg>
