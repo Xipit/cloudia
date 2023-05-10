@@ -131,42 +131,53 @@ export async function getNextHoursWeatherData(location: String, daysInToTheFutur
 		// remove old items from list
 		forecastHours.hour.splice(0);
 
-		const hourIncrement = daysInToTheFuture > 0
-			? 3
-			: 1;
+		if(daysInToTheFuture > 0){
+			const startHour = 6;
+			const hourIncrement = 3;
+			
+			// Pushes the data for the next i-Hours into forecastHour.hour
+			for (let i = 0; i < 5; i++) {
 
-		// This is used to get to know which is the next hour for the forecastHours.hour array
-		const startHour = daysInToTheFuture > 0
-			? getDayInTheFutureStart(data.forecast, daysInToTheFuture, 6)
-			: getCurrentStart();
+				const forecastDay = data.forecast.forecastday[daysInToTheFuture];
 
-		let dayIndex = daysInToTheFuture;
-		
-		// Pushes the data for the next i-Hours into forecastHour.hour
-		for (let i = 0; i < 5; i++) {
-			startHour.setHours(startHour.getHours() + hourIncrement);
-			const formattedDateString = getFormattedDate(startHour);
+				const forecastHour = forecastDay.hour[startHour + (i * hourIncrement)]
 
-			// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
-			if (data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
-				dayIndex ++;
+				const formattedDateString = getFormattedDate(new Date(forecastDay.date_epoch * 1000));
+
+				pushHour(forecastHour, forecastDay, formattedDateString, startHour + (i * hourIncrement)) 
 			}
+		}else {
+			const hourIncrement = 1
 
-			const forecastDay = data.forecast.forecastday[dayIndex];
-			const forecastHour = forecastDay.hour[startHour.getHours()];
+			// This is used to get to know which is the next hour for the forecastHours.hour array
+			const startHour = getCurrentStart();
 
-			pushHour(forecastHour, forecastDay, formattedDateString, daysInToTheFuture > 0);
-		}
+			let dayIndex = 0;
+			
+			// Pushes the data for the next i-Hours into forecastHour.hour
+			for (let i = 0; i < 5; i++) {
+				startHour.setHours(startHour.getHours() + hourIncrement);
+				const formattedDateString = getFormattedDate(startHour);
+
+				// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
+				if (daysInToTheFuture < 1 && data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
+					dayIndex ++;
+				}
+
+				const forecastDay = data.forecast.forecastday[dayIndex];
+				const forecastHour = forecastDay.hour[startHour.getHours()];
+
+				 pushHour(forecastHour, forecastDay, formattedDateString, null);
+			}
+		}	
 
 		return forecastHours;
 	}
 }
 
-function pushHour(hour:any, day:any, formattedDateString:string, useUTC: boolean){
-	const time = 		new Date(hour.time_epoch * 1000);
-	const timeString = 	useUTC 
-		? time.getUTCHours().toString().padStart(2, '0') + ":" + time.getUTCMinutes().toString().padStart(2, '0')
-		: time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
+function pushHour(hour:any, day:any, formattedDateString:string, overwriteHour: number|null){
+	const time = 		new Date(hour.time_epoch * 1000); 								
+	const timeString = (overwriteHour ?? time.getHours()).toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');						
 	const iconURL = 	getIconURL(hour.condition.code, day.astro.sunrise, day.astro.sunset, timeString);
 
 	forecastHours.hour.push({
@@ -188,21 +199,10 @@ function getCurrentStart(): Date{
 	return(new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours()));
 }
 
-function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number, additionalHours:number): Date{
-
+function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number): Date{
 	const dayInTheFuture = new Date(forecast.forecastday[daysInToTheFuture].hour[0].time_epoch * 1000);
-	// calculate difference to UTC
-	const utcHours = dayInTheFuture.getUTCHours();
 
-	const hourDifferenceToUTC = utcHours <= 12 
-		? - utcHours
-		: 24 - utcHours;
-
-
-	const dayInTheFutureWithLocalHoursFactoredIn: Date = dayInTheFuture;
-	dayInTheFutureWithLocalHoursFactoredIn.setHours(hourDifferenceToUTC + additionalHours);
-
-	return dayInTheFutureWithLocalHoursFactoredIn;
+	return dayInTheFuture;
 }
 
 export async function getNextDaysWeatherData(location: String) {
