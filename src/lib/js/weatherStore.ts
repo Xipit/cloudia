@@ -57,7 +57,7 @@ function createWeather() {
         }
    
         const newWeatherData = await getCurrentWeatherData(newLocation);
-        const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation, 2);
+        const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation, 1);
         const newNextDaysWeatherData = await getNextDaysWeatherData(newLocation);
         
         if(newWeatherData.error){

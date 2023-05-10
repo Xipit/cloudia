@@ -134,46 +134,68 @@ export async function getNextHoursWeatherData(location: String, daysInToTheFutur
 		const timestampNow = Date.now();
 		let dateReference = new Date(timestampNow);
 
-		// This is used to get to know which is the next hour for the forecastHours.hour array
-		const nextHourDate = new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours())
+		if(daysInToTheFuture > 0){
+			const forecastDay = data.forecast.forecastday[daysInToTheFuture];
 
-		let dayIndex = 0;
+			const date:Date = new Date(forecastDay.date_epoch * 1000);
 
-		const hourIncrement = daysInToTheFuture > 0
-			? 3
-			: 1;
-		
-		// Pushes the data for the next i-Hours into forecastHour.hour
-		for (let i = 0; i < 5; i++) {
-			nextHourDate.setHours(nextHourDate.getHours() + hourIncrement);
+			console.log(date.toISOString());
 
-			let formattedDateString = getFormattedDate(nextHourDate);
 
-			// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
-			if (data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
-				dayIndex ++;
+
+			for (let i = 0; i < 5; i++) {
+				const forecastHour = forecastDay.hour[i];
+
+				console.log((new Date(forecastHour.time_epoch * 1000).toISOString()));
+
+				const formattedDateString = getFormattedDate(date);
+
+				pushHour(forecastHour, forecastDay, formattedDateString);
 			}
 
-			let forecastday = data.forecast.forecastday[dayIndex];
-			let forecastHour = forecastday.hour[nextHourDate.getHours()];
+		} else {
+			// This is used to get to know which is the next hour for the forecastHours.hour array
+			const nextHourDate = new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours())
+			const hourIncrement = 1;
 
-			let time = new Date(forecastHour.time_epoch * 1000);
-			let timeString = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
-			let iconURL = getIconURL(forecastHour.condition.code, forecastday.astro.sunrise, forecastday.astro.sunset, timeString);
+			let dayIndex = 0;
+			
+			// Pushes the data for the next i-Hours into forecastHour.hour
+			for (let i = 0; i < 5; i++) {
+				nextHourDate.setHours(nextHourDate.getHours() + hourIncrement);
+				const formattedDateString = getFormattedDate(nextHourDate);
 
-			forecastHours.hour.push({
-				date: formattedDateString,
-				time: timeString,
-				temp: {
-					f: forecastHour.temp_f.toString(),
-					c: forecastHour.temp_c.toString(),
-					k: (forecastHour.temp_c + 273).toString()
-				},
-				conditionIconURL: iconURL, 
-			})
+				// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
+				if (data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
+					dayIndex ++;
+				}
+
+				const forecastDay = data.forecast.forecastday[dayIndex];
+				const forecastHour = forecastDay.hour[nextHourDate.getHours()];
+
+				pushHour(forecastHour, forecastDay, formattedDateString);
+			}
 		}
+		
 		return forecastHours;
 	}
+}
+
+function pushHour(hour:any, day:any, formattedDateString:string){
+	const time = 		new Date(hour.time_epoch * 1000);
+	const timeString = 	time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
+	const iconURL = 	getIconURL(hour.condition.code, day.astro.sunrise, day.astro.sunset, timeString);
+
+	forecastHours.hour.push({
+		date: formattedDateString,
+		time: timeString,
+		temp: {
+			f: hour.temp_f.toString(),
+			c: hour.temp_c.toString(),
+			k: (hour.temp_c + 273).toString()
+		},
+		conditionIconURL: iconURL, 
+	})
 }
 
 export async function getNextDaysWeatherData(location: String) {
