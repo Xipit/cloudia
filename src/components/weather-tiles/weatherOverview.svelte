@@ -21,15 +21,15 @@
         
             <div class="feelslike tile">
                 <p class="description">gefühlte Temperatur</p>
-                <p>	{applySettingToTemp(settings, data.feelslike)} </p>
+                <span class="value">	{applySettingToTemp(settings, data.feelslike)} </span>
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
-                <p> {data.current.condition.text} </p>
+                <p class="value"> {data.current.condition.text} </p>
             </div>
             <div class="humidity tile">
                 <p class="description">Luftfeuchtig&shykeit</p>
-                <p>	{data.current.humidity} % </p>
+                <p class="value">	{data.current.humidity} % </p>
             </div>
 
         {/if}		
@@ -60,10 +60,18 @@
                 </p> 
             </div>
             <div class="sun-and-moon tile">
-                <div class="description">Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span></div> 
-                <div class="description">Sonnen&shyuntergang: <span class="value">{data.day[0].sunset}</span></div> 
-                <div class="description">Mond&shyaufgang: <span class="value">{data.day[0].moonrise}</span></div> 
-                <div class="description">Mond&shyuntergang: <span class="value">{data.day[0].moonset}</span></div> 
+                <div class="description">
+                    Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span>
+                </div> 
+                <div class="description">
+                    Sonnen&shyuntergang: <span class="value">{data.day[0].sunset}</span>
+                </div> 
+                <div class="description moon">
+                    Mond&shyaufgang: <span class="value">{data.day[0].moonrise}</span>
+                </div> 
+                <div class="description moon">
+                    Mond&shyuntergang: <span class="value">{data.day[0].moonset}</span>
+                </div> 
                 <p></p>
             </div>
         {/if}		
@@ -80,9 +88,9 @@
         {:else}
 
             <div class="visiblePlanet tile">
-                <p class="description">zu sehende Planeten:</p>
+                <p class="description">sichtbare Planeten:</p>
                 {#each visiblePlanetsData as data}
-                    <p>{data.name}</p>
+                    <p class="value">{data.name}</p>
                 {/each}
             </div>
             
@@ -98,7 +106,7 @@
         padding-top: var(--spacing-sm);
 
         display: grid;
-        grid-template-columns: 33.3% 33.3% 33.3%;
+        grid-template-columns: 33.5% 33.5% 33.5%;
         grid-template-rows: auto auto auto auto;
         gap: var(--spacing-sm);
 		
@@ -122,7 +130,7 @@
 			grid-row-start: 3;
 			grid-row-end: 4;
 			text-align: left !important;
-			padding: 15px 0 0 15px !important;
+			padding: 15px 15px 0 15px !important;
 			word-break: initial;
 		}
 
@@ -142,5 +150,38 @@
 				font-size: 16px;
 			}
 		}
+
+        .value {
+            font-weight: normal;
+            font-size: 16px;
+        }
+    }
+
+	@media only screen and (min-width: 850px) {
+        .grid-container {
+            grid-template-rows: auto auto 120px auto;
+            .sun-and-moon {
+                padding: 35px 50px 15px 30px !important;
+
+                .moon {
+                    position: relative;
+                    bottom: 54px;
+                    left: 58%;
+                    text-align: left;
+                }
+            }
+
+            .description {
+                font-size: 21px;
+
+                .value {
+                    font-size: 19px;
+                }
+            }
+
+            .value {
+                font-size: 19px;
+            }
+        }
     }
 </style>

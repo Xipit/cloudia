@@ -16,9 +16,14 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
         serverSession: data.session
     });
 
+    const { data: savedLocations } = await supabase
+        .from('saved_locations')
+        .select('*');
+
     const { data : { session } } = await supabase.auth.getSession();
+
 
     const { settings } = data;
 
-    return { supabase, session, settings };
+    return { savedLocations, supabase, session, settings };
 }
