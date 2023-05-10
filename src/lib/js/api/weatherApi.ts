@@ -131,59 +131,42 @@ export async function getNextHoursWeatherData(location: String, daysInToTheFutur
 		// remove old items from list
 		forecastHours.hour.splice(0);
 
-		const timestampNow = Date.now();
-		let dateReference = new Date(timestampNow);
+		const hourIncrement = daysInToTheFuture > 0
+			? 3
+			: 1;
 
-		if(daysInToTheFuture > 0){
-			const forecastDay = data.forecast.forecastday[daysInToTheFuture];
+		// This is used to get to know which is the next hour for the forecastHours.hour array
+		const startHour = daysInToTheFuture > 0
+			? getDayInTheFutureStart(data.forecast, daysInToTheFuture, 6)
+			: getCurrentStart();
 
-			const date:Date = new Date(forecastDay.date_epoch * 1000);
-
-			console.log(date.toISOString());
-
-
-
-			for (let i = 0; i < 5; i++) {
-				const forecastHour = forecastDay.hour[i];
-
-				console.log((new Date(forecastHour.time_epoch * 1000).toISOString()));
-
-				const formattedDateString = getFormattedDate(date);
-
-				pushHour(forecastHour, forecastDay, formattedDateString);
-			}
-
-		} else {
-			// This is used to get to know which is the next hour for the forecastHours.hour array
-			const nextHourDate = new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours())
-			const hourIncrement = 1;
-
-			let dayIndex = 0;
-			
-			// Pushes the data for the next i-Hours into forecastHour.hour
-			for (let i = 0; i < 5; i++) {
-				nextHourDate.setHours(nextHourDate.getHours() + hourIncrement);
-				const formattedDateString = getFormattedDate(nextHourDate);
-
-				// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
-				if (data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
-					dayIndex ++;
-				}
-
-				const forecastDay = data.forecast.forecastday[dayIndex];
-				const forecastHour = forecastDay.hour[nextHourDate.getHours()];
-
-				pushHour(forecastHour, forecastDay, formattedDateString);
-			}
-		}
+		let dayIndex = daysInToTheFuture;
 		
+		// Pushes the data for the next i-Hours into forecastHour.hour
+		for (let i = 0; i < 5; i++) {
+			startHour.setHours(startHour.getHours() + hourIncrement);
+			const formattedDateString = getFormattedDate(startHour);
+
+			// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
+			if (data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
+				dayIndex ++;
+			}
+
+			const forecastDay = data.forecast.forecastday[dayIndex];
+			const forecastHour = forecastDay.hour[startHour.getHours()];
+
+			pushHour(forecastHour, forecastDay, formattedDateString, daysInToTheFuture > 0);
+		}
+
 		return forecastHours;
 	}
 }
 
-function pushHour(hour:any, day:any, formattedDateString:string){
+function pushHour(hour:any, day:any, formattedDateString:string, useUTC: boolean){
 	const time = 		new Date(hour.time_epoch * 1000);
-	const timeString = 	time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
+	const timeString = 	useUTC 
+		? time.getUTCHours().toString().padStart(2, '0') + ":" + time.getUTCMinutes().toString().padStart(2, '0')
+		: time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
 	const iconURL = 	getIconURL(hour.condition.code, day.astro.sunrise, day.astro.sunset, timeString);
 
 	forecastHours.hour.push({
@@ -196,6 +179,30 @@ function pushHour(hour:any, day:any, formattedDateString:string){
 		},
 		conditionIconURL: iconURL, 
 	})
+}
+
+function getCurrentStart(): Date{
+	const timestampNow = Date.now();
+	let dateReference = new Date(timestampNow);
+
+	return(new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours()));
+}
+
+function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number, additionalHours:number): Date{
+
+	const dayInTheFuture = new Date(forecast.forecastday[daysInToTheFuture].hour[0].time_epoch * 1000);
+	// calculate difference to UTC
+	const utcHours = dayInTheFuture.getUTCHours();
+
+	const hourDifferenceToUTC = utcHours <= 12 
+		? - utcHours
+		: 24 - utcHours;
+
+
+	const dayInTheFutureWithLocalHoursFactoredIn: Date = dayInTheFuture;
+	dayInTheFutureWithLocalHoursFactoredIn.setHours(hourDifferenceToUTC + additionalHours);
+
+	return dayInTheFutureWithLocalHoursFactoredIn;
 }
 
 export async function getNextDaysWeatherData(location: String) {
