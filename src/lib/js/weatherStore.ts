@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { get, writable, type Writable } from "svelte/store";
 import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "./api/weatherApi";
-import { createGeneralisedWeatherCondition, generaliseWeatherCondition, type GeneralWeatherCondition } from "./util/weatherStoreUtils";
+import { clampDaysInToTheFuture, createDaysInToTheFuture, createGeneralisedWeatherCondition, generaliseWeatherCondition, type GeneralWeatherCondition } from "./util/weatherStoreUtils";
 import { fromLocalStorage, toLocalStorage } from "./util/localStorageWrapper";
 import { replaceStateWithSearchParam } from "./util/url";
 import { getVisiblePlanetsData } from "./api/visiblePlanetsAPI";
@@ -46,18 +46,19 @@ function createWeather() {
         get(location) != '' 
             ? 'daysInToTheFuture' 
             : ''
-        , 0);//TODO change to 0
-    const daysInToTheFuture = writable<number>(daysInToTheFutureInitialValue);
+        , 0);
+    const daysInToTheFuture = createDaysInToTheFuture(daysInToTheFutureInitialValue);
     toLocalStorage(daysInToTheFuture, 'daysInToTheFuture');
 
-    async function setLocation (newLocation:string, daysInToTheFuture:number = 0) {
+    async function setLocation (newLocation:string, newDaysInToTheFuture:number = get(daysInToTheFuture)) {
         if(newLocation == ""){
             console.warn("Tried to set empty location.");
             return;
         }
+        console.log(newDaysInToTheFuture);
    
         const newWeatherData = await getCurrentWeatherData(newLocation);
-        const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation, 1);
+        const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation, clampDaysInToTheFuture(newDaysInToTheFuture));
         const newNextDaysWeatherData = await getNextDaysWeatherData(newLocation);
         
         if(newWeatherData.error){
@@ -71,12 +72,20 @@ function createWeather() {
             nextDaysWeatherData: newNextDaysWeatherData
         });
 
-        visiblePlanets.set(getVisiblePlanetsData(newWeatherData.location.lat, newWeatherData.location.lat));
+        if(newDaysInToTheFuture < 1)
+            visiblePlanets.set(getVisiblePlanetsData(newWeatherData.location.lat, newWeatherData.location.lat));
 
+        
         location.set(newLocation);
         setLocationURLParamWithoutReload();
 
-        const newGeneralisedWeatherCondition = generaliseWeatherCondition(newWeatherData.current.condition.text);
+        daysInToTheFuture.set(newDaysInToTheFuture);
+        setDaysInToTheFutureURLParamWithoutReload();
+
+        const newGeneralisedWeatherCondition = generaliseWeatherCondition(
+            newDaysInToTheFuture > 0 
+                ? newWeatherData.current.condition.text
+                : newNextDaysWeatherData.day[get(daysInToTheFuture)].conditionText);
         generalisedWeatherCondition.set(newGeneralisedWeatherCondition);
 
         // just here to trigger subscribe
@@ -99,6 +108,25 @@ function createWeather() {
         });
     }
 
+    function getDaysInToTheFutureURLParam(url:URL): number|undefined {
+        const param = url.searchParams.get('daysInToTheFuture');
+
+        return param != undefined 
+            ? Number(url.searchParams.get('daysInToTheFuture')?.toString())
+            : undefined;
+    }
+
+    function setDaysInToTheFutureURLParamWithoutReload () {
+        if(get(location) == ""){
+            console.warn("Tried setting '?daysInToTheFuture=' URL-Search-Param before setting internal location!");
+            return;
+        }
+
+        replaceStateWithSearchParam({
+            daysInToTheFuture: get(daysInToTheFuture).toString()
+        });
+    }
+
     return {
         subscribe,
         set: setLocation,
@@ -117,8 +145,10 @@ function createWeather() {
         getDaysInToTheFuture: () => {
             return get(daysInToTheFuture);
         },
-        setURLParamWithoutReload: setLocationURLParamWithoutReload,
-        getURLParam: getLocationURLParam
+        setLocationURLParamWithoutReload: setLocationURLParamWithoutReload,
+        getLocationURLParam: getLocationURLParam,
+        setDaysInToTheFutureURLParamWithoutReload: setDaysInToTheFutureURLParamWithoutReload,
+        getDaysInToTheFutureURLParam: getDaysInToTheFutureURLParam
     };
 }
 

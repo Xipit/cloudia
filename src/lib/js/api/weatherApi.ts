@@ -35,6 +35,7 @@ const forecastDays = {
 		sunset: "",
 		moonrise: "",
 		moonset: "",
+		conditionText: "",
 	}]
 }
 
@@ -236,6 +237,7 @@ export async function getNextDaysWeatherData(location: String) {
 					sunset: forecastDay.astro.sunset.toString(),
 					moonrise: forecastDay.astro.moonrise.toString(),
 					moonset: forecastDay.astro.moonset.toString(),
+					conditionText: forecastDay.day.condition.text.toString()
 				})
 			}
 		}

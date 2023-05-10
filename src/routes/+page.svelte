@@ -19,6 +19,8 @@
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
+
+	let daysInToTheFuture:number  = data.daysInToTheFuture;
 	
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
@@ -27,7 +29,8 @@
 		nextDaysWeatherData 	= weatherDataObject.nextDaysWeatherData;
 	
 		visiblePlanetsData 		= weather.getVisiblePlanets();
-		//console.log(visiblePlanetsData.length ?? 'No array');
+
+		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -53,9 +56,9 @@
 
 
     <section>		
-        <MainWeatherInfo bind:weatherData bind:settings/>
+        <MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:settings/>
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 		<Apod />
 
 

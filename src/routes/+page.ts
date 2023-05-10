@@ -8,14 +8,18 @@ import { browser } from "$app/environment";
 
 export const load = (async ({ url, data }) => {
 
-    const locationParam = weather.getURLParam(url);
+    const locationParam = weather.getLocationURLParam(url);
+    const daysInToTheFutureParam = weather.getDaysInToTheFutureURLParam(url);
 
     if(browser){
-        if(locationParam != undefined){
-            weather.set(locationParam);
-        } else {
-            weather.set(weather.getLocation());
-        }
+        const location = locationParam ?? weather.getLocation();
+        const daysInToTheFuture = daysInToTheFutureParam ?? weather.getDaysInToTheFuture();
+
+        console.log("pageload: get " +  weather.getDaysInToTheFuture());
+        console.log("pageload: param" +  daysInToTheFuture);
+        console.log("pageload: " +  daysInToTheFuture);
+
+        weather.set(location, daysInToTheFuture);
     }
 
     const { 
@@ -26,6 +30,14 @@ export const load = (async ({ url, data }) => {
 
     const visiblePlanetsData:any = weather.getVisiblePlanets();
 
-    return { weatherData, nextHoursWeatherData, nextDaysWeatherData, visiblePlanetsData };
+    const daysInToTheFuture:number = weather.getDaysInToTheFuture();
+
+    return { 
+        weatherData, 
+        nextHoursWeatherData, 
+        nextDaysWeatherData, 
+        visiblePlanetsData, 
+        daysInToTheFuture
+    };
 
 }) satisfies PageLoad;

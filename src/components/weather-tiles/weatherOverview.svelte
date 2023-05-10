@@ -6,6 +6,7 @@
 	export let nextDaysWeatherData:any;
     export let visiblePlanetsData:any;
     export let settings:any;
+    export let daysInToTheFuture:number;
 
 </script>
 
@@ -25,11 +26,11 @@
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
-                <p class="value"> {data.current.condition.text} </p>
+                <p class="value"> {data.current.condition.text} </p> <!-- TODO daysintothefuture-->
             </div>
             <div class="humidity tile">
                 <p class="description">Luftfeuchtig&shykeit</p>
-                <p class="value">	{data.current.humidity} % </p>
+                <p class="value">	{data.current.humidity} % </p> <!-- TODO daysintothefuture-->
             </div>
 
         {/if}		
@@ -49,28 +50,28 @@
                 <p class="description">
                     Max: 
                     <span class="value">
-                        {applySettingToTemp(settings, data.day[0].maxTemp)}
+                        {applySettingToTemp(settings, data.day[daysInToTheFuture].maxTemp)}
                     </span>
                 </p> 
                 <p class="description">
                     Min: 
                     <span class="value">
-                        {applySettingToTemp(settings, data.day[0].minTemp)}
+                        {applySettingToTemp(settings, data.day[daysInToTheFuture].minTemp)}
                     </span>
                 </p> 
             </div>
             <div class="sun-and-moon tile">
                 <div class="description">
-                    Sonnen&shyaufgang: <span class="value">{data.day[0].sunrise}</span>
+                    Sonnen&shyaufgang: <span class="value">{data.day[daysInToTheFuture].sunrise}</span>
                 </div> 
                 <div class="description">
-                    Sonnen&shyuntergang: <span class="value">{data.day[0].sunset}</span>
+                    Sonnen&shyuntergang: <span class="value">{data.day[daysInToTheFuture].sunset}</span>
                 </div> 
                 <div class="description moon">
-                    Mond&shyaufgang: <span class="value">{data.day[0].moonrise}</span>
+                    Mond&shyaufgang: <span class="value">{data.day[daysInToTheFuture].moonrise}</span>
                 </div> 
                 <div class="description moon">
-                    Mond&shyuntergang: <span class="value">{data.day[0].moonset}</span>
+                    Mond&shyuntergang: <span class="value">{data.day[daysInToTheFuture].moonset}</span>
                 </div> 
                 <p></p>
             </div>
@@ -79,6 +80,7 @@
         <p style="color: red">{error.message}</p>
     {/await}
 
+    <!-- TODO daysintothefuture-->
     <!-- Visible Planets -->
     {#await visiblePlanetsData}
         <p>In den Sternenhimmel schauen ...</p>
