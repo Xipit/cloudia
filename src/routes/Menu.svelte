@@ -251,13 +251,13 @@
     .burger-menu-background {
         position: absolute;
         width: 350px;
-	    top: 0;
-	    left: 0;
-	    background: linear-gradient(0deg, rgba(128, 217, 207, 0.1), rgba(128, 217, 207, 0.1)), #000000;
+	      top: 0;
+	      left: 0;
+	      background: linear-gradient(0deg, rgba(128, 217, 207, 0.1), rgba(128, 217, 207, 0.1)), #000000;
         box-shadow: 5px 0px 4px rgba(0, 0, 0, 0.25);
-	    padding: 1em;
-	    height: 100vh;
-	    border-left: 0.063em solid rgba(0, 0, 0, .1);
+	      padding: 1em;
+	      height: 100vh;
+	      border-left: 0.063em solid rgba(0, 0, 0, .1);
         z-index: -1;
     }
     

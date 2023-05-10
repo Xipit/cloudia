@@ -29,12 +29,12 @@ export const actions = {
 
         try {
             // supabase logged the user in, so we can change the users password
-            const { data: user, error } = await supabase.auth.updateUser({
+            const { data: user, error:err } = await supabase.auth.updateUser({
                 password: obj.password as string,
             });
 
-            if (error) {
-                console.log('supa change pw error', error);
+            if (err) {
+                console.log('supa change pw error', err);
                 return {
                     errors: [
                         { field: 'password', message: 'Something went wrong, cant update password' },
@@ -45,21 +45,17 @@ export const actions = {
             }
 
             if (user) {
-                throw redirect(302, '/');
-
-                /*
                 return {
                     data: user,
                     errors: [],
                     success: true,
                 };
-                */
             }
             
-        } catch (error: any) {
+        } catch (err: any) {
             try {
-                const { fieldErrors: errors } = error.flatten();
-                console.log('catch error', errors);
+                const { fieldErrors: errors } = err.flatten();
+                console.log('catch error', err);
 
                 return {
                     errors: errors,
@@ -67,7 +63,7 @@ export const actions = {
                     success: false,
                 };
             } catch (error2) {
-                console.log(error);
+                console.log(err);
             }
         }
     },

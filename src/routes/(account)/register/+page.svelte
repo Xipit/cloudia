@@ -4,10 +4,19 @@
 <main>
 	<h1>Register</h1>
 	<form action="?/register" method="POST" class="auth-form">
-		<label for=""> Email </label>
+
+		<label class= "labelMail" for=""> Email </label>
 		<input type="text" name="email" />
-		<label for=""> Password </label>
+
+
+		<label class= "labelPassword" for=""> Password </label>
 		<input type="password" name="password" />
-		<button class="btn btn-primary">Register</button>
+
+
+		<input type="submit" value="Register" />
 	</form>
 </main>
+
+<style lang="scss">
+	@import '../accountpage-layout.scss';
+</style>
