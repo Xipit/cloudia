@@ -24,7 +24,7 @@
     .raindrop {
         position: fixed;
         height: 100px;
-        background: linear-gradient(transparent, #8ebfff9c);
+        background: linear-gradient(transparent, #bac3cf59);
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
         animation: raining infinite;
@@ -34,7 +34,7 @@
     }
 
     .raindrop:nth-child(3n + 1) {
-        background: linear-gradient(transparent, rgba(124, 160, 203, 0.581));
+        background: linear-gradient(transparent, #8892a359);
         z-index: -60;
     }
     

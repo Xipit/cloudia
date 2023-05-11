@@ -1,7 +1,12 @@
 <script lang="ts">  
+	import { browser } from "$app/environment";
+	import RainDrop from "./raindrop.svelte";
+
     import layer1 from '$lib/assets/svg/background/layer1.svg';
 	import layer2 from '$lib/assets/svg/background/layer2.svg';
 	import layer3 from '$lib/assets/svg/background/layer3.svg';
+
+	const amount = browser ? window.innerWidth / 5 : 0;
 </script>
 
 <!--background cloud layers-->
@@ -9,7 +14,12 @@
 	<img src={layer1} class="clouds" id="layer1" alt="moving clouds">
 	<img src={layer2} class="clouds" id="layer2" alt="moving clouds">
 	<img src={layer3} class="clouds" id="layer3" alt="moving clouds">
-	<div class="lightning"><p>H</p></div>
+	<div class="lightning"></div>
+</div>
+<div class="rain-container" >
+	{#each { length: amount } as _, i}
+        <RainDrop />
+    {/each} 
 </div>
 	
 
@@ -60,7 +70,7 @@
 		right: 0px;
 		width: 3000px;
 		height: 3000px;
-		background: white;
+		background: rgba(255, 255, 255, 0.3);
 		opacity: 0;
 		animation: lightning 4s linear infinite;
 		z-index: -120;

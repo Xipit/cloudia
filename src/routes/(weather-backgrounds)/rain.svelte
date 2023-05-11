@@ -9,7 +9,7 @@
     const amount = browser ? window.innerWidth / 5 : 0;
 </script>
 
-<div class="rain-container" > 
+<div class="rain-container">
     <div class="background-images">
         <img src={layer1} class="clouds" id="layer1" alt="moving clouds">
         <img src={layer2} class="clouds" id="layer2" alt="moving clouds">
