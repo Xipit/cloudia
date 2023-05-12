@@ -60,19 +60,20 @@
 			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
 			<div class="macro-buttons">
 				<button
+				disabled={!weatherData.temp}
 					on:click={() => {weather.resetData();}}
 				>
 					Ort zurücksetzen
 				</button>
 
 				<button 
-					disabled={daysInToTheFuture == 0}
+					disabled={!weatherData.temp || daysInToTheFuture == 0}
 					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
 				>
 					Tag vorher
 				</button>
 				<button 
-					disabled={daysInToTheFuture == 2}
+					disabled={!weatherData.temp || daysInToTheFuture == 2}
 					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
 				>
 					Tag danach
