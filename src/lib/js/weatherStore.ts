@@ -130,7 +130,7 @@ function createWeather() {
         });
     }
 
-    function resetURLParamsWithoutRedload () {
+    function resetURLParamsWithoutReload () {
         replaceStateWithSearchParam({
             daysInToTheFuture: '',
             location: '',
@@ -146,7 +146,7 @@ function createWeather() {
             nextHoursWeatherData: notFetchedError,
             nextDaysWeatherData: notFetchedError,
         })
-        resetURLParamsWithoutRedload();
+        resetURLParamsWithoutReload();
 
         update(value => value + 1);
     }
