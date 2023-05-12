@@ -15,6 +15,8 @@
 
 		<input type="submit" value="Register" />
 	</form>
+
+	<a href="/login">Login</a>
 </main>
 
 <style lang="scss">

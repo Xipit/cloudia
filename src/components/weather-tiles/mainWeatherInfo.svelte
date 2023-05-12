@@ -3,6 +3,7 @@
 
     export let weatherData: any;
     export let settings: any;
+    export let daysInToTheFuture:number;
 </script>
 
 
@@ -13,8 +14,21 @@
         <p>{data.error.message}</p>
     {:else}
         <div class="main-info">
-            <div class="temperature">{applySettingToTemp(settings, data.temp)}</div>
-            <div class="location">{data.location.name}</div>
+            <div class="temperature">
+                {#if daysInToTheFuture == 0}
+                    {applySettingToTemp(settings, data.temp)}
+                {:else if daysInToTheFuture == 1}
+                    Morgen 
+                {:else}
+                    Übermorgen
+                {/if}
+            </div>
+            <div class="location">
+                {daysInToTheFuture > 0
+                    ? data.location.name + " (Lokale Zeit)"
+                    : data.location.name
+                }
+            </div>
         </div>
     {/if}		
 {:catch error}

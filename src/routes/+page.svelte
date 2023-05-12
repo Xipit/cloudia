@@ -19,6 +19,8 @@
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
+
+	let daysInToTheFuture:number  = data.daysInToTheFuture;
 	
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
@@ -27,7 +29,8 @@
 		nextDaysWeatherData 	= weatherDataObject.nextDaysWeatherData;
 	
 		visiblePlanetsData 		= weather.getVisiblePlanets();
-		//console.log(visiblePlanetsData.length ?? 'No array');
+
+		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -53,13 +56,35 @@
 
 
     <section>		
-        <MainWeatherInfo bind:weatherData bind:settings/>
+		<div class="main-wrapper">
+			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
+			<div class="macro-buttons">
+				<button
+					on:click={() => {weather.resetData();}}
+				>
+					Ort zurücksetzen
+				</button>
+
+				<button 
+					disabled={daysInToTheFuture == 0}
+					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
+				>
+					Tag vorher
+				</button>
+				<button 
+					disabled={daysInToTheFuture == 2}
+					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
+				>
+					Tag danach
+				</button>
+			</div>
+		</div>
+
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:settings/>
-		<Apod />
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
+		<Apod bind:daysInToTheFuture/>
 
-
-	<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
 		{#await nextDaysWeatherData}
 			<p>checke Wetter für die nächsten Tage</p>
 		{:then data} 
@@ -94,6 +119,23 @@
 
 		&:hover, &:active, &:focus{
 			background-color: blanchedalmond;
+		}
+	}
+
+	.main-wrapper{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+
+		.button {
+			font-size: 1.3em;
+			background-color: azure;		
+			padding: 0.3em;
+
+			&:hover, &:active, &:focus{
+				background-color: blanchedalmond;
+			}
 		}
 	}
 

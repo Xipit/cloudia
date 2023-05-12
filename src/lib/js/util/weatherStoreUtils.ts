@@ -1,4 +1,5 @@
-import { writable, type Writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
+import { replaceStateWithSearchParam } from "./url";
 
 const cloudList = [
     'Cloudy',
@@ -33,7 +34,8 @@ export enum GeneralWeatherCondition {
     rain    = "rain",
     snow    = "snow",
     storm   = "storm",
-    sun     = "sun"
+    sun     = "sun",
+    undefined = "undefined"
 }
 
 export function generaliseWeatherCondition (weatherCondition:string):GeneralWeatherCondition {
@@ -78,4 +80,22 @@ export function createGeneralisedWeatherCondition(initialValue:GeneralWeatherCon
         },
         update: update
     }
+}
+
+export function createDaysInToTheFuture(initialValue:number):Writable<number> {
+    const { subscribe, set, update } = writable(initialValue);
+
+    return{
+        subscribe,
+        set: (value:number) => {
+            console.log(value);
+            set(clampDaysInToTheFuture(value));   // clamp between 0 and 2  -> weatherAPI only sends us 3 days
+        },
+        update: update
+    }
+}
+
+export function clampDaysInToTheFuture(daysIntoTheFuture:number): number{
+    console.log("clamped to" + (Math.min(Math.max(daysIntoTheFuture, 0), 2)));
+    return (Math.min(Math.max(daysIntoTheFuture, 0), 2));
 }
