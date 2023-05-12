@@ -58,7 +58,13 @@
     <section>		
 		<div class="main-wrapper">
 			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-			<div class="day-change-buttons">
+			<div class="macro-buttons">
+				<button
+					on:click={() => {weather.resetData();}}
+				>
+					Ort zurücksetzen
+				</button>
+
 				<button 
 					disabled={daysInToTheFuture == 0}
 					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}

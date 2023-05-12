@@ -147,12 +147,15 @@ function createWeather() {
             nextDaysWeatherData: notFetchedError,
         })
         resetURLParamsWithoutRedload();
+
+        update(value => value + 1);
     }
 
     return {
         subscribe,
         set: setLocation,
         setDaysInToTheFuture,
+        resetData,
         getLocation: () => {
             return get(location);
         },
