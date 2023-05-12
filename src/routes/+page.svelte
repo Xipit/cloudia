@@ -56,13 +56,29 @@
 
 
     <section>		
-        <MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
+		<div class="main-wrapper">
+			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
+			<div class="day-change-buttons">
+				<button 
+					disabled={daysInToTheFuture == 0}
+					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
+				>
+					Tag vorher
+				</button>
+				<button 
+					disabled={daysInToTheFuture == 2}
+					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
+				>
+					Tag danach
+				</button>
+			</div>
+		</div>
+
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
 		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 		<Apod bind:daysInToTheFuture/>
 
-
-	<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
 		{#await nextDaysWeatherData}
 			<p>checke Wetter für die nächsten Tage</p>
 		{:then data} 
@@ -97,6 +113,23 @@
 
 		&:hover, &:active, &:focus{
 			background-color: blanchedalmond;
+		}
+	}
+
+	.main-wrapper{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+
+		.button {
+			font-size: 1.3em;
+			background-color: azure;		
+			padding: 0.3em;
+
+			&:hover, &:active, &:focus{
+				background-color: blanchedalmond;
+			}
 		}
 	}
 

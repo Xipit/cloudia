@@ -1,7 +1,6 @@
-import { browser } from "$app/environment";
 import { get, writable, type Writable } from "svelte/store";
 import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "./api/weatherApi";
-import { clampDaysInToTheFuture, createDaysInToTheFuture, createGeneralisedWeatherCondition, generaliseWeatherCondition, type GeneralWeatherCondition } from "./util/weatherStoreUtils";
+import { clampDaysInToTheFuture, createDaysInToTheFuture, createGeneralisedWeatherCondition, generaliseWeatherCondition, GeneralWeatherCondition,  } from "./util/weatherStoreUtils";
 import { fromLocalStorage, toLocalStorage } from "./util/localStorageWrapper";
 import { replaceStateWithSearchParam } from "./util/url";
 import { getVisiblePlanetsData } from "./api/visiblePlanetsAPI";
@@ -49,6 +48,10 @@ function createWeather() {
         , 0);
     const daysInToTheFuture = createDaysInToTheFuture(daysInToTheFutureInitialValue);
     toLocalStorage(daysInToTheFuture, 'daysInToTheFuture');
+
+    async function setDaysInToTheFuture(newDaysInToTheFuture:number){
+        setLocation(get(location), newDaysInToTheFuture);
+    }
 
     async function setLocation (newLocation:string, newDaysInToTheFuture:number = get(daysInToTheFuture)) {
         if(newLocation == ""){
@@ -127,9 +130,29 @@ function createWeather() {
         });
     }
 
+    function resetURLParamsWithoutRedload () {
+        replaceStateWithSearchParam({
+            daysInToTheFuture: '',
+            location: '',
+        })
+    }
+
+    function resetData() {
+        location.set("");
+        generalisedWeatherCondition.set(GeneralWeatherCondition.undefined);
+        daysInToTheFuture.set(0);
+        weatherObject.set({
+            weatherData: notFetchedError,
+            nextHoursWeatherData: notFetchedError,
+            nextDaysWeatherData: notFetchedError,
+        })
+        resetURLParamsWithoutRedload();
+    }
+
     return {
         subscribe,
         set: setLocation,
+        setDaysInToTheFuture,
         getLocation: () => {
             return get(location);
         },

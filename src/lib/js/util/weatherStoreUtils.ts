@@ -34,7 +34,8 @@ export enum GeneralWeatherCondition {
     rain    = "rain",
     snow    = "snow",
     storm   = "storm",
-    sun     = "sun"
+    sun     = "sun",
+    undefined = "undefined"
 }
 
 export function generaliseWeatherCondition (weatherCondition:string):GeneralWeatherCondition {

@@ -22,11 +22,13 @@
                 {:else}
                     Übermorgen
                 {/if}
-                </div>
-            <div class="location">{daysInToTheFuture > 0
-                ? data.location.name + " (Lokale Zeit)"
-                : data.location.name
-            }</div>
+            </div>
+            <div class="location">
+                {daysInToTheFuture > 0
+                    ? data.location.name + " (Lokale Zeit)"
+                    : data.location.name
+                }
+            </div>
         </div>
     {/if}		
 {:catch error}
