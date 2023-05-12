@@ -18,8 +18,7 @@
 
         z-index: -100;
 
-        filter: invert(75%) sepia(99%) saturate(323%) hue-rotate(342deg) brightness(104%) contrast(101%)
-        drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+        filter: drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
     }
     #sunbeams {
         position: fixed;
@@ -29,8 +28,7 @@
 
         z-index: -100;
 
-        filter: invert(75%) sepia(99%) saturate(323%) hue-rotate(342deg) brightness(104%) contrast(101%)
-        drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
+        filter: drop-shadow(6px 10px 3px rgb(0 0 0 / 0.4));
 
         animation: rotateBeams infinite 5s ease-in-out;
         transform-origin: center center;
