@@ -31,11 +31,17 @@ const forecastDays = {
 			k: "",
 			f: ""
 		},
+		avgTemp: {
+			c: "",
+			k: "",
+			f: ""
+		},
 		sunrise: "",
 		sunset: "",
 		moonrise: "",
 		moonset: "",
 		conditionText: "",
+		avgHumidity: "",
 	}]
 }
 
@@ -233,11 +239,17 @@ export async function getNextDaysWeatherData(location: String) {
 						c: forecastDay.day.mintemp_c.toString(),
 						k: (forecastDay.day.mintemp_c + 273).toString(),
 					},
+					avgTemp: {
+						f: forecastDay.day.avgtemp_f.toString(),
+						c: forecastDay.day.avgtemp_c.toString(),
+						k: (forecastDay.day.avgtemp_c + 273).toString(),
+					},
 					sunrise: forecastDay.astro.sunrise.toString(),
 					sunset: forecastDay.astro.sunset.toString(),
 					moonrise: forecastDay.astro.moonrise.toString(),
 					moonset: forecastDay.astro.moonset.toString(),
-					conditionText: forecastDay.day.condition.text.toString()
+					conditionText: forecastDay.day.condition.text.toString(),
+					avgHumidity: forecastDay.day.avghumidity.toString(),
 				})
 			}
 		}

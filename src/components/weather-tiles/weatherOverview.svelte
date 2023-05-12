@@ -16,13 +16,14 @@
     {#await weatherData}
         <p>hole Wetterinformationen...</p>
     {:then data}
+        <!-- svelte-ignore empty-block -->
         {#if data.error}
             <p>{data.error.message}</p>
+        {:else if daysInToTheFuture > 0}
         {:else}
-        
             <div class="feelslike tile">
                 <p class="description">gefühlte Temperatur</p>
-                <span class="value">	{applySettingToTemp(settings, data.feelslike)} </span>
+                <span class="value">{applySettingToTemp(settings, data.feelslike)} </span>
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
@@ -32,7 +33,6 @@
                 <p class="description">Luftfeuchtig&shykeit</p>
                 <p class="value">	{data.current.humidity} % </p> <!-- TODO daysintothefuture-->
             </div>
-
         {/if}		
     {:catch error}
         <p style="color: red">{error.message}</p>
@@ -46,6 +46,23 @@
         {#if data.error}
             <p>{data.error.message}</p>
         {:else}
+
+            {#if daysInToTheFuture > 0}
+                <div class="feelslike tile">
+                    <p class="description">Temperatur (Durchschnitt)</p>
+                    <span class="value">{applySettingToTemp(settings, data.day[daysInToTheFuture].avgTemp)} </span>
+                </div>
+                <div class="condition tile">
+                    <p class="description">Wetter&shykondition (Durchschnitt)</p>
+                    <p class="value"> {data.day[daysInToTheFuture].conditionText} </p> <!-- TODO daysintothefuture-->
+                </div>
+                <div class="humidity tile">
+                    <p class="description">Luftfeuchtig&shykeit (Durchschnitt)</p>
+                    <p class="value">	{data.day[daysInToTheFuture].avgHumidity} % </p> <!-- TODO daysintothefuture-->
+                </div>
+
+            {/if}
+
             <div class="temp-range tile">
                 <p class="description">
                     Max: 
@@ -87,6 +104,11 @@
     {:then visiblePlanetsData} 
         {#if visiblePlanetsData.error}
             <p>{visiblePlanetsData.error.message}</p>
+        {:else if daysInToTheFuture > 0}
+            <div class="visiblePlanet tile">
+                <p class="description">sichtbare Planeten:</p>
+                <p class="value"> Keine Vorschau möglich. </p>
+            </div>
         {:else}
 
             <div class="visiblePlanet tile">

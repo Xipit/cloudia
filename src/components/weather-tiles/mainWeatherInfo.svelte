@@ -15,10 +15,13 @@
     {:else}
         <div class="main-info">
             <div class="temperature">
-                {daysInToTheFuture > 0
-                    ? "Morgen"
-                    : applySettingToTemp(settings, data.temp)
-                }
+                {#if daysInToTheFuture == 0}
+                    {applySettingToTemp(settings, data.temp)}
+                {:else if daysInToTheFuture == 1}
+                    Morgen 
+                {:else}
+                    Übermorgen
+                {/if}
                 </div>
             <div class="location">{daysInToTheFuture > 0
                 ? data.location.name + " (Lokale Zeit)"

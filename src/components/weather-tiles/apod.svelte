@@ -1,6 +1,8 @@
  <script lang="ts">
 	import { getAPOD } from "$lib/js/api/apodApi";
 
+    export let daysInToTheFuture:number;
+
 	// APOD - Astronomy Picture of the Day
 	let apodData = getAPOD();
  </script>
@@ -12,7 +14,11 @@
 {:then data} 
 
     <div class="tile apod">
-        <p class="title">Astronomy Picture of the Day</p>
+        {#if daysInToTheFuture == 0}
+            <p class="title">Astronomy Picture of the Day</p>
+        {:else}
+            <p class="title">Astronomy Picture of the Day ({data.date})</p>
+        {/if}
         <!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
         <!-- svelte-ignore a11y-img-redundant-alt -->
         <img src={data.url} alt="APOD - Astronomy Picture of the Day">
