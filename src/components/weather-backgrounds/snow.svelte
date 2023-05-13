@@ -21,7 +21,7 @@
     <img src={snowflakessmall} class="snowflake snowflake-small animation-small-delay left-side-small" alt="snowflakes">
 </div>
 
-<style>
+<style lang="scss">
     @import './cloud-animations.scss';
 
     /*cloud layers*/
@@ -66,7 +66,7 @@
     .snowflake {
         position: fixed;
         right: 0px;
-        top: -800px;
+        top: -1000px;
         
     }
     .snowflake-big {
