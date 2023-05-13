@@ -6,7 +6,14 @@
     import { page } from '$app/stores';
     import { navigating } from '$app/stores'
     import { goto, } from "$app/navigation";
-  
+    import person from '$lib/assets/svg/menu/person.svg';
+    import search from '$lib/assets/svg/menu/search.svg';
+    import star from '$lib/assets/svg/menu/star.svg';
+    import logout from '$lib/assets/svg/menu/logout.svg';
+    import login from '$lib/assets/svg/menu/login.svg';
+    import register from '$lib/assets/svg/menu/register.svg';
+    import { clickOutside } from "$lib/js/clickOutside";    
+
     export let open:boolean;
     export let isLoggedIn:boolean;
     export let savedLocations: {[x: string]: any;}[] | null;
@@ -24,7 +31,13 @@
         errorMessage = "";
 
 		await goto(`/?location=${location}`);
+
+        location = "";
 	}
+
+    function closeMenu(){
+        open = false;
+    }
 
 </script>
 <!--transition:fly={{ x:'-100%', duration: 750, easing: quadOut }}-->
@@ -38,11 +51,11 @@
   </div>
   
   {#if open}
-    <div class="burger-menu" >
+    <div class="burger-menu" > <!-- use:clickOutside on:click_outside={closeMenu()}-->
         {#if isLoggedIn}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div class="secondary-button account-button" on:click|preventDefault="{() => goto(`/account`)}">
-                <img src="src\lib\assets\svg\menu\person.svg" alt="person" class="person-icon">
+            <div class="secondary-button account-button" on:click|preventDefault="{() => goto(`/account`)}" >
+                <img src={person} alt="person" class="person-icon">
                 <p>langemail@example.com</p>
             </div>
             
@@ -52,7 +65,7 @@
                         {#each savedLocations as location}
                             <!-- svelte-ignore a11y-click-events-have-key-events -->
                             <div class="savedLocations" on:click|preventDefault="{() => goto(`/?location=${location.location_name}`)}">
-                                <img src="src\lib\assets\svg\menu\star.svg" alt="star" class="star-icon">
+                                <img src={star} alt="star" class="star-icon">
                                 <!--a href="/?location={location.location_name}" data-sveltekit-preload-data="off">{location.location_name}</a-->
                                 <p>{location.location_name}</p>
                             </div>
@@ -68,13 +81,13 @@
                 <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
                     <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
                     <button type="submit" class="search-button">
-                        <img src="src\lib\assets\svg\menu\search.svg" alt="search" class="search-icon">
+                        <img src={search} alt="search">
                     </button>
                 </form>
 
                 <form action="/logout" method="POST">
                     <button type="submit" class="secondary-button">
-                        <img src="src\lib\assets\svg\menu\logout.svg" alt="person" class="person-icon">
+                        <img src={logout} alt="person" class="person-icon">
                         <p>Logout</p>
                     </button>
                 </form>
@@ -84,13 +97,22 @@
                 <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
                     <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
                     <button type="submit" class="search-button">
-                        <img src="src\lib\assets\svg\menu\search.svg" alt="search" class="search-icon">
+                        <img src={search} alt="search">
                     </button>
                 </form>
                 
                 <p class="search-error-message">{errorMessage}</p>
-                <input type="button" value="login" on:click={() => goto('/login')} class="secondary-button">
-                <input type="button" value="register" on:click={() => goto('/register')} class="secondary-button">
+
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="secondary-button" on:click|preventDefault="{() => goto(`/login`)}">
+                    <img src={login} alt="login">
+                    <p>Login</p>
+                </div>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="secondary-button" on:click|preventDefault="{() => goto(`/register`)}">
+                    <img src={register} alt="login">
+                    <p>Register</p>
+                </div>
             </div>
 
             
@@ -117,7 +139,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        height: 90vh;
+        height: 100dvh;
     }
 
     .burger-menu-top {
@@ -156,14 +178,11 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin: 1em;
+        margin: 0em;
 
         background: #FFFFFF;
         border: 0;
         border-radius: 50px;
-
-        display: flex;
-        flex-direction: row;
     }
 
     .search-error-message {
@@ -173,7 +192,7 @@
     }
 
     .search-input {
-        flex-grow: 1;
+        flex-grow: 2;
         background-color: transparent;
         border: 0;
         border-radius: 50px 0px 0px 50px;
@@ -256,7 +275,7 @@
 	      background: linear-gradient(0deg, rgba(128, 217, 207, 0.1), rgba(128, 217, 207, 0.1)), #000000;
         box-shadow: 5px 0px 4px rgba(0, 0, 0, 0.25);
 	      padding: 1em;
-	      height: 100vh;
+	      height: 100dvh;
 	      border-left: 0.063em solid rgba(0, 0, 0, .1);
         z-index: -1;
     }
