@@ -1,5 +1,9 @@
 <script lang="ts">
-	import type { LayoutData, LayoutServerData, PageData } from "./$types";
+	import type { PageData } from "./$types";
+
+	import nextDay from '$lib/assets/svg/homepage/nextDay.svg';
+	import previousDay from '$lib/assets/svg/homepage/previousDay.svg';
+	import resetLocation from '$lib/assets/svg/homepage/resetLocation.svg';
 
 	import { weather } from "$lib/js/weatherStore";
 	import { onDestroy } from "svelte";
@@ -60,23 +64,26 @@
 			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
 			<div class="macro-buttons">
 				<button
-				disabled={!weatherData.temp}
+					class="tile"
+					disabled={!weatherData.temp}
 					on:click={() => {weather.resetData();}}
 				>
-					Ort zurücksetzen
+					<img src={resetLocation} id="resetLocation" alt="Ort zurücksetzen">
 				</button>
 
 				<button 
+					class="tile"
 					disabled={!weatherData.temp || daysInToTheFuture == 0}
 					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
 				>
-					Tag vorher
+				<img src={previousDay} id="previousDay" alt="Tag vorher">
 				</button>
 				<button 
+					class="tile"
 					disabled={!weatherData.temp || daysInToTheFuture == 2}
 					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
 				>
-					Tag danach
+					<img src={nextDay} id="nextDay" alt="Tag danach">
 				</button>
 			</div>
 		</div>
@@ -113,6 +120,9 @@
 
 
 <style lang="scss">
+	@import '../components/weather-tiles/weather-tiles.scss';
+
+
 	/* The following lines are just temporary */
 	.button {
 		background-color: azure;		
@@ -129,6 +139,37 @@
 		justify-content: space-between;
 		align-items: flex-end;
 
+		.main-info {
+			flex: 2;
+		}
+
+		.macro-buttons {
+			flex: 1;
+
+			justify-content: flex-end;
+			display: flex;
+			flex-direction: column;
+			align-content: flex-end;
+			flex-wrap: wrap;
+			align-items: stretch;
+			gap: var(--spacing-sm);
+
+			button {
+				width: 40px;
+				height: 40px;
+
+				align-items: center;
+				justify-content: center;
+				display: inline-flex;
+				padding: var(--spacing-sm);
+				border: 0;
+
+				&:disabled {
+					opacity: 0.4;
+				}
+			}
+		}
+
 		.button {
 			font-size: 1.3em;
 			background-color: azure;		
@@ -139,6 +180,12 @@
 			}
 		}
 	}
+
+	@media only screen and (min-width: 450px) {
+        .main-wrapper .macro-buttons {
+			flex-direction: row;
+		}
+    }
 
 	section {
 		margin: 0.5em 0;
