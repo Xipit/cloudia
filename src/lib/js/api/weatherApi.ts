@@ -1,18 +1,19 @@
 import { PUBLIC_API_KEY_WEATHER } from "$env/static/public";
-import { getIconURL } from "$lib/js/weatherIcons";
+import { getIconURL } from "$lib/js/util/weatherIconUtils";
 import { Cache } from './cache';
 
 const cache = new Cache();
 const BASE_URL = "http://api.weatherapi.com/v1/";
 
-export let latitude: any = null;
-export let longitude: any = null;
-
 const forecastHours = {
 	hour: [{
 		date: "",
 		time: "",
-		temp_c: "",
+		temp: {
+			c: "",
+			k: "",
+			f: ""
+		},
 		conditionIconURL: "",
 	}]
 }
@@ -20,12 +21,27 @@ const forecastHours = {
 const forecastDays = {
 	day: [{
 		date: "",
-		maxtemp_c: "",
-		mintemp_c: "",
+		maxTemp: {
+			c: "",
+			k: "",
+			f: ""
+		},
+		minTemp: {
+			c: "",
+			k: "",
+			f: ""
+		},
+		avgTemp: {
+			c: "",
+			k: "",
+			f: ""
+		},
 		sunrise: "",
 		sunset: "",
 		moonrise: "",
 		moonset: "",
+		conditionText: "",
+		avgHumidity: "",
 	}]
 }
 
@@ -56,14 +72,24 @@ export async function getCurrentWeatherData(location: String){
 	const data = await API_REQUEST_CURRENT(location);
 
 	if (data.error) {
-		latitude = null;
-		longitude = null;
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
 		return data;
 	} else {
-		latitude = data.location.lat;
-		longitude = data.location.lon;
-		return data;
+		return {
+			...data,
+			// append temperature data to pure API data
+			// is necessary to switch temperature unit
+			temp: {
+				f: data.current.temp_f.toString(),
+				c: data.current.temp_c.toString(),
+				k: (data.current.temp_c + 273).toString(),
+			},
+			feelslike: {
+				f: data.current.feelslike_f.toString(),
+				c: data.current.feelslike_c.toString(),
+				k: (data.current.feelslike_c + 273).toString()
+			}
+		};
 	}
 }
 
@@ -103,7 +129,7 @@ async function getForecastWeatherData(location: String){
 	return data;
 }
 
-export async function getNextHoursWeatherData(location: String){
+export async function getNextHoursWeatherData(location: String, daysInToTheFuture:number = 0){
 	const data = await getForecastWeatherData(location);
 
 	if (data.error){		
@@ -112,41 +138,78 @@ export async function getNextHoursWeatherData(location: String){
 		// remove old items from list
 		forecastHours.hour.splice(0);
 
-		let timestampNow = Date.now();
-		let dateNow = new Date(timestampNow);
+		if(daysInToTheFuture > 0){
+			const startHour = 6;
+			const hourIncrement = 3;
+			
+			// Pushes the data for the next i-Hours into forecastHour.hour
+			for (let i = 0; i < 5; i++) {
 
-		// This is used to get to know which is the next hour for the forecastHours.hour array
-		let nextHourDate = new Date(dateNow.getFullYear(), dateNow.getMonth(), dateNow.getDate(), dateNow.getHours())
+				const forecastDay = data.forecast.forecastday[daysInToTheFuture];
 
-		let dayIndex = 0;
+				const forecastHour = forecastDay.hour[startHour + (i * hourIncrement)]
 
-		// Pushes the data for the next i-Hours into forecastHour.hour
-		for (let i = 0; i < 5; i++) {
-			nextHourDate.setHours(nextHourDate.getHours() + 1);
+				const formattedDateString = getFormattedDate(new Date(forecastDay.date_epoch * 1000));
 
-			let formattedDateString = getFormattedDate(nextHourDate);
-
-			// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
-			if (data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
-				dayIndex ++;
+				pushHour(forecastHour, forecastDay, formattedDateString, startHour + (i * hourIncrement)) 
 			}
+		}else {
+			const hourIncrement = 1
 
-			let forecastday = data.forecast.forecastday[dayIndex];
-			let forecastHour = forecastday.hour[nextHourDate.getHours()];
+			// This is used to get to know which is the next hour for the forecastHours.hour array
+			const startHour = getCurrentStart();
 
-			let time = new Date(forecastHour.time_epoch * 1000);
-			let timeString = time.getHours().toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');
-			let iconURL = getIconURL(forecastHour.condition.code, forecastday.astro.sunrise, forecastday.astro.sunset, timeString);
+			let dayIndex = 0;
+			
+			// Pushes the data for the next i-Hours into forecastHour.hour
+			for (let i = 0; i < 5; i++) {
+				startHour.setHours(startHour.getHours() + hourIncrement);
+				const formattedDateString = getFormattedDate(startHour);
 
-			forecastHours.hour.push({
-				date: formattedDateString,
-				time: timeString,
-				temp_c: forecastHour.temp_c.toString(),
-				conditionIconURL: iconURL, 
-			})
-		}
+				// if the date changes (if the nextHourDate changes from 11pm to 12am), the next element of the forecastday array is to be used from the API response
+				if (daysInToTheFuture < 1 && data.forecast.forecastday[dayIndex].date.toString() != formattedDateString) {
+					dayIndex ++;
+				}
+
+				const forecastDay = data.forecast.forecastday[dayIndex];
+				const forecastHour = forecastDay.hour[startHour.getHours()];
+
+				 pushHour(forecastHour, forecastDay, formattedDateString, null);
+			}
+		}	
+
 		return forecastHours;
 	}
+}
+
+function pushHour(hour:any, day:any, formattedDateString:string, overwriteHour: number|null){
+	const time = 		new Date(hour.time_epoch * 1000); 								
+	const timeString = (overwriteHour ?? time.getHours()).toString().padStart(2, '0') + ":" + time.getMinutes().toString().padStart(2, '0');						
+	const iconURL = 	getIconURL(hour.condition.code, day.astro.sunrise, day.astro.sunset, timeString);
+
+	forecastHours.hour.push({
+		date: formattedDateString,
+		time: timeString,
+		temp: {
+			f: hour.temp_f.toString(),
+			c: hour.temp_c.toString(),
+			k: (hour.temp_c + 273).toString()
+		},
+		conditionIconURL: iconURL, 
+	})
+}
+
+function getCurrentStart(): Date{
+	const timestampNow = Date.now();
+	let dateReference = new Date(timestampNow);
+
+	return(new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours()));
+}
+
+function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number): Date{
+	const dayInTheFuture = new Date(forecast.forecastday[daysInToTheFuture].hour[0].time_epoch * 1000);
+
+	return dayInTheFuture;
 }
 
 export async function getNextDaysWeatherData(location: String) {
@@ -166,12 +229,27 @@ export async function getNextDaysWeatherData(location: String) {
 			if (forecastDay != null) {
 				forecastDays.day.push({
 					date: forecastDay.date.toString(),
-					maxtemp_c: forecastDay.day.maxtemp_c.toString(),
-					mintemp_c: forecastDay.day.mintemp_c.toString(),
+					maxTemp: {
+						f: forecastDay.day.maxtemp_f,
+						c: forecastDay.day.maxtemp_c.toString(),
+						k: (forecastDay.day.maxtemp_c + 273).toString()
+					},
+					minTemp: {
+						f: forecastDay.day.mintemp_f.toString(),
+						c: forecastDay.day.mintemp_c.toString(),
+						k: (forecastDay.day.mintemp_c + 273).toString(),
+					},
+					avgTemp: {
+						f: forecastDay.day.avgtemp_f.toString(),
+						c: forecastDay.day.avgtemp_c.toString(),
+						k: (forecastDay.day.avgtemp_c + 273).toString(),
+					},
 					sunrise: forecastDay.astro.sunrise.toString(),
 					sunset: forecastDay.astro.sunset.toString(),
 					moonrise: forecastDay.astro.moonrise.toString(),
 					moonset: forecastDay.astro.moonset.toString(),
+					conditionText: forecastDay.day.condition.text.toString(),
+					avgHumidity: forecastDay.day.avghumidity.toString(),
 				})
 			}
 		}

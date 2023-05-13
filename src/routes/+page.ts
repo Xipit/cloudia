@@ -1,35 +1,43 @@
 import { page } from "$app/stores";
-import { setLocationParameter, getLatestLocation, handleLatestLocation } from "$lib/js/latestLocationUtil";
+//import { setLocationParameter, getLatestLocation, handleLatestLocation } from "$lib/js/latestLocationUtil";
 
-import type { Actions } from "@sveltejs/kit";
-import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "$lib/js/api/weatherApi";
 import type { PageLoad } from "./$types";
+import { weather } from "$lib/js/weatherStore";
+import { browser } from "$app/environment";
 
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, data }) => {
 
-    const location:string = (() => {
-        const locationParam = url.searchParams.get('location')?.toString();
-        if(locationParam && locationParam != ""){
-            return locationParam;
-        } else {
-            // read latest location from localstorage and set URL parameter
-            const latestLocation = getLatestLocation();
-            setLocationParameter(latestLocation);
-            return latestLocation
-        }
-    })();
+    const locationParam = weather.getLocationURLParam(url);
+    const daysInToTheFutureParam = weather.getDaysInToTheFutureURLParam(url);
 
+    if(browser){
+        const location = locationParam ?? weather.getLocation();
+        const daysInToTheFuture = daysInToTheFutureParam ?? weather.getDaysInToTheFuture();
 
-    let weatherData = await getCurrentWeatherData(location);
-	let nextHoursWeatherData = getNextHoursWeatherData(location);
-    let nextDaysWeatherData = getNextDaysWeatherData(location);
+        console.log("pageload: get " +  weather.getDaysInToTheFuture());
+        console.log("pageload: param" +  daysInToTheFuture);
+        console.log("pageload: " +  daysInToTheFuture);
 
-    // used to style pages conditionally by weather condition
-    if(!weatherData.error && location != ""){
-        handleLatestLocation(location, weatherData.current.condition.text);
+        weather.set(location, daysInToTheFuture);
     }
 
-    return { weatherData, nextHoursWeatherData, nextDaysWeatherData, location };
+    const { 
+        weatherData, 
+        nextHoursWeatherData, 
+        nextDaysWeatherData 
+    } = weather.getWeather();
+
+    const visiblePlanetsData:any = weather.getVisiblePlanets();
+
+    const daysInToTheFuture:number = weather.getDaysInToTheFuture();
+
+    return { 
+        weatherData, 
+        nextHoursWeatherData, 
+        nextDaysWeatherData, 
+        visiblePlanetsData, 
+        daysInToTheFuture
+    };
 
 }) satisfies PageLoad;

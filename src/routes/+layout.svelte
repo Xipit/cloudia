@@ -6,22 +6,32 @@
 	import type { LayoutData } from './$types';
 
 	// Import different Weather Backgrounds
-	import Storm from './(weather-backgrounds)/storm.svelte';
-	import Cloud from './(weather-backgrounds)/cloud.svelte';
-	import Sun from './(weather-backgrounds)/sun.svelte';
-	import Snow from './(weather-backgrounds)/snow.svelte';
-	import Rain from './(weather-backgrounds)/rain.svelte';
-	import { generalWeatherCondition, getGeneralisedWeatherCondition } from '$lib/js/latestLocationUtil';
-	import { get } from 'svelte/store';
-	import { latestWeatherCondition } from '$lib/stores';
+	import Storm from '../components/weather-backgrounds/storm.svelte';
+	import Rain from '../components/weather-backgrounds/rain.svelte';
+	import Snow from '../components/weather-backgrounds/snow.svelte';
+	import Cloud from '../components/weather-backgrounds/cloud.svelte';
+	import Sun from '../components/weather-backgrounds/sun.svelte';
+
+	import { weather } from '$lib/js/weatherStore';
+
+	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';
+	import { redirect } from '@sveltejs/kit';
+
+
 
 	// AUTHENTICATION 
 	export let data: LayoutData;
-	$: ({ supabase, session } = data);
+	$: ({ savedLocations, supabase, session } = data);
+
 	onMount(() => {
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((event, _session) => {
+
+			if(event === "PASSWORD_RECOVERY"){
+				throw redirect(302, '/login/change-password?token=' + session?.access_token);
+			}
+
 			console.log('Auth state change detected');
 			invalidate('supabase:auth');
 
@@ -32,41 +42,36 @@
 	let isLoggedIn:boolean = data.session !== null;
 
 	// WEATHER CONDITION
-	let weatherCondition:string;
+	let generalisedWeatherCondition:GeneralWeatherCondition;
 
-	const unsubscribeWeatherCondition = latestWeatherCondition.subscribe(value => {
-		weatherCondition = value;
+	const unsubscribeWeather = weather.subscribe(() => {
+		generalisedWeatherCondition = weather.getGeneralisedWeatherCondition();
 	})
 
-	onDestroy(unsubscribeWeatherCondition);
+	onDestroy(unsubscribeWeather);
 </script>
 
 <!--
 	to display different weather backgrounds add a switch statement
-	that looks current weather condition to determent the right component
+	that looks at current weather condition to determent the right component
 -->
 
-		{#if weatherCondition === generalWeatherCondition.storm}
-			<Storm />
-		{:else if weatherCondition === generalWeatherCondition.rain}
-			<Rain />
-		{:else if weatherCondition === generalWeatherCondition.snow}
-			<Snow />
-		{:else if weatherCondition === generalWeatherCondition.cloud}
-			<Cloud />
-		{:else if weatherCondition === generalWeatherCondition.sun}
-			<Sun />
-		{:else}
-			<Sun />
-		{/if}
-
-<!--
-	TODO: caused performance problems
+{#if generalisedWeatherCondition === GeneralWeatherCondition.storm}
 	<Storm />
--->
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.rain}
+	<Rain />
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.snow}
+	<Snow />
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.cloud}
+	<Cloud />
+{:else if generalisedWeatherCondition === GeneralWeatherCondition.sun}
+	<Sun />
+{:else}
+	<!-- no location selected -->
+{/if}
 
 <div class="app">
-	<Header bind:isLoggedIn={isLoggedIn}/>
+	<Header bind:isLoggedIn={isLoggedIn} bind:savedLocations={savedLocations}/>
 
 	<main>
 		<slot />
@@ -76,12 +81,6 @@
 <style lang="scss">
 	@import '../app.scss';
 
-	:global(html) {
-        background-image: linear-gradient(to top, var(--primary-bg-color), var(--secondary-bg-color));
-        font-family: 'Atkinson Hyperlegible', sans-serif;
-		color: var(--text-color);
-    }
-	
 	.app {
 		display: flex;
 		flex-direction: column;

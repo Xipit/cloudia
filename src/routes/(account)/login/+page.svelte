@@ -2,12 +2,25 @@
 </script>
 
 <main>
-	<h1>Login</h1>
+	<h1 class="headline">Login</h1>
 	<form action="?/login" method="POST" class="auth-form">
-		<label for=""> Email </label>
+
+		<label class= "labelMail" for=""> Email </label>
 		<input type="text" name="email" />
-		<label for=""> Password </label>
+
+
+		<label class= "labelPassword" for=""> Password </label>
 		<input type="password" name="password" />
-		<button type="submit" class="btn btn-primary">Login</button>
+
+
+		<input type="submit" value="Login" />
+
 	</form>
+
+	<a href="/register">Registrieren</a>
+	<a href="/forgot-password">Passwort vergessen</a>
 </main>
+
+<style lang="scss">
+	@import '../accountpage-layout.scss';
+</style>

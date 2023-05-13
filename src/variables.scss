@@ -1,17 +1,17 @@
 
 :root{
     --base: 4px;
-    --spacing-xs: $base;
+    --spacing-xs: var(--base);
     --spacing-sm: calc(2*var(--base));
     --spacing-md: calc(4*var(--base));
     --spacing-lg: calc(8*var(--base));
     --spacing-xl: calc(16*var(--base));
 
     --text-color: white;
-    --primary-bg-color: rgb(45, 45, 45);
-    --secondary-bg-color: black;
+    --primary-bg-color: rgb(9 82 92);
+    --secondary-bg-color: #4bb4e9;
     --primary-accent-color: teal;
-    --secondary-accent-color: goldenrod;
+    --secondary-accent-color: green;
 
     &[data-theme="storm"] {
         --text-color: white;
