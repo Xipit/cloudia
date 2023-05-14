@@ -41,7 +41,6 @@
     }
 
 </script>
-<!--transition:fly={{ x:'-100%', duration: 750, easing: quadOut }}-->
     <div class="icon">
         <Hamburger
             bind:open
@@ -49,7 +48,7 @@
     </div>
 
     {#if open}
-        <div class="burger-menu"> <!-- use:clickOutside on:click_outside={closeMenu()}-->
+        <div class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }}> <!-- use:clickOutside on:click_outside={closeMenu()}-->
             <div class="burger-menu-top">
                 <a class="cloudia" href="/" >cloudia</a>
             </div>
@@ -122,6 +121,7 @@
         position: absolute;
         top: 10px;
         left: 10px;
+        z-index: 10;
     }
 
     .burger-menu {
