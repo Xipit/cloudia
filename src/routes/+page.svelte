@@ -12,10 +12,13 @@
 	import NextHoursWeather from "../components/weather-tiles/nextHoursWeather.svelte";
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 	import Apod from "../components/weather-tiles/apod.svelte";
+	import SearchForm from "../components/searchForm.svelte";
 
     export let data: PageData;
 
 	let { settings } = data;
+	let isLoggedIn:boolean = data.session !== null;
+	$: searchFormOpen = true;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -59,63 +62,69 @@
     </section>
 
 
-    <section>		
-		<div class="main-wrapper">
-			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-			<div class="macro-buttons">
-				<button
-					class="tile"
-					disabled={!weatherData.temp}
-					on:click={() => {weather.resetData();}}
-				>
-					<img src={resetLocation} id="resetLocation" alt="Ort zurücksetzen">
-				</button>
+	{#if searchFormOpen}
+		<section class="search-form">
+			<SearchForm bind:isLoggedIn={isLoggedIn} bind:open={searchFormOpen}/>
+		</section>
+	{:else}
+    	<section>			
+			<div class="main-wrapper">
+				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
+				<div class="macro-buttons">
+					<button
+						class="tile"
+						disabled={!weatherData.temp}
+						on:click={() => {weather.resetData();}}
+					>
+						<img src={resetLocation} id="resetLocation" alt="Ort zurücksetzen">
+					</button>
 
-				<button 
-					class="tile"
-					disabled={!weatherData.temp || daysInToTheFuture == 0}
-					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
-				>
-				<img src={previousDay} id="previousDay" alt="Tag vorher">
-				</button>
-				<button 
-					class="tile"
-					disabled={!weatherData.temp || daysInToTheFuture == 2}
-					on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
-				>
-					<img src={nextDay} id="nextDay" alt="Tag danach">
-				</button>
+					<button 
+						class="tile"
+						disabled={!weatherData.temp || daysInToTheFuture == 0}
+						on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
+					>
+					<img src={previousDay} id="previousDay" alt="Tag vorher">
+					</button>
+					<button 
+						class="tile"
+						disabled={!weatherData.temp || daysInToTheFuture == 2}
+						on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
+					>
+						<img src={nextDay} id="nextDay" alt="Tag danach">
+					</button>
+				</div>
 			</div>
-		</div>
 
-		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
-		<Apod bind:daysInToTheFuture/>
+			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
+			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
+			<Apod bind:daysInToTheFuture/>
 
-		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
-		{#await nextDaysWeatherData}
-			<p>checke Wetter für die nächsten Tage</p>
-		{:then data} 
-			{#if data.error}
-				<p>{data.error.message}</p>
-			{:else}
-				{#each data.day as day}
-					<p>{day.date}</p>
-					<p>- max temp: {day.maxtemp.c}°C</p>
-					<p>- min temp: {day.mintemp.c}°C</p>
-				{/each}
-			{/if}	
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await}-->
-		
+			<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
+			{#await nextDaysWeatherData}
+				<p>checke Wetter für die nächsten Tage</p>
+			{:then data} 
+				{#if data.error}
+					<p>{data.error.message}</p>
+				{:else}
+					{#each data.day as day}
+						<p>{day.date}</p>
+						<p>- max temp: {day.maxtemp.c}°C</p>
+						<p>- min temp: {day.mintemp.c}°C</p>
+					{/each}
+				{/if}	
+			{:catch error}
+				<p style="color: red">{error.message}</p>
+			{/await}-->
+			
 
-		<form on:submit|preventDefault={onLocationSubmit}>
-			<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
-			<button type="submit">Wetterdaten bekommen</button>
-		</form>
-		
-	</section>
+			<form on:submit|preventDefault={onLocationSubmit}>
+				<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
+				<button type="submit">Wetterdaten bekommen</button>
+			</form>
+
+		</section>
+	{/if}
 </main>
 
 
@@ -179,6 +188,10 @@
 				background-color: blanchedalmond;
 			}
 		}
+	}
+
+	.search-form {
+		display: flex;
 	}
 
 	@media only screen and (min-width: 450px) {
