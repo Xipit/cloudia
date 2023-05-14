@@ -12,7 +12,7 @@
     import logout from '$lib/assets/svg/menu/logout.svg';
     import login from '$lib/assets/svg/menu/login.svg';
     import register from '$lib/assets/svg/menu/register.svg';
-    import { clickOutside } from "$lib/js/clickOutside";    
+    import { clickOutside } from "$lib/js/clickOutside";  
 
     export let open:boolean;
     export let isLoggedIn:boolean;
@@ -41,14 +41,14 @@
     }
 
 </script>
-    <div class="icon">
+    <div class="icon" use:clickOutside={'#burger-menu'} on:click_outside={closeMenu}>
         <Hamburger
             bind:open
             --color=var(--text-color) />
     </div>
 
     {#if open}
-        <div id="burger-menu" class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }} use:clickOutside={'#burger-menu'} on:click_outside={closeMenu}>
+        <div id="burger-menu" class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }}>
             <div class="burger-menu-top">
                 <a class="cloudia" href="/" >cloudia</a>
             </div>
@@ -87,7 +87,7 @@
                         </button>
                     </form>
                 </div>
-                {:else}
+            {:else}
                 <div class="burger-menu-mid">
                     <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
                         <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
