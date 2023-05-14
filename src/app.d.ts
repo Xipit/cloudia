@@ -15,4 +15,10 @@ declare global {
 		// interface Error {}
 		// interface Platform {}
 	}
+
+	namespace svelteHTML {
+        interface HTMLAttributes<T> {
+            "on:click_outside"?: (e: CustomEvent<T>) => void;
+        }
+    }
 }

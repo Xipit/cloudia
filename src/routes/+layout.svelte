@@ -40,6 +40,7 @@
 	})
 
 	let isLoggedIn:boolean = data.session !== null;
+	let email:string|undefined = data.session?.user.email;
 
 	// WEATHER CONDITION
 	let generalisedWeatherCondition:GeneralWeatherCondition;
@@ -71,7 +72,7 @@
 {/if}
 
 <div class="app">
-	<Header bind:isLoggedIn={isLoggedIn} bind:savedLocations={savedLocations}/>
+	<Header bind:isLoggedIn={isLoggedIn} bind:savedLocations={savedLocations} bind:email={email}/>
 
 	<main>
 		<slot />

@@ -7,10 +7,11 @@
 
     export let isLoggedIn:boolean;
     export let savedLocations: {[x: string]: any;}[] | null;
+    export let email:string|undefined;
 </script>
 
 <div class="header">
-	<Menu bind:open bind:isLoggedIn bind:savedLocations/>
+	<Menu bind:open bind:isLoggedIn bind:savedLocations bind:email/>
 </div>
 
 
