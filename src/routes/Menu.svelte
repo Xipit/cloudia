@@ -48,7 +48,7 @@
     </div>
 
     {#if open}
-        <div class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }}> <!-- use:clickOutside on:click_outside={closeMenu()}-->
+        <div id="burger-menu" class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }} use:clickOutside={'#burger-menu'} on:click_outside={closeMenu}>
             <div class="burger-menu-top">
                 <a class="cloudia" href="/" >cloudia</a>
             </div>
