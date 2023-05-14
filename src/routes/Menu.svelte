@@ -17,6 +17,7 @@
     export let open:boolean;
     export let isLoggedIn:boolean;
     export let savedLocations: {[x: string]: any;}[] | null;
+    export let email: string|undefined;
     let location:string;
 
     $: if ($navigating){
@@ -56,7 +57,7 @@
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="secondary-button account-button" on:click|preventDefault="{() => goto(`/account`)}" >
                 <img src={person} alt="person" class="person-icon">
-                <p>langemail@example.com</p>
+                <p>{email}</p>
             </div>
             
             <div class="burger-menu-mid">
@@ -139,7 +140,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        height: 100dvh;
+        height: 90dvh;
     }
 
     .burger-menu-top {
