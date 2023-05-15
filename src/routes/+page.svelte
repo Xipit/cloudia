@@ -12,7 +12,7 @@
 
     export let data: PageData;
 
-	let { settings } = data;
+	let { settings, savedLocations } = data;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -59,7 +59,7 @@
     <section>		
 		<div class="main-wrapper">
 			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-			<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture />
+			<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations />
 		</div>
 
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>

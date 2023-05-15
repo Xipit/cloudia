@@ -8,14 +8,43 @@
 
     export let disable: any;
     export let daysInToTheFuture: number;
+    export let savedLocations:{ [x: string]: any; }[] | null;
+
+    $: locationName = weather.getLocation();
+    $: isCurrentLocationSaved = savedLocations?.some(savedLocation => savedLocation.location_name === locationName);
 </script>
 
 
 <div class="macro-buttons">
+
+    <form
+        method="post"
+        action= {isCurrentLocationSaved 
+            ? "savedLocations?/deleteLocation" 
+            : "savedLocations?/addLocation"
+        }
+        class={disable
+            ? "tile disabled"
+            : "tile"
+        }
+    >
+
+        <input name="locationName" type="hidden" value={locationName}>
+
+        <input 
+            type="image"
+            src={star}
+            alt={isCurrentLocationSaved 
+                ? "Von gespeicherten Orten entfernen"
+                : "Zu gepseicherten Orten hinzufügen"
+            }
+        />
+ 
+    </form>
     <button
         class="tile"
         disabled={disable}
-        on:click={() => {weather.resetData();}}
+        on:click={() => {}}
     >
         <img src={star} id="saveLocation" alt="Ort speichern">
     </button>
@@ -58,7 +87,7 @@
         align-items: stretch;
         gap: var(--spacing-sm);
 
-        button {
+        button, form {
             width: 40px;
             height: 40px;
 
@@ -67,8 +96,9 @@
             display: inline-flex;
             padding: var(--spacing-sm);
             border: 0;
+            box-sizing: border-box;
 
-            &:disabled {
+            &:disabled, &.disabled {
                 opacity: 0.4;
                 pointer-events: none;
             }
@@ -77,6 +107,12 @@
                 cursor: pointer;
                 border: 1px solid var(--text-color);
             }
+        }
+
+        form{
+            padding: 0;
+            width: 40px;
+            height: 40px;
         }
     }
 
