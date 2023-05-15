@@ -12,7 +12,7 @@
 
     export let data: PageData;
 
-	let { settings, savedLocations } = data;
+	$: ({ settings, savedLocations } = data);
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;

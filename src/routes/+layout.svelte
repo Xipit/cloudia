@@ -72,7 +72,7 @@
 {/if}
 
 <div class="app">
-	<Header bind:isLoggedIn={isLoggedIn} bind:savedLocations={savedLocations} bind:email={email}/>
+	<Header bind:isLoggedIn bind:savedLocations bind:email/>
 
 	<main>
 		<slot />

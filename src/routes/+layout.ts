@@ -19,9 +19,11 @@ export const load: LayoutLoad = async ({ fetch, data:serverData, depends }) => {
     
     const { data : { session } } = await supabase.auth.getSession();
     
+    console.log("layout.ts load");
     const { data: savedLocations } = await supabase
         .from('saved_locations')
         .select('*');
+    console.log("savedLocations length" + savedLocations?.length);
 
     const { settings } = serverData;
 

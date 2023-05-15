@@ -4,7 +4,9 @@
     import nextDay from '$lib/assets/svg/homepage/nextDay.svg';
 	import previousDay from '$lib/assets/svg/homepage/previousDay.svg';
 	import resetLocation from '$lib/assets/svg/homepage/resetLocation.svg';
-    import star from '$lib/assets/svg/menu/star.svg';
+    import bookmarkFull from '$lib/assets/svg/menu/bookmark-full.svg';
+    import bookmarkEmpty from '$lib/assets/svg/menu/bookmark-empty.svg';
+	import { enhance } from "$app/forms";
 
     export let disable: any;
     export let daysInToTheFuture: number;
@@ -27,13 +29,17 @@
             ? "tile disabled"
             : "tile"
         }
+        use:enhance
     >
 
         <input name="locationName" type="hidden" value={locationName}>
 
         <input 
             type="image"
-            src={star}
+            src={isCurrentLocationSaved
+                ? bookmarkFull
+                : bookmarkEmpty
+            }
             alt={isCurrentLocationSaved 
                 ? "Von gespeicherten Orten entfernen"
                 : "Zu gepseicherten Orten hinzufügen"
@@ -41,13 +47,6 @@
         />
  
     </form>
-    <button
-        class="tile"
-        disabled={disable}
-        on:click={() => {}}
-    >
-        <img src={star} id="saveLocation" alt="Ort speichern">
-    </button>
 
     <button
         class="tile"
@@ -113,6 +112,12 @@
             padding: 0;
             width: 40px;
             height: 40px;
+        }
+
+        input[type="image"]{
+            border: 0;
+            aspect-ratio: 1;
+            padding: 6px;
         }
     }
 
