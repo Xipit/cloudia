@@ -11,6 +11,7 @@
     export let disable: any;
     export let daysInToTheFuture: number;
     export let savedLocations:{ [x: string]: any; }[] | null;
+    export let session: any;
 
     $: locationName = weather.getLocation();
     $: isCurrentLocationSaved = savedLocations?.some(savedLocation => savedLocation.location_name === locationName);
@@ -19,34 +20,39 @@
 
 <div class="macro-buttons">
 
-    <form
-        method="post"
-        action= {isCurrentLocationSaved 
-            ? "savedLocations?/deleteLocation" 
-            : "savedLocations?/addLocation"
-        }
-        class={disable
-            ? "tile disabled"
-            : "tile"
-        }
-        use:enhance
-    >
-
-        <input name="locationName" type="hidden" value={locationName}>
-
-        <input 
-            type="image"
-            src={isCurrentLocationSaved
-                ? bookmarkFull
-                : bookmarkEmpty
+    {#if session}
+        <form
+            method="post"
+            action= {isCurrentLocationSaved 
+                ? "savedLocations?/deleteLocation" 
+                : "savedLocations?/addLocation"
             }
-            alt={isCurrentLocationSaved 
-                ? "Von gespeicherten Orten entfernen"
-                : "Zu gepseicherten Orten hinzufügen"
+            class={disable
+                ? "tile disabled"
+                : "tile"
             }
-        />
+            use:enhance
+        >
+
+            <input name="locationName" type="hidden" value={locationName}>
+
+            <input 
+                type="image"
+                src={isCurrentLocationSaved
+                    ? bookmarkFull
+                    : bookmarkEmpty
+                }
+                alt={isCurrentLocationSaved 
+                    ? "Von gespeicherten Orten entfernen"
+                    : "Zu gepseicherten Orten hinzufügen"
+                }
+            />
+    
+        </form>
  
-    </form>
+    {:else}
+        <div class="tile" style="visibility: hidden;"></div>
+    {/if}
 
     <button
         class="tile"
