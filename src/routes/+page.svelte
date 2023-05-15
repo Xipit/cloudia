@@ -18,7 +18,7 @@
 
 	let { settings } = data;
 	let isLoggedIn:boolean = data.session !== null;
-	$: searchFormOpen = true;
+	$: searchFormOpen = false;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -47,24 +47,17 @@
 	let onLocationSubmit = async () => {
 		weather.set(newLocation)
 	}
+
+	$: if (weatherData.error) {
+		searchFormOpen = true;
+	}
+
 </script>
 
 <main>
-    <section>
-        {#if data.session }
-        <p>Welcome {data.session.user.email}</p>
-        <form action="/logout" method="POST">
-            <button type="submit" class="button">LogOut</button>
-        </form>
-    {:else}
-        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p> <br>
-    {/if}
-    </section>
-
-
 	{#if searchFormOpen}
 		<section class="search-form">
-			<SearchForm bind:isLoggedIn={isLoggedIn} bind:open={searchFormOpen}/>
+			<SearchForm bind:isLoggedIn bind:open={searchFormOpen}/>
 		</section>
 	{:else}
     	<section>			
@@ -74,7 +67,7 @@
 					<button
 						class="tile"
 						disabled={!weatherData.temp}
-						on:click={() => {weather.resetData();}}
+						on:click={() => {weather.resetData()}}
 					>
 						<img src={resetLocation} id="resetLocation" alt="Ort zurücksetzen">
 					</button>
@@ -192,6 +185,7 @@
 
 	.search-form {
 		display: flex;
+		justify-content: center;
 	}
 
 	@media only screen and (min-width: 450px) {

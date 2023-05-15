@@ -8,17 +8,14 @@
 
     let onLocationSubmit = async () => {
         weather.set(newLocation);
-
-        // check if it is set
         open = false;
     }
 </script>
 
 <main>
-	<h1 class="headline">Location suchen</h1>
+	<h1 class="headline">Wetter in...</h1>
 	<form on:submit|preventDefault={onLocationSubmit}>
 
-		<label class= "labelLocation" for=""> Location </label>
 		<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
 
 		<input type="submit" value="Wetterdaten bekommen" />
@@ -26,7 +23,7 @@
 	</form>
 
     {#if isLoggedIn === false}
-        <!-- todo: LOGIN -->
+		<a href="/login">Login</a>
         <a href="/register">Registrieren</a>
     {/if}
 </main>
