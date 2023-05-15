@@ -59,7 +59,7 @@
     <section>		
 		<div class="main-wrapper">
 			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-			<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations />
+			<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
 		</div>
 
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
