@@ -58,7 +58,6 @@ function createWeather() {
             console.warn("Tried to set empty location.");
             return;
         }
-        console.log(newDaysInToTheFuture);
    
         const newWeatherData = await getCurrentWeatherData(newLocation);
         const newNextHoursWeatherData = await getNextHoursWeatherData(newLocation, clampDaysInToTheFuture(newDaysInToTheFuture));

@@ -6,24 +6,24 @@ import {
 import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
 import type { LayoutLoad } from './$types';
 
-export const load: LayoutLoad = async ({ fetch, data, depends }) => {
+export const load: LayoutLoad = async ({ fetch, data:serverData, depends }) => {
     depends('supabase:auth');
 
     const supabase = createSupabaseLoadClient({
         supabaseUrl: PUBLIC_SUPABASE_URL,
         supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
         event: { fetch },
-        serverSession: data.session
+        serverSession: serverData.session
     });
 
+    
+    const { data : { session } } = await supabase.auth.getSession();
+    
     const { data: savedLocations } = await supabase
         .from('saved_locations')
         .select('*');
 
-    const { data : { session } } = await supabase.auth.getSession();
-
-
-    const { settings } = data;
+    const { settings } = serverData;
 
     return { savedLocations, supabase, session, settings };
 }

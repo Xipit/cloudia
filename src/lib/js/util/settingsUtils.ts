@@ -1,7 +1,5 @@
 export function applySettingToTemp(settings: any, temp:any):string {
     if(settings == undefined){
-        console.log('No settings in nextHoursWeather');
-
         return `${temp.c}°C`;
     }
 
