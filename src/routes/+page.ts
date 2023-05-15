@@ -15,10 +15,6 @@ export const load = (async ({ url, data }) => {
         const location = locationParam ?? weather.getLocation();
         const daysInToTheFuture = daysInToTheFutureParam ?? weather.getDaysInToTheFuture();
 
-        console.log("pageload: get " +  weather.getDaysInToTheFuture());
-        console.log("pageload: param" +  daysInToTheFuture);
-        console.log("pageload: " +  daysInToTheFuture);
-
         weather.set(location, daysInToTheFuture);
     }
 
