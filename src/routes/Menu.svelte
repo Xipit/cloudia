@@ -59,6 +59,12 @@
 
             {#if isLoggedIn}
                 <div class="burger-menu-mid">
+                    <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
+                        <input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" class="search-input">
+                        <button type="submit" class="search-button">
+                            <img src={search} alt="search">
+                        </button>
+                    </form>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class="secondary-button account-button" on:click|preventDefault="{() => goto(`/account`)}" >
                         <img src={person} alt="person">
@@ -77,12 +83,7 @@
                     </div>
                 </div>
                 <div class="burger-menu-bottom">
-                    <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
-                        <input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" class="search-input">
-                        <button type="submit" class="search-button">
-                            <img src={search} alt="search">
-                        </button>
-                    </form>
+                    
 
                     <form action="/logout" method="POST">
                         <button type="submit" class="secondary-button">
@@ -192,14 +193,15 @@
 
     .savedLocation {
         margin-bottom: 15px;
-        padding-left: 1em;
+        padding-left: var(--spacing-sm);;
         padding-right: 1em;
         background: var(--primary-accent-color);
         border-radius: 4px;
     
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: var(--spacing-sm);
     
         p {
             color: var(--text-color);
