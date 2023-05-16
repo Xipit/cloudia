@@ -77,8 +77,8 @@ function createWeather() {
         if(newDaysInToTheFuture < 1)
             visiblePlanets.set(getVisiblePlanetsData(newWeatherData.location.lat, newWeatherData.location.lat));
 
-        
-        location.set(newLocation);
+        const newLocationFromAPI = newWeatherData.location.name;
+        location.set(newLocationFromAPI);
         setLocationURLParamWithoutReload();
 
         daysInToTheFuture.set(newDaysInToTheFuture);

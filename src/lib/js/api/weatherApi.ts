@@ -58,7 +58,7 @@ const forecastDays = {
 
 // Get current weather from the API
 
-async function API_REQUEST_CURRENT(location: String){
+async function API_REQUEST_CURRENT(location: string){
 	let url = BASE_URL + "current.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location;
 	let fetchOptions = {
 		method: 'GET',
@@ -67,11 +67,11 @@ async function API_REQUEST_CURRENT(location: String){
 		}
 	}
 
-	let localStorageKey = "weatherApiCurrent?q=" + location;
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 1);
+	let localStorageKeyPrefix = "weatherApiCurrent?q=";
+	return await cache.fetchWithCache(localStorageKeyPrefix, location, url, fetchOptions, 1);
 }
 
-export async function getCurrentWeatherData(location: String){
+export async function getCurrentWeatherData(location: string){
 	if (location == ""){
 		return	{
 			error: {
@@ -114,7 +114,7 @@ export async function getCurrentWeatherData(location: String){
 
 // Get forecast from API
 
-async function API_REQUEST_FORECAST(location: String){
+async function API_REQUEST_FORECAST(location: string){
 	let url = BASE_URL + "forecast.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location + "&days=3";
 	let fetchOptions = {
 		method: 'GET',
@@ -123,13 +123,13 @@ async function API_REQUEST_FORECAST(location: String){
 		}
 	}
 
-	let localStorageKey = "weatherApiForecast" + location;
+	let localStorageKeyPrefix = "weatherApiForecast";
 	//todo: check how long the data can/should be used until new data should be fetched? --> what value should "expiresAfterMinutes" have?
 	// new enum property in "expireEnum"?
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
+	return await cache.fetchWithCache(localStorageKeyPrefix, location, url, fetchOptions, 15);
 }
 
-async function getForecastWeatherData(location: String){
+async function getForecastWeatherData(location: string){
 	if (location == ""){
 		return	{
 			error: {
@@ -147,7 +147,7 @@ async function getForecastWeatherData(location: String){
 	return data;
 }
 
-export async function getNextHoursWeatherData(location: String, daysInToTheFuture:number = 0){
+export async function getNextHoursWeatherData(location: string, daysInToTheFuture:number = 0){
 	const data = await getForecastWeatherData(location);
 
 	if (data.error){		
@@ -231,7 +231,7 @@ function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number): Date{
 	return dayInTheFuture;
 }
 
-export async function getNextDaysWeatherData(location: String) {
+export async function getNextDaysWeatherData(location: string) {
 	const data = await getForecastWeatherData(location);
 
 	if (data.error){		

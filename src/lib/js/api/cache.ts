@@ -12,7 +12,7 @@ export class Cache{
         return this;
     }
 
-    async fetchWithCache(localStorageKey: string, url: string, fetchOptions: RequestInit, expiresAfterMinutes: number, oneRefreshPerDay = false): Promise<any>{
+    async fetchWithCache(localStorageKeyPrefix: string, location:string, url: string, fetchOptions: RequestInit, expiresAfterMinutes: number, oneRefreshPerDay = false): Promise<any>{
         if(browser){
             if (typeof localStorage === "undefined") {
                 let data = {
@@ -23,7 +23,7 @@ export class Cache{
                 }
                 return data;
             }
-    
+            const localStorageKey = localStorageKeyPrefix + location;
             const cachedData = localStorage.getItem(localStorageKey);
     
             if (cachedData) {
@@ -60,6 +60,7 @@ export class Cache{
             data.expiresAfterMinutes = expiresAfterMinutes;
             data.oneRefreshPerDay = oneRefreshPerDay;
             
+            const localStorageKey = localStorageKeyPrefix + data.location.name;
             if(browser)
                 localStorage.setItem(localStorageKey, JSON.stringify(data));
         } else {
