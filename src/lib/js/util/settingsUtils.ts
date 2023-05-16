@@ -18,3 +18,29 @@ export function applySettingToTemp(settings: any, temp:any):string {
             break;
     }
 }
+
+export function applySettingToSpeed(settings: any, speed:any):string {
+    if(settings == undefined){
+        return `${speed.kph} km/h`;
+    }
+
+    switch(settings.speed_unit){
+    
+        case 'ms':
+            return `${speed.ms} m/s`;
+            break;
+            
+        case 'beaufort':
+            return `${speed.beaufort} Beaufort`;
+            break;
+            
+        case 'knot':
+            return `${speed.knot} Knoten`;
+            break;
+
+        default:
+        case 'kmh':
+            return `${speed.kph} km/h`;
+            break;
+    }
+}

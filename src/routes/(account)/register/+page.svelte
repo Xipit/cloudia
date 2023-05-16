@@ -6,11 +6,11 @@
 	<form action="?/register" method="POST" class="auth-form">
 
 		<label class= "labelMail" for=""> Email </label>
-		<input type="text" name="email" />
+		<input type="text" name="email" required/>
 
 
 		<label class= "labelPassword" for=""> Password </label>
-		<input type="password" name="password" />
+		<input type="password" name="password" required/>
 
 
 		<input type="submit" value="Register" />

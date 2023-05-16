@@ -45,7 +45,7 @@
 <main>
 	{#if searchFormOpen}
 		<section class="search-form">
-			<SearchForm bind:isLoggedIn/>
+			<SearchForm bind:savedLocations bind:isLoggedIn/>
 		</section>
 	{:else}
     	<section>			
@@ -55,7 +55,7 @@
 			</div>
 	
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
+			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:nextHoursWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 			<Apod bind:daysInToTheFuture/>
 
 			<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
