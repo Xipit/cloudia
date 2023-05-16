@@ -1,39 +1,35 @@
-
 <script lang="ts">
     import { fly, scale } from 'svelte/transition';
     import { quadOut } from 'svelte/easing';
     import { Hamburger } from 'svelte-hamburgers';
-    import { page } from '$app/stores';
     import { navigating } from '$app/stores'
     import { goto, } from "$app/navigation";
     import person from '$lib/assets/svg/menu/person.svg';
     import search from '$lib/assets/svg/menu/search.svg';
-    import star from '$lib/assets/svg/menu/star.svg';
+    import bookmark from '$lib/assets/svg/menu/bookmark-full.svg';
     import logout from '$lib/assets/svg/menu/logout.svg';
     import login from '$lib/assets/svg/menu/login.svg';
     import register from '$lib/assets/svg/menu/register.svg';
+    import logoBW from '$lib/assets/svg/logo/logo-sw.svg';
     import { clickOutside } from "$lib/js/clickOutside";  
+	import { weather } from '$lib/js/weatherStore';
 
     export let open:boolean;
     export let isLoggedIn:boolean;
     export let savedLocations: {[x: string]: any;}[] | null;
     export let email: string|undefined;
-    let location:string;
+    
+    let newLocation:string;
 
     $: if ($navigating){
         open = false;
     }
 
-    $: errorMessage = "";
-
-
 	let onLocationSubmit = async () => {
-        //todo: Errorhandling when its a wrong location
-        errorMessage = "";
-
-		await goto(`/?location=${location}`);
-
-        location = "";
+        const success = await weather.set(newLocation);
+        if (success) {
+            closeMenu();
+        }
 	}
 
     function closeMenu(){
@@ -50,11 +46,21 @@
     {#if open}
         <div id="burger-menu" class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }}>
             <div class="burger-menu-top">
-                <a class="cloudia" href="/" >cloudia</a>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div class="logo-cloudia" on:click|preventDefault="{() => goto(`/`)}">
+                    <img src={logoBW} alt="logo cloudia" class="logoBW">
+                    <a class="cloudia" href="/" >cloudia</a>
+                </div>
             </div>
 
             {#if isLoggedIn}
                 <div class="burger-menu-mid">
+                    <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
+                        <input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" class="search-input">
+                        <button type="submit" class="search-button">
+                            <img src={search} alt="search">
+                        </button>
+                    </form>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class="secondary-button account-button" on:click|preventDefault="{() => goto(`/account`)}" >
                         <img src={person} alt="person">
@@ -64,8 +70,8 @@
                         {#if savedLocations}
                             {#each savedLocations as location}
                                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                <div class="savedLocation" on:click|preventDefault="{() => goto(`/?location=${location.location_name}`)}">
-                                    <img src={star} alt="star" class="star-icon">
+                                <div class="savedLocation" on:click|preventDefault="{() => {weather.set(location.location_name); closeMenu();}}">
+                                    <img src={bookmark} alt="bookmark" class="bookmark-icon">
                                     <p>{location.location_name}</p>
                                 </div>
                             {/each}                            
@@ -73,12 +79,7 @@
                     </div>
                 </div>
                 <div class="burger-menu-bottom">
-                    <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
-                        <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
-                        <button type="submit" class="search-button">
-                            <img src={search} alt="search">
-                        </button>
-                    </form>
+                    
 
                     <form action="/logout" method="POST">
                         <button type="submit" class="secondary-button">
@@ -90,13 +91,11 @@
             {:else}
                 <div class="burger-menu-mid">
                     <form on:submit|preventDefault={onLocationSubmit} class="search-wrapper">
-                        <input type="search" name="location" bind:value={location} placeholder="Ort eintragen" class="search-input">
+                        <input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" class="search-input">
                         <button type="submit" class="search-button">
                             <img src={search} alt="search">
                         </button>
                     </form>
-
-                    <p class="search-error-message">{errorMessage}</p>
 
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class="secondary-button" on:click|preventDefault="{() => goto(`/login`)}">
@@ -110,8 +109,6 @@
                     </div>
                 </div>
             {/if}
-            
-            <div class="burger-menu-background" />
         </div>
     {/if}
 
@@ -125,7 +122,8 @@
     }
 
     .burger-menu {
-        width: var(--burger-menu-width);
+        max-width: var(--burger-menu-width);
+        width: 100dvw;
         text-align: left;
         font-size: 1.5em;
         letter-spacing: 0.15em;
@@ -137,11 +135,15 @@
         display: flex;
         flex-direction: column;
 
+        background-color: rgba(220, 220, 220, 0.5);
+        backdrop-filter: blur(10px);
+
         .burger-menu-top {
             padding-left: var(--burger-menu-padding);
             padding-right: var(--burger-menu-padding);
             flex: 1;
             display: flex;
+            align-items: center;
             justify-content: flex-end;
         }
     
@@ -172,7 +174,6 @@
         overflow-x: hidden;
         overflow-y: scroll;
         padding-right: 5px;
-        padding-left: 1em;
     
         &::-webkit-scrollbar {
             width: 5px;
@@ -189,18 +190,18 @@
 
     .savedLocation {
         margin-bottom: 15px;
-        padding-left: 1em;
+        padding-left: var(--spacing-sm);;
         padding-right: 1em;
         background: var(--primary-accent-color);
-        box-shadow: -3px 4px 0px rgba(0, 0, 0, 0.25);
         border-radius: 4px;
     
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: var(--spacing-sm);
     
         p {
-            color: black;
+            color: var(--text-color);
             font-size: xx-large;
             overflow: hidden;
             white-space: nowrap;
@@ -208,7 +209,7 @@
             margin: 0.2em;
         }
     
-        .star-icon {
+        .bookmark-icon {
             height: 1.5em;
             align-self: center;
         }
@@ -219,23 +220,22 @@
         }
     }    
 
-    .cloudia {
-        color: var(--text-color);
-        font-size:x-large;
-        font-family: 'Chewy', cursive;
-        text-decoration: none;
-        margin-top: var(--burger-menu-padding);
-    }
+    .logo-cloudia {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
 
-    .burger-menu-background {
-        position: absolute;
-        width: var(--burger-menu-width);
-	    top: 0;
-	    left: 0;
-	    background: linear-gradient(0deg, rgba(128, 217, 207, 0.1), rgba(128, 217, 207, 0.1)), #000000;
-        box-shadow: 5px 0px 4px rgba(0, 0, 0, 0.25);
-	    height: 100dvh;
-        z-index: -1;
+        .logoBW {
+            height: 1em;
+            margin-right: .3em;
+        }
+
+        .cloudia {
+            color: #1f1f1f;
+            font: size 1em;;
+            font-family: 'Chewy', cursive;
+            text-decoration: none;
+        }
     }
     
     .secondary-button {
@@ -244,6 +244,7 @@
         margin-top: 0.5em;
         margin-bottom: 0.5em;
         background-color: var(--secondary-accent-color);
+        box-shadow: -3px 4px 0px rgba(0, 0, 0, 0.25);
         border-radius: 5px;
         padding: .3em;
         padding-right: 0.5em;
@@ -277,17 +278,12 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin: 0em;
+        margin-bottom: .5em;
 
         background: #FFFFFF;
         border: 0;
         border-radius: 50px;
-    }
-        
-    .search-error-message {
-        color: red;
-        font-size: small;
-        letter-spacing: normal;
+        box-shadow: -3px 4px 0px rgba(0, 0, 0, 0.25);
     }
         
     .search-input {
@@ -298,6 +294,7 @@
 
         padding-left: 1.5em;
         font-size: large;
+        width: 100%;
     }
         
     .search-button {
