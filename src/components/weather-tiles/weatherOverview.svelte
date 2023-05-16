@@ -22,11 +22,11 @@
         {:else if daysInToTheFuture > 0}
         {:else}
             <div class="feelslike tile">
-                <p class="description">gefühlte Temperatur</p>
+                <p class="description">gefühlte Tempe&shyratur</p>
                 <span class="value">{applySettingToTemp(settings, data.feelslike)} </span>
             </div>
             <div class="condition tile">
-                <p class="description">Wetter&shykondition</p>
+                <p class="description">aktuelle Wetter&shykondition</p>
                 <p class="value"> {data.current.condition.text} </p> <!-- TODO daysintothefuture-->
             </div>
             <div class="humidity tile">
@@ -49,15 +49,15 @@
 
             {#if daysInToTheFuture > 0}
                 <div class="feelslike tile">
-                    <p class="description">Temperatur (Durchschnitt)</p>
+                    <p class="description">Temperatur (Durch&shyschnitt)</p>
                     <span class="value">{applySettingToTemp(settings, data.day[daysInToTheFuture].avgTemp)} </span>
                 </div>
                 <div class="condition tile">
-                    <p class="description">Wetter&shykondition (Durchschnitt)</p>
+                    <p class="description">Wetter&shykondition (Durch&shyschnitt)</p>
                     <p class="value"> {data.day[daysInToTheFuture].conditionText} </p> <!-- TODO daysintothefuture-->
                 </div>
                 <div class="humidity tile">
-                    <p class="description">Luftfeuchtig&shykeit (Durchschnitt)</p>
+                    <p class="description">Luftfeuchtig&shykeit (Durch&shyschnitt)</p>
                     <p class="value">	{data.day[daysInToTheFuture].avgHumidity} % </p> <!-- TODO daysintothefuture-->
                 </div>
 
@@ -166,18 +166,18 @@
 		}
 
 		.description {
-			font-size: 18px;
+			font-size: 1.1em;
 			font-weight: bold;
 
 			.value {
 				font-weight: normal;
-				font-size: 16px;
+				font-size: 0.9em;
 			}
 		}
 
         .value {
             font-weight: normal;
-            font-size: 16px;
+            font-size: 1em;
         }
     }
 
@@ -196,15 +196,15 @@
             }
 
             .description {
-                font-size: 21px;
+                font-size: 1.32em;
 
                 .value {
-                    font-size: 19px;
+                    font-size: 0.8em;
                 }
             }
 
             .value {
-                font-size: 19px;
+                font-size: 1.19em;
             }
         }
     }
