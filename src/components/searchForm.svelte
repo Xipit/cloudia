@@ -2,13 +2,12 @@
     import { weather } from "$lib/js/weatherStore";
 
     export let isLoggedIn:boolean;
-    export let open:boolean;
 
     let newLocation: string = "";
 
     let onLocationSubmit = async () => {
         weather.set(newLocation);
-        open = false;
+        
     }
 </script>
 
@@ -16,7 +15,7 @@
 	<h1 class="headline">Wetter in...</h1>
 	<form on:submit|preventDefault={onLocationSubmit}>
 
-		<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
+		<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" required>
 
 		<input type="submit" value="Wetterdaten bekommen" />
 

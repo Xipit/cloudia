@@ -18,7 +18,7 @@
 
 	let { settings } = data;
 	let isLoggedIn:boolean = data.session !== null;
-	$: searchFormOpen = false;
+	let searchFormOpen = data.weatherData.error != undefined;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -38,26 +38,17 @@
 		visiblePlanetsData 		= weather.getVisiblePlanets();
 
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
+
+		searchFormOpen 			= weatherDataObject.weatherData.error != undefined;
 	})
 
 	onDestroy(unsubscribeWeather);
-	
-	let newLocation: string = "";
-
-	let onLocationSubmit = async () => {
-		weather.set(newLocation)
-	}
-
-	$: if (weatherData.error) {
-		searchFormOpen = true;
-	}
-
 </script>
 
 <main>
 	{#if searchFormOpen}
 		<section class="search-form">
-			<SearchForm bind:isLoggedIn bind:open={searchFormOpen}/>
+			<SearchForm bind:isLoggedIn/>
 		</section>
 	{:else}
     	<section>			
@@ -109,13 +100,6 @@
 			{:catch error}
 				<p style="color: red">{error.message}</p>
 			{/await}-->
-			
-
-			<form on:submit|preventDefault={onLocationSubmit}>
-				<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
-				<button type="submit">Wetterdaten bekommen</button>
-			</form>
-
 		</section>
 	{/if}
 </main>
@@ -124,6 +108,9 @@
 <style lang="scss">
 	@import '../components/weather-tiles/weather-tiles.scss';
 
+	main {
+		margin-top: 5em;
+	}
 
 	/* The following lines are just temporary */
 	.button {
