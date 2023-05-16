@@ -113,8 +113,6 @@
                     </div>
                 </div>
             {/if}
-            
-            <!--div class="burger-menu-background" /-->
         </div>
     {/if}
 
@@ -136,7 +134,7 @@
         padding: 0;
         color: black;
         overflow: hidden;
-        height: 100vh;
+        height: 100dvh;
 
         display: flex;
         flex-direction: column;
