@@ -45,7 +45,7 @@
 <main>
 	{#if searchFormOpen}
 		<section class="search-form">
-			<SearchForm bind:isLoggedIn/>
+			<SearchForm bind:savedLocations bind:isLoggedIn/>
 		</section>
 	{:else}
     	<section>			
