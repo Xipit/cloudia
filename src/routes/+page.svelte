@@ -1,10 +1,6 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 
-	import nextDay from '$lib/assets/svg/homepage/nextDay.svg';
-	import previousDay from '$lib/assets/svg/homepage/previousDay.svg';
-	import resetLocation from '$lib/assets/svg/homepage/resetLocation.svg';
-
 	import { weather } from "$lib/js/weatherStore";
 	import { onDestroy } from "svelte";
 
@@ -13,10 +9,11 @@
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 	import Apod from "../components/weather-tiles/apod.svelte";
 	import SearchForm from "../components/searchForm.svelte";
+	import HomepageButtons from "../components/homepage-buttons.svelte";
 
     export let data: PageData;
 
-	let { settings } = data;
+	$: ({ settings, savedLocations } = data);
 	let isLoggedIn:boolean = data.session !== null;
 	let searchFormOpen = data.weatherData.error != undefined;
 
@@ -54,32 +51,9 @@
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-				<div class="macro-buttons">
-					<button
-						class="tile"
-						disabled={!weatherData.temp}
-						on:click={() => {weather.resetData()}}
-					>
-						<img src={resetLocation} id="resetLocation" alt="Ort zurücksetzen">
-					</button>
-
-					<button 
-						class="tile"
-						disabled={!weatherData.temp || daysInToTheFuture == 0}
-						on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture - 1);}}
-					>
-					<img src={previousDay} id="previousDay" alt="Tag vorher">
-					</button>
-					<button 
-						class="tile"
-						disabled={!weatherData.temp || daysInToTheFuture == 2}
-						on:click={() => {weather.setDaysInToTheFuture(daysInToTheFuture + 1);}}
-					>
-						<img src={nextDay} id="nextDay" alt="Tag danach">
-					</button>
-				</div>
+				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
 			</div>
-
+	
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
 			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 			<Apod bind:daysInToTheFuture/>
@@ -127,47 +101,6 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: flex-end;
-
-		.main-info {
-			flex: 2;
-		}
-
-		.macro-buttons {
-			flex: 1;
-
-			justify-content: flex-end;
-			display: flex;
-			flex-direction: column;
-			align-content: flex-end;
-			flex-wrap: wrap;
-			align-items: stretch;
-			gap: var(--spacing-sm);
-
-			button {
-				width: 40px;
-				height: 40px;
-
-				align-items: center;
-				justify-content: center;
-				display: inline-flex;
-				padding: var(--spacing-sm);
-				border: 0;
-
-				&:disabled {
-					opacity: 0.4;
-				}
-			}
-		}
-
-		.button {
-			font-size: 1.3em;
-			background-color: azure;		
-			padding: 0.3em;
-
-			&:hover, &:active, &:focus{
-				background-color: blanchedalmond;
-			}
-		}
 	}
 
 	.search-form {
