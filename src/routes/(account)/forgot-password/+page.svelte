@@ -9,9 +9,9 @@
     <form action="?/sendRecovery" method="POST" class="auth-form">
 
         <label for=""> Email </label>
-        <input type="text" name="email" />
+        <input type="text" name="email" required/>
         
-        <input type="submit" value="Passwort zurücksetzen" />
+        <input type="submit" value="Passwort zurücksetzen" required/>
 
     </form>
 </main>

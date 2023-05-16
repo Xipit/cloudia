@@ -6,4 +6,5 @@ $font-accent: 'Chewy', cursive;
     background: $background-tiles-color;
     padding: 0 10px 10px 10px;
     border-radius: 0.438em;
+    backdrop-filter: blur(2px);
 }
