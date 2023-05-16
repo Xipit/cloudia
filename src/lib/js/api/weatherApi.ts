@@ -57,7 +57,7 @@ async function API_REQUEST_CURRENT(location: String){
 	}
 
 	let localStorageKey = "weatherApiCurrent?q=" + location;
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
+	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 1);
 }
 
 export async function getCurrentWeatherData(location: String){
