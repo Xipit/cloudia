@@ -74,7 +74,7 @@
                         {#if savedLocations}
                             {#each savedLocations as location}
                                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                <div class="savedLocation" on:click|preventDefault="{() => weather.set(newLocation)}">
+                                <div class="savedLocation" on:click|preventDefault="{() => {weather.set(location.location_name); closeMenu();}}">
                                     <img src={bookmark} alt="bookmark" class="bookmark-icon">
                                     <p>{location.location_name}</p>
                                 </div>
@@ -114,7 +114,7 @@
                 </div>
             {/if}
             
-            <div class="burger-menu-background" />
+            <!--div class="burger-menu-background" /-->
         </div>
     {/if}
 
@@ -140,6 +140,9 @@
 
         display: flex;
         flex-direction: column;
+
+        background-color: rgba(220, 220, 220, 0.5);
+        backdrop-filter: blur(10px);
 
         .burger-menu-top {
             padding-left: var(--burger-menu-padding);
@@ -247,8 +250,8 @@
         width: 100%;
 	    top: 0;
 	    left: 0;
-        background-color: rgba(220, 220, 220, 0.5);
-        backdrop-filter: blur(10px);
+        //background-color: rgba(220, 220, 220, 0.5);
+        //backdrop-filter: blur(10px);
 	    height: 200dvh;
         z-index: -1;
     }
