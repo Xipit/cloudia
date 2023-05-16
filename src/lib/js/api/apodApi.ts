@@ -19,7 +19,7 @@ async function API_REQUEST(){
 	}
 
 	let localStorageKey = "apodApi";
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 0, true);
+	return await cache.fetchWithCache(localStorageKey, null, url, fetchOptions, 0, true);
 }
 
 // this function can be called from the outside to get the information for the APOD
