@@ -15,6 +15,7 @@ const forecastHours = {
 			f: ""
 		},
 		conditionIconURL: "",
+		chanceOfRain: "",
 	}]
 }
 
@@ -35,6 +36,16 @@ const forecastDays = {
 			c: "",
 			k: "",
 			f: ""
+		},
+		rainAmount: {
+			mm: "",
+			in: "", // not currently used
+		},
+		maxWindSpeed: {
+			kph: "",
+			ms: "",
+			knot: "",
+			beaufort: "",
 		},
 		sunrise: "",
 		sunset: "",
@@ -88,7 +99,14 @@ export async function getCurrentWeatherData(location: String){
 				f: data.current.feelslike_f.toString(),
 				c: data.current.feelslike_c.toString(),
 				k: (data.current.feelslike_c + 273).toString()
-			}
+			},
+			windSpeed: {
+				kph: data.current.wind_kph.toString(),
+				ms: (data.current.wind_kph / 3.6).toFixed(1).toString(),
+				knot: (data.current.wind_mph * 0.86897624).toFixed(1).toString(),
+				beaufort: (Math.ceil(Math.cbrt(Math.pow((data.current.wind_kph / 3.6) /0.836, 1)))).toString(),
+			},
+			windDirection: data.current.wind_dir.toString(),
 		};
 	}
 }
@@ -196,6 +214,7 @@ function pushHour(hour:any, day:any, formattedDateString:string, overwriteHour: 
 			k: (hour.temp_c + 273).toString()
 		},
 		conditionIconURL: iconURL, 
+		chanceOfRain: hour.chance_of_rain,
 	})
 }
 
@@ -243,6 +262,16 @@ export async function getNextDaysWeatherData(location: String) {
 						f: forecastDay.day.avgtemp_f.toString(),
 						c: forecastDay.day.avgtemp_c.toString(),
 						k: (forecastDay.day.avgtemp_c + 273).toString(),
+					},
+					rainAmount: {
+						mm: forecastDay.day.totalprecip_mm.toString(),
+						in: "",
+					},
+					maxWindSpeed: {
+						kph: forecastDay.day.maxwind_kph.toString(),
+						ms: (forecastDay.day.maxwind_kph / 3.6).toFixed(1).toString(),
+						knot: (forecastDay.day.maxwind_mph * 0.86897624).toFixed(1).toString(),
+						beaufort: (Math.ceil(Math.cbrt(Math.pow((forecastDay.day.maxwind_kph / 3.6) /0.836, 1)))).toString(),
 					},
 					sunrise: forecastDay.astro.sunrise.toString(),
 					sunset: forecastDay.astro.sunset.toString(),

@@ -33,6 +33,8 @@
     @import './weather-tiles.scss';
 
     .apod {
+        margin-top: var(--spacing-sm);
+
         .title{
             font-family: $font-accent;
             font-size: 1.6rem;

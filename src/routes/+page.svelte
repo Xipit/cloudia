@@ -63,7 +63,7 @@
 		</div>
 
 		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
+		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:nextHoursWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 		<Apod bind:daysInToTheFuture/>
 
 		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>

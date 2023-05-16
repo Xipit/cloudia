@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { applySettingToTemp } from "$lib/js/util/settingsUtils";
+	import { applySettingToSpeed, applySettingToTemp } from "$lib/js/util/settingsUtils";
 
 
 	export let weatherData:any;
 	export let nextDaysWeatherData:any;
+    export let nextHoursWeatherData:any;
     export let visiblePlanetsData:any;
     export let settings:any;
     export let daysInToTheFuture:number;
@@ -27,11 +28,15 @@
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
-                <p class="value"> {data.current.condition.text} </p> <!-- TODO daysintothefuture-->
+                <p class="value">{data.current.condition.text}</p> <!-- TODO daysintothefuture-->
             </div>
             <div class="humidity tile">
                 <p class="description">Luftfeuchtig&shykeit</p>
-                <p class="value">	{data.current.humidity} % </p> <!-- TODO daysintothefuture-->
+                <p class="value">{data.current.humidity} % </p> <!-- TODO daysintothefuture-->
+            </div>
+            <div class="wind tile">
+                <p class="description">Wind</p>
+                <span class="value">{applySettingToSpeed(settings, data.windSpeed) + " von " + data.windDirection}</span>
             </div>
         {/if}		
     {:catch error}
@@ -60,7 +65,10 @@
                     <p class="description">Luftfeuchtig&shykeit (Durchschnitt)</p>
                     <p class="value">	{data.day[daysInToTheFuture].avgHumidity} % </p> <!-- TODO daysintothefuture-->
                 </div>
-
+                <div class="wind tile">
+                    <p class="description">Max. Windgeschwindigkeit</p>
+                    <span class="value">{applySettingToSpeed(settings, data.day[daysInToTheFuture].maxWindSpeed)}</span>
+                </div>
             {/if}
 
             <div class="temp-range tile">
@@ -77,6 +85,12 @@
                     </span>
                 </p> 
             </div>
+
+            <div class="rain-amount tile">
+                <p class="description">Regenmenge</p>
+                <span class="value">{data.day[daysInToTheFuture].rainAmount.mm} mm</span>
+            </div>
+
             <div class="sun-and-moon tile">
                 <div class="description">
                     Sonnen&shyaufgang: <span class="value">{data.day[daysInToTheFuture].sunrise}</span>
@@ -93,6 +107,21 @@
                 <p></p>
             </div>
         {/if}		
+    {:catch error}
+        <p style="color: red">{error.message}</p>
+    {/await}
+
+    {#await nextHoursWeatherData}
+        <p>hole Wetterinformationen...</p>
+    {:then data}
+        {#if data.error}
+            <p>{data.error.message}</p>
+        {:else}
+            <div class="rain-chance tile">
+                <p class="description">Regenwahrscheinlichkeit ({data.hour[0].time})</p>
+                <span class="value">{data.hour[0].chanceOfRain} %</span>
+            </div> 
+        {/if}
     {:catch error}
         <p style="color: red">{error.message}</p>
     {/await}
@@ -131,7 +160,7 @@
 
         display: grid;
         grid-template-columns: 33.5% 33.5% 33.5%;
-        grid-template-rows: auto auto auto auto;
+        grid-template-rows: auto auto auto auto auto;
         gap: var(--spacing-sm);
 		
 		.humidity {
@@ -141,18 +170,25 @@
 			grid-row-end: 3;
 		}
 
+        .wind {
+            grid-column-start: 3;
+			grid-column-end: 4;
+			grid-row-start: 1;
+			grid-row-end: 2;
+        }
+
 		.visiblePlanet {
 			grid-column-start: 3;
 			grid-column-end: 4;
-			grid-row-start: 1;
-			grid-row-end: 4;
+			grid-row-start: 2;
+			grid-row-end: 5;
 		}
 
 		.sun-and-moon {
 			grid-column-start: 1;
 			grid-column-end: 3;
-			grid-row-start: 3;
-			grid-row-end: 4;
+			grid-row-start: 4;
+			grid-row-end: 5;
 			text-align: left !important;
 			padding: 15px 15px 0 15px !important;
 			word-break: initial;
@@ -164,6 +200,20 @@
 			grid-row-start: 2;
 			grid-row-end: 3;
 		}
+
+        .rain-amount{
+            grid-column-start: 1;
+			grid-column-end: 2;
+			grid-row-start: 3;
+			grid-row-end: 4;
+        }
+
+        .rain-chance {
+            grid-column-start: 2;
+			grid-column-end: 3;
+			grid-row-start: 3;
+			grid-row-end: 4;
+        }
 
 		.description {
 			font-size: 18px;
