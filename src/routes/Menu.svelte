@@ -26,14 +26,10 @@
     }
 
 	let onLocationSubmit = async () => {
-        weather.set(newLocation);
-        
-        /////////////////////////////////////
-
+        const success = await weather.set(newLocation);
+        if (success) {
             closeMenu();
-
-        //////////////////////////////////////
-
+        }
 	}
 
     function closeMenu(){
@@ -240,18 +236,6 @@
             font-family: 'Chewy', cursive;
             text-decoration: none;
         }
-    }
-    
-    .burger-menu-background {
-        position: absolute;
-        max-width: var(--burger-menu-width);
-        width: 100%;
-	    top: 100dvh;
-	    left: 0;
-        background-color: rgba(220, 220, 220, 0.5);
-        backdrop-filter: blur(10px);
-	    height: 100dvh;
-        z-index: -1;
     }
     
     .secondary-button {
