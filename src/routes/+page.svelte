@@ -84,6 +84,7 @@
 
 	main {
 		margin-top: 5em;
+		max-width: var(--main-max-width);
 	}
 
 	/* The following lines are just temporary */
