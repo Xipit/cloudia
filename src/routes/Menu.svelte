@@ -70,7 +70,7 @@
                         {#if savedLocations}
                             {#each savedLocations as location}
                                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                <div class="savedLocation" on:click|preventDefault="{() => {weather.set(location.location_name); closeMenu();}}">
+                                <div class="savedLocation" on:click|preventDefault="{() => {goto('/'); weather.set(location.location_name); closeMenu();}}">
                                     <img src={bookmark} alt="bookmark" class="bookmark-icon">
                                     <p>{location.location_name}</p>
                                 </div>
