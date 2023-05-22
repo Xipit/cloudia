@@ -12,9 +12,15 @@
     export let daysInToTheFuture: number;
     export let savedLocations:{ [x: string]: any; }[] | null;
     export let session: any;
+    export let newLocationIsSet: boolean;
 
     $: locationName = weather.getLocation();
     $: isCurrentLocationSaved = savedLocations?.some(savedLocation => savedLocation.location_name === locationName);
+    
+    $: if (newLocationIsSet){
+        locationName = weather.getLocation();
+        newLocationIsSet = false;
+    }
 </script>
 
 
