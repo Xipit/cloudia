@@ -22,5 +22,5 @@
 </main>
 
 <style lang="scss">
-	@import '../accountpage-layout.scss';
+	@import '../accountPages.scss';
 </style>

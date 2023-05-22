@@ -23,18 +23,17 @@
 
 </script>
 
-<main >
+<main>
     <h1>
         Account
     </h1>
     <form
         class="submit-form"
         method="post"
-        action="?/update"
+        action="?/updateSettings"
         bind:this={settingsForm}
         use:enhance={handleUpdateSettings}
     >
-
         <label for="email">E-Mail</label>
         <input id="email" type="text" value={session.user.email} disabled/>
 
@@ -82,5 +81,5 @@
 </main>
 
 <style>
-	@import '../accountpage-layout.scss';
+    @import '../accountPages.scss';
 </style>

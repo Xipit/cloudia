@@ -79,7 +79,7 @@
 </div>
 
 <style lang="scss">
-    @import '../components/weather-tiles/weather-tiles.scss';
+    @import '../components/weather-tiles/weatherTiles.scss';
 
 
     .macro-buttons {

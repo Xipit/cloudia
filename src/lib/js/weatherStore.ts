@@ -1,11 +1,11 @@
-import { get, writable, type Writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { getCurrentWeatherData, getNextDaysWeatherData, getNextHoursWeatherData } from "./api/weatherApi";
 import { clampDaysInToTheFuture, createDaysInToTheFuture, createGeneralisedWeatherCondition, generaliseWeatherCondition, GeneralWeatherCondition,  } from "./util/weatherStoreUtils";
 import { fromLocalStorage, toLocalStorage } from "./util/localStorageWrapper";
 import { replaceStateWithSearchParam } from "./util/url";
 import { getVisiblePlanetsData } from "./api/visiblePlanetsAPI";
 
-
+// gets executed once to create the [weather] object
 function createWeather() {
     // dummy store object used to trigger [subscribe] 
     const { subscribe, update, set } = writable(0);
@@ -15,24 +15,34 @@ function createWeather() {
             message: 'Not fetched yet.'
         }
     };
+
+
+    /*
+        MODEL 
+    */
+
+    // weather data, such as temperature or wind current
     const weatherObject = writable({
         weatherData: notFetchedError,
         nextHoursWeatherData: notFetchedError,
         nextDaysWeatherData: notFetchedError
     });
 
+    // selected Location
     const locationInitialValue: string = fromLocalStorage('location', '');
     const location = writable<string>(locationInitialValue);
     toLocalStorage(location, 'location');
 
+    // weather condition to drive weather-background, is dependant on location being set
     const generalisedWeatherConditionInitialValue: GeneralWeatherCondition = fromLocalStorage(
-        get(location) != '' 
+        get(location) != '' // only use localstorage value if location is set, else it would break the view
             ? 'generalisedWeatherCondition' 
             : ''
         , '');
     const generalisedWeatherCondition = createGeneralisedWeatherCondition(generalisedWeatherConditionInitialValue);
     toLocalStorage(generalisedWeatherCondition, 'generalisedWeatherCondition');
 
+    // list of visible planets, is dependent upon daysInToTheFuture = 0
     const visiblePlanetsInitialValue = fromLocalStorage(
         get(location) != '' 
             ? 'visiblePlanets' 
@@ -41,6 +51,7 @@ function createWeather() {
     const visiblePlanets = writable<Array<string>|any>(visiblePlanetsInitialValue);
     toLocalStorage(visiblePlanets, 'visiblePlanets');
 
+    // how many days in to the future the weather data should be from
     const daysInToTheFutureInitialValue = fromLocalStorage(
         get(location) != '' 
             ? 'daysInToTheFuture' 
@@ -49,9 +60,9 @@ function createWeather() {
     const daysInToTheFuture = createDaysInToTheFuture(daysInToTheFutureInitialValue);
     toLocalStorage(daysInToTheFuture, 'daysInToTheFuture');
 
-    async function setDaysInToTheFuture(newDaysInToTheFuture:number){
-        setLocation(get(location), newDaysInToTheFuture);
-    }
+    /*
+        CONTROLLER
+    */
 
     async function setLocation (newLocation:string, newDaysInToTheFuture:number = get(daysInToTheFuture)) {
         if(newLocation == ""){
@@ -84,16 +95,21 @@ function createWeather() {
         daysInToTheFuture.set(newDaysInToTheFuture);
         setDaysInToTheFutureURLParamWithoutReload();
 
+        // get current weather condition or use average weather condition depending on daysInToTheFuture
         const newGeneralisedWeatherCondition = generaliseWeatherCondition(
             newDaysInToTheFuture > 0 
                 ? newWeatherData.current.condition.text
                 : newNextDaysWeatherData.day[get(daysInToTheFuture)].conditionText);
         generalisedWeatherCondition.set(newGeneralisedWeatherCondition);
 
-        // just here to trigger subscribe
-        // im sorry that i have bastardized sveltekit stores to this
+        // just here to trigger [subscribe]
         update(value => value + 1);
+        
         return true;
+    }
+
+    async function setDaysInToTheFuture(newDaysInToTheFuture:number){
+        setLocation(get(location), newDaysInToTheFuture);
     }
 
     function getLocationURLParam(url:URL): string|undefined {
@@ -148,6 +164,7 @@ function createWeather() {
         })
         resetURLParamsWithoutReload();
 
+        // just here to trigger [subscribe]
         update(value => value + 1);
     }
 
@@ -179,5 +196,3 @@ function createWeather() {
 }
 
 export const weather = createWeather();
-
-

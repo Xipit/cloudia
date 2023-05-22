@@ -152,7 +152,7 @@
 </div>
 
 <style lang="scss">
-    @import './weather-tiles.scss';
+    @import './weatherTiles.scss';
 
     .grid-container {
         width: calc(100% - calc(2 * var(--spacing-sm)));

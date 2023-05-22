@@ -64,7 +64,7 @@
 </main>
 
 <style lang="scss">
-	@import '../routes/\(account\)/accountpage-layout.scss';
+	@import '../routes/\(account\)/accountPages.scss';
 
 	form, h2 {
 		display: contents;

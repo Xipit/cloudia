@@ -11,7 +11,7 @@
 	import Cloud 	from '../components/weather-backgrounds/cloud.svelte';
 	import Sun 		from '../components/weather-backgrounds/sun.svelte';
 	
-	import Header 	from '../components/burger-menu/Header.svelte';
+	import Header 	from '../components/burger-menu/header.svelte';
 
 	import { weather } from '$lib/js/weatherStore';
 	import { GeneralWeatherCondition } from '$lib/js/util/weatherStoreUtils';

@@ -9,7 +9,7 @@
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 	import Apod from "../components/weather-tiles/apod.svelte";
 	import SearchForm from "../components/searchForm.svelte";
-	import HomepageButtons from "../components/homepage-buttons.svelte";
+	import HomepageButtons from "../components/homepageButtons.svelte";
 
 	// gets data from [load] function in +page.ts
     export let data: PageData;
@@ -68,7 +68,7 @@
 
 
 <style lang="scss">
-	@import '../components/weather-tiles/weather-tiles.scss';
+	@import '../components/weather-tiles/weatherTiles.scss';
 
 	main {
 		margin-top: 5em;

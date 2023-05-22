@@ -33,7 +33,7 @@
 {/await}
 
 <style lang="scss">
-	@import './weather-tiles.scss';
+	@import './weatherTiles.scss';
 
     .weather-indicator{
 			display: flex;

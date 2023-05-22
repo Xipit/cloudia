@@ -1,3 +1,5 @@
+
+// gets used to close the burger menu when clicking outside of it
 export function clickOutside(node: HTMLElement, ignore?: string) {
 
   const handleClick = (event: Event) => {

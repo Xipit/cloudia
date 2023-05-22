@@ -14,7 +14,7 @@ export const load = (async ({ locals: {supabase, getSession } }) => {
 // source: https://blog.skorp.io/reset-password-via-email-with-supabase-and-sveltekit
 
 export const actions = {
-    new_password: async (event:any) => {
+    newPassword: async (event:any) => {
         const { request, locals } = event;
         const { supabase, getSession } = locals;
         const session = await getSession();

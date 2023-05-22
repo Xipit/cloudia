@@ -4,13 +4,12 @@
 	import { page } from "$app/stores";
 	import type { PageData } from "./$types";
 
-
     export let data: PageData;
 
     $:{
         const redirectTo = $page.url.searchParams.get('redirect');
 
-        // check if user has been set in session store, then redirect
+        // check if user has been set in session store (= is logged in), then redirect
         if(browser && data.session){
             goto(redirectTo ?? '/account');
         }

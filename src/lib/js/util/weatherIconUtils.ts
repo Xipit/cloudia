@@ -16,6 +16,7 @@ import thunder from '$lib/assets/svg/weather-icons/thunder.svg';
 
 
 export function getIconURL(conditionCode:number, sunrise:string, sunset:string, now:string){
+	// time gets passed as e.g. "04:00" and needs to be parsed
 
 	const nowSplit:Array<string> 		= now.split(":");
 	const nowSplitHour:number 			= parseInt(nowSplit[0]);

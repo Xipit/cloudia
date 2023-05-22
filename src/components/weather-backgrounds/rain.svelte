@@ -21,7 +21,7 @@
 
 
 <style lang="scss">
-    @import './cloud-animations.scss';
+    @import './cloudAnimations.scss';
 	/*cloud layers*/
 	.background-images {
 		position: fixed;

@@ -8,7 +8,7 @@
     <h1>Passwort vergessen</h1>
     <form action="?/sendRecovery" method="POST" class="auth-form">
 
-        <label for=""> Email </label>
+        <label for="email"> Email </label>
         <input type="text" name="email" required/>
         
         <input type="submit" value="Passwort zurücksetzen" required/>
@@ -30,5 +30,5 @@
 {/if}
 
 <style lang="scss">
-	@import '../accountpage-layout.scss';
+    @import '../accountPages.scss';
 </style>
