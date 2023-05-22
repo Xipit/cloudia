@@ -11,21 +11,24 @@
 	import SearchForm from "../components/searchForm.svelte";
 	import HomepageButtons from "../components/homepage-buttons.svelte";
 
+	// gets data from [load] function in +page.ts
     export let data: PageData;
 
 	$: ({ settings, savedLocations } = data);
-	let isLoggedIn:boolean = data.session !== null;
-	let searchFormOpen = data.weatherData.error != undefined;
+	let isLoggedIn:boolean 		= data.session !== null;
 
-	// Weather API
-	let visiblePlanetsData: any   = data.visiblePlanetsData;
-
+	// weather data, which was fetched in [load] function in +page.ts
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
 
+	let visiblePlanetsData: any   = data.visiblePlanetsData;
+
 	let daysInToTheFuture:number  = data.daysInToTheFuture;
+
+	let isNoWeatherDataPresent 	= data.weatherData.error != undefined;
 	
+	// react to any change in weatherStore
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
 		weatherData 			= weatherDataObject.weatherData;
@@ -36,18 +39,20 @@
 
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 
-		searchFormOpen 			= weatherDataObject.weatherData.error != undefined;
+		isNoWeatherDataPresent 	= weatherDataObject.weatherData.error != undefined;
 	})
 
 	onDestroy(unsubscribeWeather);
 </script>
 
 <main>
-	{#if searchFormOpen}
+	{#if isNoWeatherDataPresent}
+		<!-- display search form if no weather data is present -->
 		<section class="search-form">
 			<SearchForm bind:savedLocations bind:isLoggedIn/>
 		</section>
 	{:else}
+		<!-- display weather data if it is present -->
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
@@ -57,23 +62,6 @@
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
 			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:nextHoursWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 			<Apod bind:daysInToTheFuture/>
-
-			<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
-			{#await nextDaysWeatherData}
-				<p>checke Wetter für die nächsten Tage</p>
-			{:then data} 
-				{#if data.error}
-					<p>{data.error.message}</p>
-				{:else}
-					{#each data.day as day}
-						<p>{day.date}</p>
-						<p>- max temp: {day.maxtemp.c}°C</p>
-						<p>- min temp: {day.mintemp.c}°C</p>
-					{/each}
-				{/if}	
-			{:catch error}
-				<p style="color: red">{error.message}</p>
-			{/await}-->
 		</section>
 	{/if}
 </main>

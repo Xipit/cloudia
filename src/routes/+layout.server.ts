@@ -1,9 +1,13 @@
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = async ({ locals: { getSession, supabase } }) => {
+export const load = (async ({ locals: { getSession, supabase } }) => {
     console.log('Ran Server Load');
     const session = await getSession();
 
+    /*
+        get user settings for every page 
+        settings influence the view
+    */
     const { data: settings } = session 
         ? await supabase
             .from('settings')
@@ -11,8 +15,13 @@ export const load: LayoutServerLoad = async ({ locals: { getSession, supabase } 
             .single()
         : { data: undefined };
 
+    const { data: savedLocations } = await supabase
+        .from('saved_locations')
+        .select('*');
+
     return {
         session,
-        settings
+        settings,
+        savedLocations
     }
-};
+}) satisfies LayoutServerLoad;

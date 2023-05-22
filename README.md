@@ -1,5 +1,13 @@
 # Cloudia Wetter Website
 
+# Technologies
+
+## SvelteKit
+
+SvelteKit is a JavaScript Framework that uses [Svelte](https://svelte.dev/docs) for its components. Additionally it supports Server Side Rendering and includes a router and other state management tools.
+
+-> https://kit.svelte.dev/docs/introduction
+
 # Use tailwind css
 
 start using tailwind classes in html!
@@ -12,7 +20,6 @@ when using style tags, they need a lang="postcss" attribute to use tailwind
 
 tutorial: https://supabase.com/docs/guides/auth/managing-user-data
 
-data:
 ### savedLocations (one entry per location)
 - authID
 - locationName

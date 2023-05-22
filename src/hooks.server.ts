@@ -5,6 +5,8 @@ import {
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
 import type { Handle } from "@sveltejs/kit";
 
+// [handle] runs before every request that the server receives
+// -> https://kit.svelte.dev/docs/hooks
 export const handle: Handle = async ({ event, resolve }) => {
     event.locals.supabase = createSupabaseServerClient({
         supabaseUrl: PUBLIC_SUPABASE_URL,
