@@ -63,7 +63,7 @@
     </form>
 
     <form action="/logout" method="POST">
-        <input type="submit" value="LogOut" />
+        <input type="submit" value="Logout" />
     </form>
 
     <a href="/change-password">Passwort ändern</a>
