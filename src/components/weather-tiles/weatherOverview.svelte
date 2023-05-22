@@ -88,7 +88,7 @@
             </div>
 
             <div class="rain-amount tile">
-                <p class="description">Regenmenge</p>
+                <p class="description">Regen&shymenge</p>
                 <span class="value">{data.day[daysInToTheFuture].rainAmount.mm} mm</span>
             </div>
 
@@ -119,7 +119,7 @@
             <p>{data.error.message}</p>
         {:else}
             <div class="rain-chance tile">
-                <p class="description">Regenwahrscheinlichkeit ({data.hour[0].time})</p>
+                <p class="description">Regen&shywahrschein&shylich&shykeit ({data.hour[0].time})</p>
                 <span class="value">{data.hour[0].chanceOfRain} %</span>
             </div> 
         {/if}
