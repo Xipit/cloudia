@@ -96,6 +96,7 @@
 			flex-wrap: nowrap;
 			border-radius: 4px;
 			box-sizing: border-box;
+			cursor: pointer;
 			
 			img {
 				width: 32px;
