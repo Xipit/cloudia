@@ -18,7 +18,7 @@ async function API_REQUEST(latitude: number, longitude: number){
 	}
 
 	let localStorageKey = "visiblePlanets?lat=" + latitude + "&lon=" + longitude;
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
+	return await cache.fetchWithCache(localStorageKey, null, url, fetchOptions, 15);
 }
 
 export async function getVisiblePlanetsData(latitude: number, longitude: number){

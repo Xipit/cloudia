@@ -56,7 +56,7 @@ function createWeather() {
     async function setLocation (newLocation:string, newDaysInToTheFuture:number = get(daysInToTheFuture)) {
         if(newLocation == ""){
             console.warn("Tried to set empty location.");
-            return;
+            return false;
         }
    
         const newWeatherData = await getCurrentWeatherData(newLocation);
@@ -65,7 +65,7 @@ function createWeather() {
         
         if(newWeatherData.error){
             console.warn(`Tried to set invalid location(${newLocation}). Weather API Error: \n${newWeatherData.error.message}`);
-            return;
+            return false;
         }
         
         weatherObject.set({
@@ -77,8 +77,8 @@ function createWeather() {
         if(newDaysInToTheFuture < 1)
             visiblePlanets.set(getVisiblePlanetsData(newWeatherData.location.lat, newWeatherData.location.lat));
 
-        
-        location.set(newLocation);
+        const newLocationFromAPI = newWeatherData.location.name;
+        location.set(newLocationFromAPI);
         setLocationURLParamWithoutReload();
 
         daysInToTheFuture.set(newDaysInToTheFuture);
@@ -93,6 +93,7 @@ function createWeather() {
         // just here to trigger subscribe
         // im sorry that i have bastardized sveltekit stores to this
         update(value => value + 1);
+        return true;
     }
 
     function getLocationURLParam(url:URL): string|undefined {

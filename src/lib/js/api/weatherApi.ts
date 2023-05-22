@@ -15,6 +15,7 @@ const forecastHours = {
 			f: ""
 		},
 		conditionIconURL: "",
+		chanceOfRain: "",
 	}]
 }
 
@@ -36,6 +37,16 @@ const forecastDays = {
 			k: "",
 			f: ""
 		},
+		rainAmount: {
+			mm: "",
+			in: "", // not currently used
+		},
+		maxWindSpeed: {
+			kph: "",
+			ms: "",
+			knot: "",
+			beaufort: "",
+		},
 		sunrise: "",
 		sunset: "",
 		moonrise: "",
@@ -47,7 +58,7 @@ const forecastDays = {
 
 // Get current weather from the API
 
-async function API_REQUEST_CURRENT(location: String){
+async function API_REQUEST_CURRENT(location: string){
 	let url = BASE_URL + "current.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location;
 	let fetchOptions = {
 		method: 'GET',
@@ -56,11 +67,11 @@ async function API_REQUEST_CURRENT(location: String){
 		}
 	}
 
-	let localStorageKey = "weatherApiCurrent?q=" + location;
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
+	let localStorageKeyPrefix = "weatherApiCurrent?q=";
+	return await cache.fetchWithCache(localStorageKeyPrefix, location, url, fetchOptions, 1);
 }
 
-export async function getCurrentWeatherData(location: String){
+export async function getCurrentWeatherData(location: string){
 	if (location == ""){
 		return	{
 			error: {
@@ -88,7 +99,14 @@ export async function getCurrentWeatherData(location: String){
 				f: data.current.feelslike_f.toString(),
 				c: data.current.feelslike_c.toString(),
 				k: (data.current.feelslike_c + 273).toString()
-			}
+			},
+			windSpeed: {
+				kph: data.current.wind_kph.toString(),
+				ms: (data.current.wind_kph / 3.6).toFixed(1).toString(),
+				knot: (data.current.wind_mph * 0.86897624).toFixed(1).toString(),
+				beaufort: (Math.ceil(Math.cbrt(Math.pow((data.current.wind_kph / 3.6) /0.836, 1)))).toString(),
+			},
+			windDirection: data.current.wind_dir.toString(),
 		};
 	}
 }
@@ -96,7 +114,7 @@ export async function getCurrentWeatherData(location: String){
 
 // Get forecast from API
 
-async function API_REQUEST_FORECAST(location: String){
+async function API_REQUEST_FORECAST(location: string){
 	let url = BASE_URL + "forecast.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location + "&days=3";
 	let fetchOptions = {
 		method: 'GET',
@@ -105,13 +123,13 @@ async function API_REQUEST_FORECAST(location: String){
 		}
 	}
 
-	let localStorageKey = "weatherApiForecast" + location;
+	let localStorageKeyPrefix = "weatherApiForecast";
 	//todo: check how long the data can/should be used until new data should be fetched? --> what value should "expiresAfterMinutes" have?
 	// new enum property in "expireEnum"?
-	return await cache.fetchWithCache(localStorageKey, url, fetchOptions, 15);
+	return await cache.fetchWithCache(localStorageKeyPrefix, location, url, fetchOptions, 15);
 }
 
-async function getForecastWeatherData(location: String){
+async function getForecastWeatherData(location: string){
 	if (location == ""){
 		return	{
 			error: {
@@ -129,7 +147,7 @@ async function getForecastWeatherData(location: String){
 	return data;
 }
 
-export async function getNextHoursWeatherData(location: String, daysInToTheFuture:number = 0){
+export async function getNextHoursWeatherData(location: string, daysInToTheFuture:number = 0){
 	const data = await getForecastWeatherData(location);
 
 	if (data.error){		
@@ -196,6 +214,7 @@ function pushHour(hour:any, day:any, formattedDateString:string, overwriteHour: 
 			k: (hour.temp_c + 273).toString()
 		},
 		conditionIconURL: iconURL, 
+		chanceOfRain: hour.chance_of_rain,
 	})
 }
 
@@ -212,7 +231,7 @@ function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number): Date{
 	return dayInTheFuture;
 }
 
-export async function getNextDaysWeatherData(location: String) {
+export async function getNextDaysWeatherData(location: string) {
 	const data = await getForecastWeatherData(location);
 
 	if (data.error){		
@@ -243,6 +262,16 @@ export async function getNextDaysWeatherData(location: String) {
 						f: forecastDay.day.avgtemp_f.toString(),
 						c: forecastDay.day.avgtemp_c.toString(),
 						k: (forecastDay.day.avgtemp_c + 273).toString(),
+					},
+					rainAmount: {
+						mm: forecastDay.day.totalprecip_mm.toString(),
+						in: "",
+					},
+					maxWindSpeed: {
+						kph: forecastDay.day.maxwind_kph.toString(),
+						ms: (forecastDay.day.maxwind_kph / 3.6).toFixed(1).toString(),
+						knot: (forecastDay.day.maxwind_mph * 0.86897624).toFixed(1).toString(),
+						beaufort: (Math.ceil(Math.cbrt(Math.pow((forecastDay.day.maxwind_kph / 3.6) /0.836, 1)))).toString(),
 					},
 					sunrise: forecastDay.astro.sunrise.toString(),
 					sunset: forecastDay.astro.sunset.toString(),

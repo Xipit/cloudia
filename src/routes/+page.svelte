@@ -8,11 +8,15 @@
 	import NextHoursWeather from "../components/weather-tiles/nextHoursWeather.svelte";
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 	import Apod from "../components/weather-tiles/apod.svelte";
+	import SearchForm from "../components/searchForm.svelte";
 	import HomepageButtons from "../components/homepage-buttons.svelte";
 
     export let data: PageData;
 
 	$: ({ settings, savedLocations } = data);
+	let isLoggedIn:boolean = data.session !== null;
+	let searchFormOpen = data.weatherData.error != undefined;
+	let newLocationIsSet = false;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -32,69 +36,45 @@
 		visiblePlanetsData 		= weather.getVisiblePlanets();
 
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
+
+		searchFormOpen 			= weatherDataObject.weatherData.error != undefined;
+
+		newLocationIsSet = true;
 	})
 
 	onDestroy(unsubscribeWeather);
-	
-	let newLocation: string = "";
-
-	let onLocationSubmit = async () => {
-		weather.set(newLocation)
-	}
 </script>
 
 <main>
-    <section>
-        {#if data.session }
-        <p>Welcome {data.session.user.email}</p>
-        <form action="/logout" method="POST">
-            <button type="submit" class="button">LogOut</button>
-        </form>
-    {:else}
-        <p>Sie sind noch nicht eingeloggt. Navigieren sie zum Burgermenü.</p> <br>
-    {/if}
-    </section>
+	{#if searchFormOpen}
+		<section class="search-form">
+			<SearchForm bind:savedLocations bind:isLoggedIn/>
+		</section>
+	{:else}
+		<!--merging of the individual components-->
+    	<section>			
+			<div class="main-wrapper">
+				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
+				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session} bind:newLocationIsSet/>
+			</div>
+	
+			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
+			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:nextHoursWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
+			<Apod bind:daysInToTheFuture/>
 
-
-    <section>		
-		<div class="main-wrapper">
-			<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-			<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
-		</div>
-
-		<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
-		<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
-		<Apod bind:daysInToTheFuture/>
-
-		<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
-		{#await nextDaysWeatherData}
-			<p>checke Wetter für die nächsten Tage</p>
-		{:then data} 
-			{#if data.error}
-				<p>{data.error.message}</p>
-			{:else}
-				{#each data.day as day}
-					<p>{day.date}</p>
-					<p>- max temp: {day.maxtemp.c}°C</p>
-					<p>- min temp: {day.mintemp.c}°C</p>
-				{/each}
-			{/if}	
-		{:catch error}
-			<p style="color: red">{error.message}</p>
-		{/await}-->
-		
-
-		<form on:submit|preventDefault={onLocationSubmit}>
-			<input type="search" name="location" bind:value={newLocation} placeholder="Ort eintragen" >
-			<button type="submit">Wetterdaten bekommen</button>
-		</form>
-		
-	</section>
+		</section>
+	{/if}
 </main>
 
 
 <style lang="scss">
-	/* The following lines are just temporary */
+	@import '../components/weather-tiles/weather-tiles.scss';
+
+	main {
+		margin-top: 5em;
+		max-width: var(--main-max-width);
+	}
+
 	.button {
 		background-color: azure;		
 		padding: 0.3em;
@@ -110,6 +90,18 @@
 		justify-content: space-between;
 		align-items: flex-end;
 	}
+
+	.search-form {
+		display: flex;
+		justify-content: center;
+	}
+
+	//for big screens
+	@media only screen and (min-width: 450px) {
+        .main-wrapper .macro-buttons {
+			flex-direction: row;
+		}
+    }
 
 	section {
 		margin: 0.5em 0;

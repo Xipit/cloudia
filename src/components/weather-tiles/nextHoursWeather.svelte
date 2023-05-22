@@ -13,7 +13,9 @@
     {#if data.error}
         <p>{data.error.message}</p>
     {:else}
+
         <div class="weather-indicator tile">
+			<!--loop for the next 5 hours-->
             {#each data.hour as hour}
                 <div class="time-element">
                     <div class="hour">
@@ -27,6 +29,7 @@
                 </div>
             {/each}
         </div>
+
     {/if}	
 {:catch error}
     <p style="color: red">{error.message}</p>
@@ -68,7 +71,8 @@
 				filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
 			}
 		}
-
+		
+	//for big screens
 	@media only screen and (min-width: 850px) {
 		.weather-indicator {
 			.time-element {
