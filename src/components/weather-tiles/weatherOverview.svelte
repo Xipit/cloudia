@@ -14,6 +14,7 @@
 
 
 <div class="grid-container">
+    <!--integration of the individual tiles with data-->
     {#await weatherData}
         <p>hole Wetterinformationen...</p>
     {:then data}
@@ -28,11 +29,11 @@
             </div>
             <div class="condition tile">
                 <p class="description">Wetter&shykondition</p>
-                <p class="value">{data.current.condition.text}</p> <!-- TODO daysintothefuture-->
+                <p class="value">{data.current.condition.text}</p>
             </div>
             <div class="humidity tile">
                 <p class="description">Luftfeuchtig&shykeit</p>
-                <p class="value">{data.current.humidity} % </p> <!-- TODO daysintothefuture-->
+                <p class="value">{data.current.humidity} % </p>
             </div>
             <div class="wind tile">
                 <p class="description">Wind</p>
@@ -44,7 +45,7 @@
     {/await}
 
 
-
+    <!--integration of the individual tiles with data for the next two days-->
     {#await nextDaysWeatherData}
         <p>hole Wetterinformationen...</p>
     {:then data}
@@ -126,8 +127,7 @@
         <p style="color: red">{error.message}</p>
     {/await}
 
-    <!-- TODO daysintothefuture-->
-    <!-- Visible Planets -->
+    <!-- Code for Visible Planets -->
     {#await visiblePlanetsData}
         <p>In den Sternenhimmel schauen ...</p>
     {:then visiblePlanetsData} 
@@ -162,7 +162,8 @@
         grid-template-columns: 33.5% 33.5% 33.5%;
         grid-template-rows: auto auto auto auto auto;
         gap: var(--spacing-sm);
-		
+
+		// the following lines define the position of every tile
 		.humidity {
 			grid-column-start: 2;
 			grid-column-end: 3;
@@ -214,6 +215,7 @@
 			grid-row-start: 3;
 			grid-row-end: 4;
         }
+        //end of definiton
 
 		.description {
 			font-size: 18px;
@@ -231,6 +233,7 @@
         }
     }
 
+    //for big screens
 	@media only screen and (min-width: 850px) {
         .grid-container {
             grid-template-rows: auto auto 120px auto;

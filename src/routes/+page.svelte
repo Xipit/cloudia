@@ -51,6 +51,7 @@
 			<SearchForm bind:savedLocations bind:isLoggedIn/>
 		</section>
 	{:else}
+		<!--merging of the individual components-->
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
@@ -61,22 +62,6 @@
 			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:nextHoursWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 			<Apod bind:daysInToTheFuture/>
 
-			<!--<h3>Wetterdaten für die nächsten 3 Tage:</h3>
-			{#await nextDaysWeatherData}
-				<p>checke Wetter für die nächsten Tage</p>
-			{:then data} 
-				{#if data.error}
-					<p>{data.error.message}</p>
-				{:else}
-					{#each data.day as day}
-						<p>{day.date}</p>
-						<p>- max temp: {day.maxtemp.c}°C</p>
-						<p>- min temp: {day.mintemp.c}°C</p>
-					{/each}
-				{/if}	
-			{:catch error}
-				<p style="color: red">{error.message}</p>
-			{/await}-->
 		</section>
 	{/if}
 </main>
@@ -90,7 +75,6 @@
 		max-width: var(--main-max-width);
 	}
 
-	/* The following lines are just temporary */
 	.button {
 		background-color: azure;		
 		padding: 0.3em;
@@ -112,6 +96,7 @@
 		justify-content: center;
 	}
 
+	//for big screens
 	@media only screen and (min-width: 450px) {
         .main-wrapper .macro-buttons {
 			flex-direction: row;

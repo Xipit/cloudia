@@ -2,7 +2,6 @@
     
     import Menu from './Menu.svelte';
 
-    // hamburger menu
 	let open:boolean;
 
     export let isLoggedIn:boolean;
@@ -10,6 +9,7 @@
     export let email:string|undefined;
 </script>
 
+<!-- insert the burger menu into the header -->
 <div class="header">
 	<Menu bind:open bind:isLoggedIn bind:savedLocations bind:email/>
 </div>
