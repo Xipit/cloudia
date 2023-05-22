@@ -20,22 +20,36 @@
     export let email: string|undefined;
     
     let newLocation:string;
+    let menuCanBeClosed = true;
 
-    $: if ($navigating){
-        open = false;
+    $: if ($navigating) {
+        if (menuCanBeClosed) {
+            open = false;
+        }
     }
 
 	let onLocationSubmit = async () => {
-        goto('/');
         const success = await weather.set(newLocation);
         if (success) {
+            menuCanBeClosed = false;
+                await goto('/');
+            menuCanBeClosed = true;
+
+            weather.setLocationURLParamWithoutReload();
+            weather.setDaysInToTheFutureURLParamWithoutReload();
             closeMenu();
-            newLocation = "";
         }
 	}
 
-    function closeMenu(){
+    async function logoClick() {
+        await goto('/');
+        weather.setLocationURLParamWithoutReload();
+        weather.setDaysInToTheFutureURLParamWithoutReload();
+    }
+
+    function closeMenu() {
         open = false;
+        newLocation = "";
     }
 
 </script>
@@ -49,7 +63,7 @@
         <div id="burger-menu" class="burger-menu" transition:fly={{ x:'-100%', duration: 500, easing: quadOut }}>
             <div class="burger-menu-top">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="logo-cloudia" on:click|preventDefault="{() => goto(`/`)}">
+                <div class="logo-cloudia" on:click|preventDefault="{() => logoClick()}">
                     <img src={logoBW} alt="logo cloudia" class="logoBW">
                     <a class="cloudia" href="/" >cloudia</a>
                 </div>
