@@ -21,7 +21,7 @@
                 {:else if daysInToTheFuture == 1}
                     Morgen 
                 {:else}
-                    Übermorgen
+                    Über&shymorgen
                 {/if}
             </div>
             <div class="location">
