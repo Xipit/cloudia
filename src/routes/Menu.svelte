@@ -26,9 +26,11 @@
     }
 
 	let onLocationSubmit = async () => {
+        goto('/');
         const success = await weather.set(newLocation);
         if (success) {
             closeMenu();
+            newLocation = "";
         }
 	}
 
