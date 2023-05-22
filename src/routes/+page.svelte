@@ -16,6 +16,7 @@
 	$: ({ settings, savedLocations } = data);
 	let isLoggedIn:boolean = data.session !== null;
 	let searchFormOpen = data.weatherData.error != undefined;
+	let newLocationIsSet = false;
 
 	// Weather API
 	let visiblePlanetsData: any   = data.visiblePlanetsData;
@@ -37,6 +38,8 @@
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 
 		searchFormOpen 			= weatherDataObject.weatherData.error != undefined;
+
+		newLocationIsSet = true;
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -51,7 +54,7 @@
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
+				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session} bind:newLocationIsSet/>
 			</div>
 	
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
