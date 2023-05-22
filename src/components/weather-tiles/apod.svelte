@@ -8,7 +8,7 @@
  </script>
  
 
-
+ <!--integration of the picture of the day-->
 {#await apodData}
     <p>hole Astronomy Picture of the Day</p>
 {:then data} 
@@ -50,6 +50,7 @@
         }
     }
 
+    //for big screens
 	@media only screen and (min-width: 850px) {
         .apod {
             img {
