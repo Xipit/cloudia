@@ -23,7 +23,7 @@ export class Cache{
                 }
                 return data;
             }
-            const localStorageKey = localStorageKeyPrefix + location;
+            const localStorageKey = localStorageKeyPrefix + location?.replaceAll(" ", "_");
             const cachedData = localStorage.getItem(localStorageKey);
     
             if (cachedData) {
@@ -60,7 +60,7 @@ export class Cache{
             data.expiresAfterMinutes = expiresAfterMinutes;
             data.oneRefreshPerDay = oneRefreshPerDay;
             
-            const localStorageKey = location ? localStorageKeyPrefix + data.location.name : localStorageKeyPrefix;
+            const localStorageKey = location ? localStorageKeyPrefix + data.location.name.replaceAll(" ", "_") : localStorageKeyPrefix;
             if(browser)
                 localStorage.setItem(localStorageKey, JSON.stringify(data));
         } else {
