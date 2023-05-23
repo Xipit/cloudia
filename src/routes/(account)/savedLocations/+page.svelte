@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
 	import type { PageData } from "./$types";
-	import Location from "./location.svelte";
+	import Location from "./Location.svelte";
+
 
     export let data: PageData;
 
