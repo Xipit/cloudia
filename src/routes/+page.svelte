@@ -16,6 +16,7 @@
 
 	$: ({ settings, savedLocations } = data);
 	let isLoggedIn:boolean 		= data.session !== null;
+	let newLocationIsSet = false;
 
 	// weather data, which was fetched in [load] function in +page.ts
 	let weatherData: any		  = data.weatherData;
@@ -40,6 +41,8 @@
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 
 		isNoWeatherDataPresent 	= weatherDataObject.weatherData.error != undefined;
+
+		newLocationIsSet = true;
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -56,12 +59,13 @@
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
+				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session} bind:newLocationIsSet/>
 			</div>
 	
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
 			<WeatherOverview bind:weatherData bind:nextDaysWeatherData bind:nextHoursWeatherData bind:visiblePlanetsData bind:daysInToTheFuture bind:settings/>
 			<Apod bind:daysInToTheFuture/>
+
 		</section>
 	{/if}
 </main>
@@ -75,7 +79,6 @@
 		max-width: var(--main-max-width);
 	}
 
-	/* The following lines are just temporary */
 	.button {
 		background-color: azure;		
 		padding: 0.3em;
@@ -97,6 +100,7 @@
 		justify-content: center;
 	}
 
+	//for big screens
 	@media only screen and (min-width: 450px) {
         .main-wrapper .macro-buttons {
 			flex-direction: row;

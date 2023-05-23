@@ -13,6 +13,7 @@
     {#if data.error}
         <p>{data.error.message}</p>
     {:else}
+
         <div class="main-info">
             <div class="temperature">
                 {#if daysInToTheFuture == 0}
@@ -20,7 +21,7 @@
                 {:else if daysInToTheFuture == 1}
                     Morgen 
                 {:else}
-                    Übermorgen
+                    Über&shymorgen
                 {/if}
             </div>
             <div class="location">
@@ -30,6 +31,7 @@
                 }
             </div>
         </div>
+        
     {/if}		
 {:catch error}
     <p style="color: red">{error.message}</p>

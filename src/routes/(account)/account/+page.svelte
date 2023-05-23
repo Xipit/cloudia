@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
     import type { ActionData, PageData } from './$types';
 
     export let data: PageData;
@@ -18,6 +19,7 @@
 		loading = true;
 		return async () => {
 			loading = false;
+            invalidateAll();
 		};
 	}
 
@@ -60,7 +62,7 @@
     </form>
 
     <form action="/logout" method="POST">
-        <input type="submit" value="LogOut" />
+        <input type="submit" value="Logout" />
     </form>
 
     <a href="/change-password">Passwort ändern</a>

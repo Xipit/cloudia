@@ -14,6 +14,7 @@
 
 
 <div class="grid-container">
+    <!--integration of the individual tiles with data-->
     {#await weatherData}
         <p>hole Wetterinformationen...</p>
     {:then data}
@@ -23,16 +24,16 @@
         {:else if daysInToTheFuture > 0}
         {:else}
             <div class="feelslike tile">
-                <p class="description">gefühlte Temperatur</p>
+                <p class="description">gefühlte Tempe&shyratur</p>
                 <span class="value">{applySettingToTemp(settings, data.feelslike)} </span>
             </div>
             <div class="condition tile">
-                <p class="description">Wetter&shykondition</p>
-                <p class="value">{data.current.condition.text}</p> <!-- TODO daysintothefuture-->
+                <p class="description">aktuelle Wetter&shykondition</p>
+                <p class="value"> {data.current.condition.text} </p> <!-- TODO daysintothefuture-->
             </div>
             <div class="humidity tile">
                 <p class="description">Luftfeuchtig&shykeit</p>
-                <p class="value">{data.current.humidity} % </p> <!-- TODO daysintothefuture-->
+                <p class="value">{data.current.humidity} % </p>
             </div>
             <div class="wind tile">
                 <p class="description">Wind</p>
@@ -44,7 +45,7 @@
     {/await}
 
 
-
+    <!--integration of the individual tiles with data for the next two days-->
     {#await nextDaysWeatherData}
         <p>hole Wetterinformationen...</p>
     {:then data}
@@ -54,15 +55,15 @@
 
             {#if daysInToTheFuture > 0}
                 <div class="feelslike tile">
-                    <p class="description">Temperatur (Durchschnitt)</p>
+                    <p class="description">Temperatur (Durch&shyschnitt)</p>
                     <span class="value">{applySettingToTemp(settings, data.day[daysInToTheFuture].avgTemp)} </span>
                 </div>
                 <div class="condition tile">
-                    <p class="description">Wetter&shykondition (Durchschnitt)</p>
+                    <p class="description">Wetter&shykondition (Durch&shyschnitt)</p>
                     <p class="value"> {data.day[daysInToTheFuture].conditionText} </p> <!-- TODO daysintothefuture-->
                 </div>
                 <div class="humidity tile">
-                    <p class="description">Luftfeuchtig&shykeit (Durchschnitt)</p>
+                    <p class="description">Luftfeuchtig&shykeit (Durch&shyschnitt)</p>
                     <p class="value">	{data.day[daysInToTheFuture].avgHumidity} % </p> <!-- TODO daysintothefuture-->
                 </div>
                 <div class="wind tile">
@@ -87,7 +88,7 @@
             </div>
 
             <div class="rain-amount tile">
-                <p class="description">Regenmenge</p>
+                <p class="description">Regen&shymenge</p>
                 <span class="value">{data.day[daysInToTheFuture].rainAmount.mm} mm</span>
             </div>
 
@@ -118,7 +119,7 @@
             <p>{data.error.message}</p>
         {:else}
             <div class="rain-chance tile">
-                <p class="description">Regenwahrscheinlichkeit ({data.hour[0].time})</p>
+                <p class="description">Regen&shywahrschein&shylich&shykeit ({data.hour[0].time})</p>
                 <span class="value">{data.hour[0].chanceOfRain} %</span>
             </div> 
         {/if}
@@ -126,8 +127,7 @@
         <p style="color: red">{error.message}</p>
     {/await}
 
-    <!-- TODO daysintothefuture-->
-    <!-- Visible Planets -->
+    <!-- Code for Visible Planets -->
     {#await visiblePlanetsData}
         <p>In den Sternenhimmel schauen ...</p>
     {:then visiblePlanetsData} 
@@ -162,7 +162,8 @@
         grid-template-columns: 33.5% 33.5% 33.5%;
         grid-template-rows: auto auto auto auto auto;
         gap: var(--spacing-sm);
-		
+
+		// the following lines define the position of every tile
 		.humidity {
 			grid-column-start: 2;
 			grid-column-end: 3;
@@ -214,23 +215,25 @@
 			grid-row-start: 3;
 			grid-row-end: 4;
         }
+        //end of definiton
 
 		.description {
-			font-size: 18px;
+			font-size: 1.1em;
 			font-weight: bold;
 
 			.value {
 				font-weight: normal;
-				font-size: 16px;
+				font-size: 0.9em;
 			}
 		}
 
         .value {
             font-weight: normal;
-            font-size: 16px;
+            font-size: 1em;
         }
     }
 
+    //for big screens
 	@media only screen and (min-width: 850px) {
         .grid-container {
             grid-template-rows: auto auto 120px auto;
@@ -246,15 +249,15 @@
             }
 
             .description {
-                font-size: 21px;
+                font-size: 1.32em;
 
                 .value {
-                    font-size: 19px;
+                    font-size: 0.8em;
                 }
             }
 
             .value {
-                font-size: 19px;
+                font-size: 1.19em;
             }
         }
     }
