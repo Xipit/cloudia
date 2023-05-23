@@ -1,6 +1,5 @@
 <script lang="ts">
-    
-    import Menu from './Menu.svelte';
+	import Menu from "./menu.svelte";
 
 	let open:boolean;
 

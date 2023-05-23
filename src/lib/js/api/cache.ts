@@ -12,6 +12,10 @@ export class Cache{
         return this;
     }
 
+    /*
+        tries to fetch data from localstorage first
+        if this fails, an API call will be executed
+    */
     async fetchWithCache(localStorageKeyPrefix: string, location:string|null, url: string, fetchOptions: RequestInit, expiresAfterMinutes: number, oneRefreshPerDay = false): Promise<any>{
         if(browser){
             if (typeof localStorage === "undefined") {
@@ -23,6 +27,8 @@ export class Cache{
                 }
                 return data;
             }
+
+            // access local storage
             const localStorageKey = localStorageKeyPrefix + location?.replaceAll(" ", "_");
             const cachedData = localStorage.getItem(localStorageKey);
     
@@ -51,6 +57,7 @@ export class Cache{
             }
         }
 
+        // fetch API
         const response = await fetch(url, fetchOptions);
         const data = await response.json();
 

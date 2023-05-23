@@ -9,7 +9,7 @@ let errorData = {
 	}
 };
 
-async function API_REQUEST(latitude: number, longitude: number){
+async function fetchVisiblePlanetsData(latitude: number, longitude: number){
 	// url https://api.visibleplanets.dev/v3?latitude=32&longitude=-98&showCoords=true
 	let url = BASE_URL + "?latitude=" + latitude + "&longitude=" + longitude + "&showCoords=true";
 
@@ -21,8 +21,9 @@ async function API_REQUEST(latitude: number, longitude: number){
 	return await cache.fetchWithCache(localStorageKey, null, url, fetchOptions, 15);
 }
 
+// this function can be called from the outside to get the information for visible Planets
 export async function getVisiblePlanetsData(latitude: number, longitude: number){
-	const data = await API_REQUEST(latitude, longitude);
+	const data = await fetchVisiblePlanetsData(latitude, longitude);
 
 	if ((latitude == data.meta.latitude) && (longitude == data.meta.longitude)){
 		return data.data;

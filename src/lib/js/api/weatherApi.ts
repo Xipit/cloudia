@@ -5,6 +5,8 @@ import { Cache } from './cache';
 const cache = new Cache();
 const BASE_URL = "http://api.weatherapi.com/v1/";
 
+
+// define data structure
 const forecastHours = {
 	hour: [{
 		date: "",
@@ -57,8 +59,7 @@ const forecastDays = {
 }
 
 // Get current weather from the API
-
-async function API_REQUEST_CURRENT(location: string){
+async function fetchCurrentWeatherData(location: string){
 	let url = BASE_URL + "current.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location;
 	let fetchOptions = {
 		method: 'GET',
@@ -80,7 +81,7 @@ export async function getCurrentWeatherData(location: string){
 		};
 	}
 
-	const data = await API_REQUEST_CURRENT(location);
+	const data = await fetchCurrentWeatherData(location);
 
 	if (data.error) {
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
@@ -114,7 +115,7 @@ export async function getCurrentWeatherData(location: string){
 
 // Get forecast from API
 
-async function API_REQUEST_FORECAST(location: string){
+async function fetchForecastWeatherData(location: string){
 	let url = BASE_URL + "forecast.json?key=" + PUBLIC_API_KEY_WEATHER + "&q=" + location + "&days=3";
 	let fetchOptions = {
 		method: 'GET',
@@ -138,7 +139,7 @@ async function getForecastWeatherData(location: string){
 		};
 	}
 
-	const data = await API_REQUEST_FORECAST(location);
+	const data = await fetchForecastWeatherData(location);
 
 	if (data.error) {
 		console.log("Errorcode: " + data.error.code + ", Errormessage: " + data.error.message);
@@ -156,6 +157,7 @@ export async function getNextHoursWeatherData(location: string, daysInToTheFutur
 		// remove old items from list
 		forecastHours.hour.splice(0);
 
+		// for tomorrow, where current data is not avilable
 		if(daysInToTheFuture > 0){
 			const startHour = 6;
 			const hourIncrement = 3;
@@ -172,11 +174,10 @@ export async function getNextHoursWeatherData(location: string, daysInToTheFutur
 				pushHour(forecastHour, forecastDay, formattedDateString, startHour + (i * hourIncrement)) 
 			}
 		}else {
+			// for today, current data is available
+
 			const hourIncrement = 1
-
-			// This is used to get to know which is the next hour for the forecastHours.hour array
-			const startHour = getCurrentStart();
-
+			const startHour = getCurrentStart(); // This is used to get to know which is the next hour for the forecastHours.hour array
 			let dayIndex = 0;
 			
 			// Pushes the data for the next i-Hours into forecastHour.hour
@@ -225,11 +226,6 @@ function getCurrentStart(): Date{
 	return(new Date(dateReference.getFullYear(), dateReference.getMonth(), dateReference.getDate(), dateReference.getHours()));
 }
 
-function getDayInTheFutureStart(forecast:any, daysInToTheFuture:number): Date{
-	const dayInTheFuture = new Date(forecast.forecastday[daysInToTheFuture].hour[0].time_epoch * 1000);
-
-	return dayInTheFuture;
-}
 
 export async function getNextDaysWeatherData(location: string) {
 	const data = await getForecastWeatherData(location);

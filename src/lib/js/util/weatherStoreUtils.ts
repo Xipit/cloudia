@@ -1,6 +1,6 @@
-import { get, writable, type Writable } from "svelte/store";
-import { replaceStateWithSearchParam } from "./url";
+import { writable, type Writable } from "svelte/store";
 
+// variable list to categorise weather condition
 const cloudList = [
     'Cloudy',
     'cloudy', 
@@ -39,6 +39,7 @@ export enum GeneralWeatherCondition {
 }
 
 export function generaliseWeatherCondition (weatherCondition:string):GeneralWeatherCondition {
+    // check if variable list is part of weathercondition
     const isCloud:boolean   = cloudList.some((text) =>  weatherCondition.includes(text));
     const isRain:boolean    = rainList.some((text) =>   weatherCondition.includes(text));
     const isSnow:boolean    = snowList.some((text) =>   weatherCondition.includes(text));
@@ -75,6 +76,7 @@ export function createGeneralisedWeatherCondition(initialValue:GeneralWeatherCon
     return{
         subscribe,
         set: (value:GeneralWeatherCondition) => {
+            // always set the html data-theme when changing weather conditions
             set(value);
             document.documentElement.setAttribute('data-theme', value);
         },
@@ -88,14 +90,14 @@ export function createDaysInToTheFuture(initialValue:number):Writable<number> {
     return{
         subscribe,
         set: (value:number) => {
-            console.log(value);
-            set(clampDaysInToTheFuture(value));   // clamp between 0 and 2  -> weatherAPI only sends us 3 days
+            // clamp between 0 and 2  -> weatherAPI only sends us 3 days
+            // this prevents outside interference and assurs that only allowed values can be set
+            set(clampDaysInToTheFuture(value));   
         },
         update: update
     }
 }
 
 export function clampDaysInToTheFuture(daysIntoTheFuture:number): number{
-    console.log("clamped to" + (Math.min(Math.max(daysIntoTheFuture, 0), 2)));
     return (Math.min(Math.max(daysIntoTheFuture, 0), 2));
 }

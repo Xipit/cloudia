@@ -1,18 +1,35 @@
 # Cloudia Wetter Website
 
-# Use tailwind css
+# Technologies
 
-start using tailwind classes in html!
+## SvelteKit
+
+SvelteKit is a JavaScript Framework that uses [Svelte](https://svelte.dev/docs) for its components. Additionally it supports Server Side Rendering and includes a router and other state management tools.
+
+-> https://kit.svelte.dev/docs/introduction
+
+## Tailwind
+
 when using style tags, they need a lang="postcss" attribute to use tailwind
 
 -> https://tailwindcss.com/docs/guides/sveltekit
+
+
+# Commonly used svelteKit features
+
+## html form action data
+
+html forms can be used to post data to a specific endpoint. This endpoint is usually inside the corresponding +page.server.ts for every route. These endpoints are also called Actions in sveltekit.
+
+## load functions
+
++page.ts and +page.server.ts can both export a load function. This function is automatically executed when a page/route is accessed. The corresponding +page.svelte can access the return variables from the load function using `export let data: PageData;`.
 
 
 # User Data in supabase
 
 tutorial: https://supabase.com/docs/guides/auth/managing-user-data
 
-data:
 ### savedLocations (one entry per location)
 - authID
 - locationName
@@ -51,7 +68,7 @@ create policy "Users can delete their own saved_locations."
 - speedUnit ('kmh', 'ms', 'beaufort', 'knot')
 - (maybe height-/ length unit)
 
-````
+```
 create table settings (
   id uuid not null references auth.users on delete cascade,
   temperature_unit text not null default 'celsius',
@@ -76,4 +93,16 @@ create policy "Users can insert their own settings."
 create policy "Users can update own settings."
   on settings for update
   using ( auth.uid() = id );
+
+```
+
+# Known Bugs
+
+- Micro interactions in forms are broken, but theoretically there. These are the small feedback texts that show up in the page when e.g. the password is invalid.
+```
+{#if form?.errors?.password}
+  <span class="text-red-500">
+    {form?.errors?.password[0]}
+  </span>
+{/if}
 ```

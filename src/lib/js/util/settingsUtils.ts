@@ -1,3 +1,11 @@
+/*
+    Apply Unit Settings to view
+
+    settings are provided by supabase and are strictly viewed sql variables, which is why the are not in camelCase
+    units are provided by the api functions and are simple objects
+*/
+
+
 export function applySettingToTemp(settings: any, temp:any):string {
     if(settings == undefined){
         return `${temp.c}°C`;

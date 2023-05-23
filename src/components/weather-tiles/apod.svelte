@@ -30,7 +30,7 @@
 {/await} 
 
 <style lang="scss">
-    @import './weather-tiles.scss';
+    @import './weatherTiles.scss';
 
     .apod {
         margin-top: var(--spacing-sm);

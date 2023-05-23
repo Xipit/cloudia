@@ -39,7 +39,7 @@
 
 
 <style lang="scss">
-	@import './weather-tiles.scss';
+	@import './weatherTiles.scss';
 
     .main-info {
 			margin-top: 4.375em;

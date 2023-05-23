@@ -18,6 +18,7 @@ export function fromLocalStorage(storageKey: string, fallbackValue: any) {
 	return fallbackValue
 }
 
+// write value into localstorage when value changes
 export function toLocalStorage(store:Writable<any>, storageKey: string) {
 	if (browser) {
 		store.subscribe((value) => {

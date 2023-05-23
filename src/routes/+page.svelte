@@ -9,24 +9,26 @@
 	import WeatherOverview from "../components/weather-tiles/weatherOverview.svelte";
 	import Apod from "../components/weather-tiles/apod.svelte";
 	import SearchForm from "../components/searchForm.svelte";
-	import HomepageButtons from "../components/homepage-buttons.svelte";
+	import HomepageButtons from "../components/homepageButtons.svelte";
 
+	// gets data from [load] function in +page.ts
     export let data: PageData;
 
 	$: ({ settings, savedLocations } = data);
-	let isLoggedIn:boolean = data.session !== null;
-	let searchFormOpen = data.weatherData.error != undefined;
-	let newLocationIsSet = false;
+	let isLoggedIn:boolean 		= data.session !== null;
 
-	// Weather API
-	let visiblePlanetsData: any   = data.visiblePlanetsData;
-
+	// weather data, which was fetched in [load] function in +page.ts
 	let weatherData: any		  = data.weatherData;
 	let nextHoursWeatherData: any = data.nextHoursWeatherData;
 	let nextDaysWeatherData: any  = data.nextDaysWeatherData;
 
+	let visiblePlanetsData: any   = data.visiblePlanetsData;
+
 	let daysInToTheFuture:number  = data.daysInToTheFuture;
+
+	let isNoWeatherDataPresent 	= data.weatherData.error != undefined;
 	
+	// react to any change in weatherStore
 	const unsubscribeWeather = weather.subscribe(() => {
 		const weatherDataObject = weather.getWeather();
 		weatherData 			= weatherDataObject.weatherData;
@@ -37,25 +39,24 @@
 
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 
-		searchFormOpen 			= weatherDataObject.weatherData.error != undefined;
-
-		newLocationIsSet = true;
+		isNoWeatherDataPresent 	= weatherDataObject.weatherData.error != undefined;
 	})
 
 	onDestroy(unsubscribeWeather);
 </script>
 
 <main>
-	{#if searchFormOpen}
+	{#if isNoWeatherDataPresent}
+		<!-- display search form if no weather data is present -->
 		<section class="search-form">
 			<SearchForm bind:savedLocations bind:isLoggedIn/>
 		</section>
 	{:else}
-		<!--merging of the individual components-->
+		<!-- display weather data if it is present -->
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session} bind:newLocationIsSet/>
+				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
 			</div>
 	
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
@@ -68,7 +69,7 @@
 
 
 <style lang="scss">
-	@import '../components/weather-tiles/weather-tiles.scss';
+	@import '../components/weather-tiles/weatherTiles.scss';
 
 	main {
 		margin-top: 5em;

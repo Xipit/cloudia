@@ -6,9 +6,10 @@ import {
 import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
 import type { LayoutLoad } from './$types';
 
-export const load: LayoutLoad = async ({ fetch, data:serverData, depends }) => {
+export const load: LayoutLoad = (async ({ fetch, data:serverData, depends }) => {
     depends('supabase:auth');
 
+    // create supabase client for sveltekit client environment using the session on the server
     const supabase = createSupabaseLoadClient({
         supabaseUrl: PUBLIC_SUPABASE_URL,
         supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
@@ -17,12 +18,8 @@ export const load: LayoutLoad = async ({ fetch, data:serverData, depends }) => {
     });
 
     const { data : { session } } = await supabase.auth.getSession();
-    
-    const { data: savedLocations } = await supabase
-        .from('saved_locations')
-        .select('*');
 
-    const { settings } = serverData;
+    const { settings, savedLocations } = serverData;
 
     return { savedLocations, supabase, session, settings };
-}
+}) satisfies LayoutLoad;
