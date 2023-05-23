@@ -8,6 +8,7 @@
     import bookmarkFull     from '$lib/assets/svg/menu/bookmark-full.svg';
     import bookmarkEmpty    from '$lib/assets/svg/menu/bookmark-empty.svg';
 	import { enhance } from "$app/forms";
+	import { onDestroy } from "svelte";
 
     export let disable: any;
     export let daysInToTheFuture: number;
@@ -18,6 +19,12 @@
     $: isCurrentLocationSaved = savedLocations?.some(savedLocation => savedLocation.location_name === locationName);
 
     let isLocationSavingLoading = false;
+
+    const unsubscribeWeather = weather.subscribe(() => {
+        locationName = weather.getLocation();
+    }); 
+
+    onDestroy(unsubscribeWeather);
 </script>
 
 

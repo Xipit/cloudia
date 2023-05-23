@@ -16,7 +16,6 @@
 
 	$: ({ settings, savedLocations } = data);
 	let isLoggedIn:boolean 		= data.session !== null;
-	let newLocationIsSet = false;
 
 	// weather data, which was fetched in [load] function in +page.ts
 	let weatherData: any		  = data.weatherData;
@@ -41,8 +40,6 @@
 		daysInToTheFuture 		= weather.getDaysInToTheFuture();
 
 		isNoWeatherDataPresent 	= weatherDataObject.weatherData.error != undefined;
-
-		newLocationIsSet = true;
 	})
 
 	onDestroy(unsubscribeWeather);
@@ -59,7 +56,7 @@
     	<section>			
 			<div class="main-wrapper">
 				<MainWeatherInfo bind:weatherData bind:daysInToTheFuture bind:settings/>
-				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session} bind:newLocationIsSet/>
+				<HomepageButtons disable={!weatherData.temp} bind:daysInToTheFuture bind:savedLocations bind:session={data.session}/>
 			</div>
 	
 			<NextHoursWeather bind:nextHoursWeatherData bind:settings/>
