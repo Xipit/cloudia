@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { weather } from "$lib/js/weatherStore";
 
-    import nextDay from '$lib/assets/svg/homepage/nextDay.svg';
-	import previousDay from '$lib/assets/svg/homepage/previousDay.svg';
-	import resetLocation from '$lib/assets/svg/homepage/resetLocation.svg';
-    import bookmarkFull from '$lib/assets/svg/menu/bookmark-full.svg';
-    import bookmarkEmpty from '$lib/assets/svg/menu/bookmark-empty.svg';
+    import nextDay          from '$lib/assets/svg/homepage/nextDay.svg';
+	import previousDay      from '$lib/assets/svg/homepage/previousDay.svg';
+	import resetLocation    from '$lib/assets/svg/homepage/resetLocation.svg';
+    import loading          from '$lib/assets/svg/homepage/loading.svg';
+    import bookmarkFull     from '$lib/assets/svg/menu/bookmark-full.svg';
+    import bookmarkEmpty    from '$lib/assets/svg/menu/bookmark-empty.svg';
 	import { enhance } from "$app/forms";
 
     export let disable: any;
@@ -15,6 +16,8 @@
 
     $: locationName = weather.getLocation();
     $: isCurrentLocationSaved = savedLocations?.some(savedLocation => savedLocation.location_name === locationName);
+
+    let isLocationSavingLoading = false;
 </script>
 
 
@@ -27,20 +30,28 @@
                 ? "savedLocations?/deleteLocation" 
                 : "savedLocations?/addLocation"
             }
-            class={disable
+            class={disable || isLocationSavingLoading
                 ? "tile disabled"
                 : "tile"
             }
-            use:enhance
+            use:enhance={() => {
+                isLocationSavingLoading = true;
+                return async ({ update }) => {
+                    await update();
+                    isLocationSavingLoading = false;
+                };
+            }}
         >
 
             <input name="locationName" type="hidden" value={locationName}>
 
             <input 
                 type="image"
-                src={isCurrentLocationSaved
-                    ? bookmarkFull
-                    : bookmarkEmpty
+                src={isLocationSavingLoading
+                    ? loading
+                    : isCurrentLocationSaved
+                        ? bookmarkFull
+                        : bookmarkEmpty
                 }
                 alt={isCurrentLocationSaved 
                     ? "Von gespeicherten Orten entfernen"

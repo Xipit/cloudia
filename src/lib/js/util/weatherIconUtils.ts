@@ -116,7 +116,7 @@ function translateConditionCodeToSVG(conditionCode:number, isSunVisible:boolean)
 			return isSunVisible
 				? sunny
 				: clear;
-			
+
 		case 1087:
 			return thunder;
 	

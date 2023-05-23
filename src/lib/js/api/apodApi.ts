@@ -12,7 +12,7 @@ let imgData = {
 }
 
 // this function returns the response of the API
-async function API_REQUEST(){
+async function fetchAPOD(){
     let url = BASE_URL + "?api_key=" + PUBLIC_API_KEY_NASA;
     let fetchOptions = {
 		method: 'GET',
@@ -24,7 +24,7 @@ async function API_REQUEST(){
 
 // this function can be called from the outside to get the information for the APOD
 export async function getAPOD(){
-    const data = await API_REQUEST();
+    const data = await fetchAPOD();
 
     if (data.error){
         return data
