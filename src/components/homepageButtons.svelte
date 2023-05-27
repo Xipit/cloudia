@@ -142,6 +142,14 @@
             border: 0;
             aspect-ratio: 1;
             padding: 6px;
+
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        img{
+            max-width: 100%;
+            max-height: calc(100% + 15px);
         }
     }
 
