@@ -97,7 +97,7 @@ function createWeather() {
 
         // get current weather condition or use average weather condition depending on daysInToTheFuture
         const newGeneralisedWeatherCondition = generaliseWeatherCondition(
-            newDaysInToTheFuture > 0 
+            newDaysInToTheFuture <= 0 
                 ? newWeatherData.current.condition.text
                 : newNextDaysWeatherData.day[get(daysInToTheFuture)].conditionText);
         generalisedWeatherCondition.set(newGeneralisedWeatherCondition);
