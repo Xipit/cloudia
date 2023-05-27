@@ -16,7 +16,8 @@ const rainList = [
 const snowList = [
     'snow', 
     'sleet', 
-    'ice', 
+    'ice',
+    'Ice',
     'Blizzard'
 ];
 const stormList = [
