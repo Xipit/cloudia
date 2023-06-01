@@ -19,9 +19,15 @@
         {:else}
             <p class="title">Astronomy Picture of the Day ({data.date})</p>
         {/if}
-        <!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
-        <!-- svelte-ignore a11y-img-redundant-alt -->
-        <img src={data.url} alt="APOD - Astronomy Picture of the Day">
+            {#if data.mediaType === "image"}
+                <!-- The following code line is required because the alt-tag of the image contains the word "picture" which throws a warning. -->
+                <!-- svelte-ignore a11y-img-redundant-alt -->
+                <img src={data.url} alt="APOD - Astronomy Picture of the Day">
+            {:else if data.mediaType === "video"}
+                <a href={data.url}>{data.url}</a>
+            {:else}
+                <p>Fehler beim Anzeigen des Picture of the Day</p>
+            {/if}
         <p class="description">{data.title}</p> 
     </div>
     
