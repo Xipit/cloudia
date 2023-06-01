@@ -8,7 +8,8 @@ const BASE_URL = "https://api.nasa.gov/planetary/apod/";
 let imgData = {
     date: typeof(String),
     title: typeof(String),
-    url: typeof(String)
+    url: typeof(String),
+    mediaType: typeof(String)
 }
 
 // this function returns the response of the API
@@ -32,7 +33,8 @@ export async function getAPOD(){
 		imgData = {
             date: data.date,
             title: data.title,
-            url: data.url
+            url: data.url,
+            mediaType: data.media_type
         }
 		return imgData;
 	}
