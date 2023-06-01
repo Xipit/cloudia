@@ -30,6 +30,10 @@ html forms can be used to post data to a specific endpoint. This endpoint is usu
 
 tutorial: https://supabase.com/docs/guides/auth/managing-user-data
 
+## authentification
+
+uses [supabase authentication](https://supabase.com/docs/guides/auth) to manage login, signup, email verification, etc...
+
 ### savedLocations (one entry per location)
 - authID
 - locationName
