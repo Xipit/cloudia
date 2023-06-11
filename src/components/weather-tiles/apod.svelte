@@ -1,16 +1,28 @@
  <script lang="ts">
 	import { getAPOD } from "$lib/js/api/apodApi";
+    import nasaBlackhole from "$lib/assets/pictures/nasa-first-image-blackhole.jpg";
 
     export let daysInToTheFuture:number;
 
 	// APOD - Astronomy Picture of the Day
 	let apodData = getAPOD();
+
+    // used to display placeholder content when APOD API is down
+    const waitForApod = () => new Promise((res) => setTimeout(res , 1000))
  </script>
  
 
  <!--integration of the picture of the day-->
 {#await apodData}
-    <p>hole Astronomy Picture of the Day</p>
+    {#await waitForApod()}
+        <p>hole Astronomy Picture of the Day ...</p>
+    {:then}
+        <div class="tile apod">
+            <p class="title">Astronomy Picture of the Day konnte nicht erreicht werden ...</p>
+            <img src={nasaBlackhole} alt="verschwommenes Schwarzes Loch">
+            <p class="description">... Deswegen seht ihr hier das erste Bild eines Schwarzen Loches (2019, Nasa)</p> 
+        </div>
+    {/await}
 {:then data} 
 
     <div class="tile apod">
