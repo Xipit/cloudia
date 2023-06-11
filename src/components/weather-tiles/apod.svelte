@@ -1,6 +1,7 @@
  <script lang="ts">
 	import { getAPOD } from "$lib/js/api/apodApi";
     import nasaBlackhole from "$lib/assets/pictures/nasa-first-image-blackhole.jpg";
+	import ApodErrorPlaceholder from "./apodErrorPlaceholder.svelte";
 
     export let daysInToTheFuture:number;
 
@@ -9,6 +10,7 @@
 
     // used to display placeholder content when APOD API is down
     const waitForApod = () => new Promise((res) => setTimeout(res , 1000))
+
  </script>
  
 
@@ -17,11 +19,7 @@
     {#await waitForApod()}
         <p>hole Astronomy Picture of the Day ...</p>
     {:then}
-        <div class="tile apod">
-            <p class="title">Astronomy Picture of the Day konnte nicht erreicht werden ...</p>
-            <img src={nasaBlackhole} alt="verschwommenes Schwarzes Loch">
-            <p class="description">... Deswegen seht ihr hier das erste Bild eines Schwarzen Loches (2019, Nasa)</p> 
-        </div>
+        <ApodErrorPlaceholder />
     {/await}
 {:then data} 
 
@@ -44,6 +42,8 @@
     </div>
     
 {:catch error}
+    <ApodErrorPlaceholder />
+    <p style="color: red">APOD API Error: </p>
     <p style="color: red">{error.message}</p>
 {/await} 
 
