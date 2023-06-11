@@ -27,6 +27,8 @@ async function fetchAPOD(){
 export async function getAPOD(){
     const data = await fetchAPOD();
 
+    console.log(data);
+
     if (data.error){
         return data
 	} else {
